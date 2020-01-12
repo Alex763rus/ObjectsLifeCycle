@@ -777,29 +777,14 @@ namespace UHFReader09demomain
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            if (CheckBox_TID.Checked)
-            {
-                if ((textBox4.Text.Length) != 2 || ((textBox5.Text.Length) != 2))
-                {
-                    StatusBar1.Panels[0].Text = "TID Parameter Error！";
-                    return;
-                }
-            }
             Timer_Test_.Enabled = !Timer_Test_.Enabled;
             if (!Timer_Test_.Enabled)
             {
-                textBox4.Enabled = true;
-                textBox5.Enabled = true;
-                CheckBox_TID.Enabled = true;
                 AddCmdLog("Inventory", "Exit Query", 0);
                 button2.Text = "Query Tag";
             }
             else
             {
-                textBox4.Enabled = false;
-                textBox5.Enabled = false;
-                CheckBox_TID.Enabled = false;
-
                 ListView1_EPC.Items.Clear();
                 button2.Text = "Stop";
             }
@@ -819,18 +804,9 @@ namespace UHFReader09demomain
               byte AdrTID = 0;
               byte LenTID = 0;
               byte TIDFlag = 0;
-              if (CheckBox_TID.Checked)
-              {
-                  AdrTID = Convert.ToByte(textBox4.Text, 16);
-                  LenTID = Convert.ToByte(textBox5.Text, 16);
-                  TIDFlag = 1;
-              }
-              else
-              {
                   AdrTID = 0;
                   LenTID = 0;
                   TIDFlag = 0;
-              }
               ListViewItem aListItem = new ListViewItem();
               fCmdRet = StaticClassReaderB.Inventory_G2(ref fComAdr, AdrTID, LenTID, TIDFlag, EPC, ref Totallen, ref CardNum, frmcomportindex);
               if ((fCmdRet == 1) | (fCmdRet == 2) | (fCmdRet == 3) | (fCmdRet == 4) | (fCmdRet == 0xFB))//代表已查找结束，
@@ -1071,21 +1047,7 @@ namespace UHFReader09demomain
             ComboBox_dminfre.SelectedIndex = 0;
         }
 
-        private void CheckBox_TID_CheckedChanged(object sender, EventArgs e)
-        {
-            if (CheckBox_TID.Checked)
-            {
-                groupBox33.Enabled = true;
-                textBox4.Enabled = true;
-                textBox5.Enabled = true;
-            }
-            else
-            {
-                groupBox33.Enabled = false;
-                textBox4.Enabled = false;
-                textBox5.Enabled = false;
-            }
-        }
+
 
       
 

@@ -87,12 +87,6 @@
             this.Label1 = new System.Windows.Forms.Label();
             this.TabSheet_EPCC1G2 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.CheckBox_TID = new System.Windows.Forms.CheckBox();
-            this.groupBox33 = new System.Windows.Forms.GroupBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label55 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label54 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.ComboBox_IntervalTime = new System.Windows.Forms.ComboBox();
             this.label23 = new System.Windows.Forms.Label();
@@ -121,7 +115,6 @@
             this.GroupBox1.SuspendLayout();
             this.TabSheet_EPCC1G2.SuspendLayout();
             this.groupBox12.SuspendLayout();
-            this.groupBox33.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).BeginInit();
@@ -741,79 +734,15 @@
             // 
             // groupBox12
             // 
-            this.groupBox12.Controls.Add(this.CheckBox_TID);
-            this.groupBox12.Controls.Add(this.groupBox33);
             this.groupBox12.Controls.Add(this.button2);
             this.groupBox12.Controls.Add(this.ComboBox_IntervalTime);
             this.groupBox12.Controls.Add(this.label23);
             this.groupBox12.Location = new System.Drawing.Point(485, 0);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(325, 105);
+            this.groupBox12.Size = new System.Drawing.Size(325, 54);
             this.groupBox12.TabIndex = 3;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Query Tag";
-            // 
-            // CheckBox_TID
-            // 
-            this.CheckBox_TID.AutoSize = true;
-            this.CheckBox_TID.Location = new System.Drawing.Point(235, 65);
-            this.CheckBox_TID.Name = "CheckBox_TID";
-            this.CheckBox_TID.Size = new System.Drawing.Size(44, 17);
-            this.CheckBox_TID.TabIndex = 12;
-            this.CheckBox_TID.Text = "TID";
-            this.CheckBox_TID.UseVisualStyleBackColor = true;
-            this.CheckBox_TID.CheckedChanged += new System.EventHandler(this.CheckBox_TID_CheckedChanged);
-            // 
-            // groupBox33
-            // 
-            this.groupBox33.Controls.Add(this.textBox5);
-            this.groupBox33.Controls.Add(this.label55);
-            this.groupBox33.Controls.Add(this.textBox4);
-            this.groupBox33.Controls.Add(this.label54);
-            this.groupBox33.Location = new System.Drawing.Point(8, 47);
-            this.groupBox33.Name = "groupBox33";
-            this.groupBox33.Size = new System.Drawing.Size(214, 52);
-            this.groupBox33.TabIndex = 11;
-            this.groupBox33.TabStop = false;
-            this.groupBox33.Text = "Query TID Parameter";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(167, 15);
-            this.textBox5.MaxLength = 2;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(37, 20);
-            this.textBox5.TabIndex = 3;
-            this.textBox5.Text = "04";
-            this.textBox5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Edit_CmdComAddr_KeyPress);
-            // 
-            // label55
-            // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(126, 25);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(31, 13);
-            this.label55.TabIndex = 2;
-            this.label55.Text = "Len：";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(71, 16);
-            this.textBox4.MaxLength = 2;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(37, 20);
-            this.textBox4.TabIndex = 1;
-            this.textBox4.Text = "02";
-            this.textBox4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Edit_CmdComAddr_KeyPress);
-            // 
-            // label54
-            // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(4, 26);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(57, 13);
-            this.label54.TabIndex = 0;
-            this.label54.Text = "StartAddr：";
             // 
             // button2
             // 
@@ -965,8 +894,6 @@
             this.TabSheet_EPCC1G2.ResumeLayout(false);
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
-            this.groupBox33.ResumeLayout(false);
-            this.groupBox33.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).EndInit();
@@ -1054,12 +981,6 @@
         private System.Windows.Forms.ComboBox ComboBox_baud2;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.RadioButton radioButton_band5;
-        private System.Windows.Forms.CheckBox CheckBox_TID;
-        private System.Windows.Forms.GroupBox groupBox33;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label55;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label54;
     }
 }
 
