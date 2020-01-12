@@ -86,16 +86,26 @@
             this.ComboBox_COM = new System.Windows.Forms.ComboBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.TabSheet_EPCC1G2 = new System.Windows.Forms.TabPage();
-            this.groupBox12 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.ComboBox_IntervalTime = new System.Windows.Forms.ComboBox();
-            this.label23 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.ListView1_EPC = new System.Windows.Forms.ListView();
-            this.listViewCol_Number = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listViewCol_ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listViewCol_Length = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listViewCol_Times = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.textBoxCertificateName = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.buttCertificateOpen = new System.Windows.Forms.Button();
+            this.textBoxPackageNum = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBoxGostThCon = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBoxSmeltingNum = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBoxBatchNum = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxFactoryNum = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.textBoxPipeId = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBoxTagId = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.StatusBar1 = new System.Windows.Forms.StatusBar();
             this.TStatusPanel = new System.Windows.Forms.StatusBarPanel();
             this.Port = new System.Windows.Forms.StatusBarPanel();
@@ -114,8 +124,8 @@
             this.groupBox2.SuspendLayout();
             this.GroupBox1.SuspendLayout();
             this.TabSheet_EPCC1G2.SuspendLayout();
-            this.groupBox12.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).BeginInit();
@@ -723,8 +733,8 @@
             // 
             // TabSheet_EPCC1G2
             // 
-            this.TabSheet_EPCC1G2.Controls.Add(this.groupBox12);
             this.TabSheet_EPCC1G2.Controls.Add(this.groupBox4);
+            this.TabSheet_EPCC1G2.Controls.Add(this.groupBox12);
             this.TabSheet_EPCC1G2.Location = new System.Drawing.Point(4, 22);
             this.TabSheet_EPCC1G2.Name = "TabSheet_EPCC1G2";
             this.TabSheet_EPCC1G2.Size = new System.Drawing.Size(817, 678);
@@ -732,96 +742,190 @@
             this.TabSheet_EPCC1G2.Text = "EPCC1-G2 Test";
             this.TabSheet_EPCC1G2.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.textBoxCertificateName);
+            this.groupBox4.Controls.Add(this.label25);
+            this.groupBox4.Controls.Add(this.buttCertificateOpen);
+            this.groupBox4.Controls.Add(this.textBoxPackageNum);
+            this.groupBox4.Controls.Add(this.label24);
+            this.groupBox4.Controls.Add(this.textBoxGostThCon);
+            this.groupBox4.Controls.Add(this.label23);
+            this.groupBox4.Controls.Add(this.textBoxSmeltingNum);
+            this.groupBox4.Controls.Add(this.label22);
+            this.groupBox4.Controls.Add(this.textBoxBatchNum);
+            this.groupBox4.Controls.Add(this.label21);
+            this.groupBox4.Controls.Add(this.textBoxFactoryNum);
+            this.groupBox4.Controls.Add(this.label20);
+            this.groupBox4.Location = new System.Drawing.Point(3, 65);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(655, 104);
+            this.groupBox4.TabIndex = 4;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Main information";
+            // 
+            // textBoxCertificateName
+            // 
+            this.textBoxCertificateName.Location = new System.Drawing.Point(81, 71);
+            this.textBoxCertificateName.Name = "textBoxCertificateName";
+            this.textBoxCertificateName.Size = new System.Drawing.Size(134, 20);
+            this.textBoxCertificateName.TabIndex = 18;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 74);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(68, 13);
+            this.label25.TabIndex = 17;
+            this.label25.Text = "Сертификат";
+            // 
+            // buttCertificateOpen
+            // 
+            this.buttCertificateOpen.Location = new System.Drawing.Point(221, 69);
+            this.buttCertificateOpen.Name = "buttCertificateOpen";
+            this.buttCertificateOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttCertificateOpen.TabIndex = 16;
+            this.buttCertificateOpen.Text = "Открыть";
+            this.buttCertificateOpen.UseVisualStyleBackColor = true;
+            this.buttCertificateOpen.Click += new System.EventHandler(this.buttCertificateOpen_Click);
+            // 
+            // textBoxPackageNum
+            // 
+            this.textBoxPackageNum.Location = new System.Drawing.Point(387, 70);
+            this.textBoxPackageNum.Name = "textBoxPackageNum";
+            this.textBoxPackageNum.Size = new System.Drawing.Size(174, 20);
+            this.textBoxPackageNum.TabIndex = 15;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(325, 73);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(56, 13);
+            this.label24.TabIndex = 14;
+            this.label24.Text = "№ пакета";
+            // 
+            // textBoxGostThCon
+            // 
+            this.textBoxGostThCon.Location = new System.Drawing.Point(81, 43);
+            this.textBoxGostThCon.Name = "textBoxGostThCon";
+            this.textBoxGostThCon.Size = new System.Drawing.Size(215, 20);
+            this.textBoxGostThCon.TabIndex = 13;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(7, 46);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(50, 13);
+            this.label23.TabIndex = 12;
+            this.label23.Text = "Гост/ТУ";
+            // 
+            // textBoxSmeltingNum
+            // 
+            this.textBoxSmeltingNum.Location = new System.Drawing.Point(387, 44);
+            this.textBoxSmeltingNum.Name = "textBoxSmeltingNum";
+            this.textBoxSmeltingNum.Size = new System.Drawing.Size(174, 20);
+            this.textBoxSmeltingNum.TabIndex = 11;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(325, 47);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(57, 13);
+            this.label22.TabIndex = 10;
+            this.label22.Text = "№ плавки";
+            // 
+            // textBoxBatchNum
+            // 
+            this.textBoxBatchNum.Location = new System.Drawing.Point(387, 17);
+            this.textBoxBatchNum.Name = "textBoxBatchNum";
+            this.textBoxBatchNum.Size = new System.Drawing.Size(174, 20);
+            this.textBoxBatchNum.TabIndex = 9;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(325, 20);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(56, 13);
+            this.label21.TabIndex = 8;
+            this.label21.Text = "№ партии";
+            // 
+            // textBoxFactoryNum
+            // 
+            this.textBoxFactoryNum.Location = new System.Drawing.Point(122, 17);
+            this.textBoxFactoryNum.Name = "textBoxFactoryNum";
+            this.textBoxFactoryNum.Size = new System.Drawing.Size(174, 20);
+            this.textBoxFactoryNum.TabIndex = 7;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 20);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(109, 13);
+            this.label20.TabIndex = 6;
+            this.label20.Text = "Заводской № трубы";
+            // 
             // groupBox12
             // 
+            this.groupBox12.Controls.Add(this.textBoxPipeId);
+            this.groupBox12.Controls.Add(this.label19);
+            this.groupBox12.Controls.Add(this.textBoxTagId);
+            this.groupBox12.Controls.Add(this.label18);
             this.groupBox12.Controls.Add(this.button2);
-            this.groupBox12.Controls.Add(this.ComboBox_IntervalTime);
-            this.groupBox12.Controls.Add(this.label23);
-            this.groupBox12.Location = new System.Drawing.Point(485, 0);
+            this.groupBox12.Location = new System.Drawing.Point(3, 3);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(325, 54);
+            this.groupBox12.Size = new System.Drawing.Size(655, 56);
             this.groupBox12.TabIndex = 3;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Query Tag";
             // 
+            // textBoxPipeId
+            // 
+            this.textBoxPipeId.Location = new System.Drawing.Point(286, 19);
+            this.textBoxPipeId.Name = "textBoxPipeId";
+            this.textBoxPipeId.Size = new System.Drawing.Size(228, 20);
+            this.textBoxPipeId.TabIndex = 7;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(238, 22);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(42, 13);
+            this.label19.TabIndex = 6;
+            this.label19.Text = "Pipe id:";
+            // 
+            // textBoxTagId
+            // 
+            this.textBoxTagId.Location = new System.Drawing.Point(52, 19);
+            this.textBoxTagId.Name = "textBoxTagId";
+            this.textBoxTagId.Size = new System.Drawing.Size(174, 20);
+            this.textBoxTagId.TabIndex = 4;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 25);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(40, 13);
+            this.label18.TabIndex = 3;
+            this.label18.Text = "Tag id:";
+            // 
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(234, 18);
+            this.button2.Location = new System.Drawing.Point(565, 19);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(84, 25);
             this.button2.TabIndex = 2;
             this.button2.Text = "Query Tag";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // ComboBox_IntervalTime
-            // 
-            this.ComboBox_IntervalTime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_IntervalTime.FormattingEnabled = true;
-            this.ComboBox_IntervalTime.Location = new System.Drawing.Point(101, 22);
-            this.ComboBox_IntervalTime.Name = "ComboBox_IntervalTime";
-            this.ComboBox_IntervalTime.Size = new System.Drawing.Size(120, 21);
-            this.ComboBox_IntervalTime.TabIndex = 1;
-            this.ComboBox_IntervalTime.SelectedIndexChanged += new System.EventHandler(this.ComboBox_IntervalTime_SelectedIndexChanged);
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 26);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(74, 13);
-            this.label23.TabIndex = 0;
-            this.label23.Text = "Read Interval:";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.ListView1_EPC);
-            this.groupBox4.Location = new System.Drawing.Point(1, 0);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(480, 176);
-            this.groupBox4.TabIndex = 0;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "List EPC of Tags";
-            // 
-            // ListView1_EPC
-            // 
-            this.ListView1_EPC.AccessibleRole = System.Windows.Forms.AccessibleRole.IpAddress;
-            this.ListView1_EPC.AutoArrange = false;
-            this.ListView1_EPC.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ListView1_EPC.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.listViewCol_Number,
-            this.listViewCol_ID,
-            this.listViewCol_Length,
-            this.listViewCol_Times});
-            this.ListView1_EPC.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ListView1_EPC.FullRowSelect = true;
-            this.ListView1_EPC.GridLines = true;
-            this.ListView1_EPC.Location = new System.Drawing.Point(3, 16);
-            this.ListView1_EPC.Name = "ListView1_EPC";
-            this.ListView1_EPC.Size = new System.Drawing.Size(474, 149);
-            this.ListView1_EPC.TabIndex = 1;
-            this.ListView1_EPC.UseCompatibleStateImageBehavior = false;
-            this.ListView1_EPC.View = System.Windows.Forms.View.Details;
-            // 
-            // listViewCol_Number
-            // 
-            this.listViewCol_Number.Text = "No.";
-            this.listViewCol_Number.Width = 40;
-            // 
-            // listViewCol_ID
-            // 
-            this.listViewCol_ID.Text = "ID";
-            this.listViewCol_ID.Width = 150;
-            // 
-            // listViewCol_Length
-            // 
-            this.listViewCol_Length.Text = "EPCLength";
-            this.listViewCol_Length.Width = 150;
-            // 
-            // listViewCol_Times
-            // 
-            this.listViewCol_Times.Text = "Times";
             // 
             // StatusBar1
             // 
@@ -892,9 +996,10 @@
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.TabSheet_EPCC1G2.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).EndInit();
@@ -955,19 +1060,11 @@
         private System.Windows.Forms.CheckBox CheckBox_SameFre;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox12;
-        private System.Windows.Forms.ComboBox ComboBox_IntervalTime;
-        private System.Windows.Forms.Label label23;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Timer Timer_Test_;
         private System.Windows.Forms.Timer Timer_G2_Read;
         private System.Windows.Forms.Timer Timer_G2_Alarm;
-        private System.Windows.Forms.ListView ListView1_EPC;
-        private System.Windows.Forms.ColumnHeader listViewCol_Number;
-        private System.Windows.Forms.ColumnHeader listViewCol_ID;
-        private System.Windows.Forms.ColumnHeader listViewCol_Length;
-        private System.Windows.Forms.ColumnHeader listViewCol_Times;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer Timer_Test_6B;
         private System.Windows.Forms.Timer Timer_6B_Read;
@@ -981,6 +1078,24 @@
         private System.Windows.Forms.ComboBox ComboBox_baud2;
         private System.Windows.Forms.Label label47;
         private System.Windows.Forms.RadioButton radioButton_band5;
+        private System.Windows.Forms.TextBox textBoxTagId;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBoxPipeId;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox textBoxCertificateName;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Button buttCertificateOpen;
+        private System.Windows.Forms.TextBox textBoxPackageNum;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBoxGostThCon;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox textBoxSmeltingNum;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox textBoxBatchNum;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBoxFactoryNum;
+        private System.Windows.Forms.Label label20;
     }
 }
 

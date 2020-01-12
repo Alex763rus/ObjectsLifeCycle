@@ -11,6 +11,7 @@ using System.Reflection;
 using ReaderB;
 using System.IO.Ports;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace UHFReader09demomain
 {
@@ -212,14 +213,7 @@ namespace UHFReader09demomain
                   ComboBox_scantime.Items.Add(Convert.ToString(i) + "*100ms");
               ComboBox_scantime.SelectedIndex = 7;
               i=40;
-              while (i<=300)
-              {
-                  ComboBox_IntervalTime.Items.Add(Convert.ToString(i) + "ms");
-              i=i+10;
-              }
-              ComboBox_IntervalTime.SelectedIndex = 1;
-              i=40;
-            
+           
               ComboBox_PowerDbm.SelectedIndex = 13;
               radioButton_band1.Checked = true;
         }
@@ -413,7 +407,6 @@ namespace UHFReader09demomain
                   Button1.Enabled = false;
                   button2.Enabled = false;
 
-                  ListView1_EPC.Items.Clear();
                   button2.Text = "Stop";
                   ComOpen = false;            
                   timer1.Enabled = false;
@@ -778,6 +771,7 @@ namespace UHFReader09demomain
         private void button2_Click(object sender, EventArgs e)
         {
             Timer_Test_.Enabled = !Timer_Test_.Enabled;
+            Timer_Test_.Interval = 1000;
             if (!Timer_Test_.Enabled)
             {
                 AddCmdLog("Inventory", "Exit Query", 0);
@@ -785,21 +779,16 @@ namespace UHFReader09demomain
             }
             else
             {
-                ListView1_EPC.Items.Clear();
                 button2.Text = "Stop";
             }
         }
         private void Inventory()
         {
-              int i;
               int CardNum=0;
               int Totallen = 0;
-              int EPClen,m;
               byte[] EPC=new byte[5000];
-              int CardIndex;
               string temps;
-              string s, sEPC;
-              bool isonlistview;
+            string tagId;
               fIsInventoryScan = true;
               byte AdrTID = 0;
               byte LenTID = 0;
@@ -814,44 +803,23 @@ namespace UHFReader09demomain
                  byte[] daw = new byte[Totallen];
                  Array.Copy(EPC, daw, Totallen);               
                  temps = ByteArrayToHexString(daw);
-                 fInventory_EPC_List = temps;            //存贮记录
-                 m=0;
-                
+                 fInventory_EPC_List = temps;            //存贮记录               
                  if (CardNum==0)
                  {
                      fIsInventoryScan = false;
                      return;
                  }
-                 for (CardIndex = 0;CardIndex<CardNum;CardIndex++)
-                 {
-                     EPClen = daw[m];
-                     sEPC = temps.Substring(m * 2 + 2, EPClen * 2);
-                     m = m + EPClen + 1;
-                     if (sEPC.Length != EPClen*2 )
-                     return;
-                    isonlistview = false;
-                     for (i=0; i< ListView1_EPC.Items.Count;i++)     //判断是否在Listview列表内
-                      {
-                        if (sEPC==ListView1_EPC.Items[i].SubItems[1].Text)
-                        {
-                         aListItem = ListView1_EPC.Items[i];
-                         ChangeSubItem(aListItem, 1, sEPC);
-                         isonlistview=true;
-                        }
-                      }
-                      if (!isonlistview)
-                      {
-                          aListItem = ListView1_EPC.Items.Add((ListView1_EPC.Items.Count + 1).ToString());
-                          aListItem.SubItems.Add("");
-                          aListItem.SubItems.Add("");
-                          aListItem.SubItems.Add("");
-                          s = sEPC;
-                          ChangeSubItem(aListItem, 1, s);
-                          s = (sEPC.Length / 2).ToString().PadLeft(2, '0');
-                          ChangeSubItem(aListItem, 2, s);
-                        
-                      }             
-                 }            
+                tagId = temps.Substring(2, daw[0] * 2);
+                MessageBox.Show(tagId);
+                textBoxTagId.Text = tagId;
+                //-------------------------------------
+                sqlFieldFill(tagId);
+                //  MessageBox.Show(temps.Substring(2, EPClen * 2));
+
+
+
+                //-------------------------------------
+
             }
             fIsInventoryScan = false;
             if (fAppClosed)
@@ -869,11 +837,7 @@ namespace UHFReader09demomain
             if (fIsInventoryScan)
                 return;
             fIsInventoryScan = true;
-                byte WordPtr, ENum;
                 byte Num = 0;
-                byte Mem = 0;
-                byte EPClength=0;
-                string str;
                 byte[] CardData=new  byte[320];
 
                 if (fCmdRet == 0)
@@ -922,15 +886,6 @@ namespace UHFReader09demomain
             fAppClosed = true;
         }
 
-        private void ComboBox_IntervalTime_SelectedIndexChanged(object sender, EventArgs e)
-        {
-              if   (ComboBox_IntervalTime.SelectedIndex <6)
-              Timer_Test_.Interval =100;
-              else
-              Timer_Test_.Interval =(ComboBox_IntervalTime.SelectedIndex+4)*10;
-        }
-
-
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
                 timer1.Enabled = false;
@@ -939,11 +894,11 @@ namespace UHFReader09demomain
                 Timer_G2_Read.Enabled = false;
                 Timer_Test_.Enabled = false;
                 button2.Text = "Query Tag";
-                if ((ListView1_EPC.Items.Count != 0)&&(ComOpen))
+                if (ComOpen)
                 {
                     button2.Enabled = true;
                 }
-                if ((ListView1_EPC.Items.Count == 0)&&(ComOpen))
+                if (ComOpen)
                 {
                     button2.Enabled = true;
                 }
@@ -1047,10 +1002,127 @@ namespace UHFReader09demomain
             ComboBox_dminfre.SelectedIndex = 0;
         }
 
+        private void sqlFieldFill(string tagNum)
+        {
+
+            //====================
+
+            SqlConnection myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" +
+                           "Trusted_Connection=yes;" +
+                           "database=ObjectsLifeCycle; " +
+                           "connection timeout=30");
+            try
+            {
+                myConnection.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERROR1");
+            }
+
+            try
+            {
+                SqlDataReader myReader = null;
+                SqlCommand myCommand = new SqlCommand(" select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, cer.[name] "
+                             + " from pipe pip"
+                             + " inner join certificate cer on  cer.certificateId = pip.certificateId"
+                             + " inner join strength stren on  stren.strengthId = pip.strengthId"
+                             + " inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId"
+                             + " inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId"
+                             + " inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId"
+                             + " inner join coupling coup on  coup.couplingId = pip.couplingId"
+                             + " inner join tag t on  t.tagId = pip.tagId"
+                             + " inner join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId"
+                             + " where t.tagNum = '" 
+                             + tagNum + "'"
+                            , myConnection);
+                myReader = myCommand.ExecuteReader();
+                myReader.Read();
+                textBoxPipeId.Text = (myReader["pipeNum"].ToString());
+                textBoxFactoryNum.Text = (myReader["factoryNum"].ToString());
+                textBoxBatchNum.Text = (myReader["batchNum"].ToString());
+                textBoxSmeltingNum.Text = (myReader["smeltingNum"].ToString());
+                textBoxGostThCon.Text = (myReader["gostThCon"].ToString());
+                textBoxPackageNum.Text = (myReader["packageNum"].ToString());
+               // textBoxReleaseDate.Text = (myReader["releaseDate"].ToString());
+                textBoxCertificateName.Text = (myReader["name"].ToString());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "ERROR2");
+            }
+
+            //===============================
+            // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
+            //myCommand.ExecuteNonQuery();
+
+            try
+            {
+                myConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
 
 
-      
+            //====================
 
+            SqlConnection myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" +
+                           "Trusted_Connection=yes;" +
+                           "database=ObjectLifeCycle; " +
+                           "connection timeout=30");
+            try
+            {
+                myConnection.Open();
+                MessageBox.Show("OKK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
 
+            try
+            {
+                //MessageBox.Show(ex.ToString());
+                SqlDataReader myReader = null;
+                SqlCommand myCommand = new SqlCommand("select * from testTable",
+                                                         myConnection);
+                myReader = myCommand.ExecuteReader();
+                while (myReader.Read())
+                {
+
+                    Console.WriteLine(myReader["Column1"].ToString());
+                    Console.WriteLine(myReader["Column2"].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            //===============================
+            // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
+            //myCommand.ExecuteNonQuery();
+
+            try
+            {
+                myConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void buttCertificateOpen_Click(object sender, EventArgs e)
+        {
+            //to do
+            // кнопка открывания сертификата
+        }
     }
 }

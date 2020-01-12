@@ -76,6 +76,7 @@ create table protection(
 if object_id('certificate') is null
 create table [certificate](
 	  certificateId numeric(15,0) identity
+    , [name] varchar(50)
 	, patch varchar(100)
 	primary key (certificateId)
 )
@@ -177,7 +178,7 @@ if not exists(select 1 from protection where brief = 'фосфатирование')
 
 -- Сертификат:
 if not exists(select 1 from [certificate] where patch = 'D:\Resources\')
-	insert into [certificate](patch) select 'D:\Resources\'
+	insert into [certificate]([name], patch) select 'НК 733536/ 06','D:\Resources\'
 
 -- Муфта:
 if not exists(select 1 from coupling where couplingId = 1)
@@ -215,22 +216,21 @@ select * from protection
 select * from [certificate]
 select * from coupling
 select * from pipe
+
+ select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, cer.[name]
+   from pipe pip
+  inner join certificate cer on  cer.certificateId = pip.certificateId
+  inner join strength stren on  stren.strengthId = pip.strengthId
+  inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
+  inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId
+  inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId
+  inner join coupling coup on  coup.couplingId = pip.couplingId
+  inner join tag t on  t.tagId = pip.tagId
+  inner join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
+  where t.tagNum = 'E2003A33D5297889349F9AA6'
 */
-select * from tag
-select * from strength
-select * from standardLen
-select * from pipeType
-select * from pipeDiameter
-select * from intercoating
-select * from firm
-select * from protection
-select * from [certificate]
-select * from coupling
-select * from pipe
- --drop database ObjectsLifeCycle
-
-
-
+--==============================================
+   --drop database ObjectsLifeCycle
 
 
 
