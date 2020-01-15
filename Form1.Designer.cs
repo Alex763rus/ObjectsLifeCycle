@@ -95,6 +95,26 @@
             this.textBoxCertificate = new System.Windows.Forms.TextBox();
             this.gpSecondInf = new System.Windows.Forms.GroupBox();
             this.butSecondInf = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -115,7 +135,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(669, 431);
+            this.tabControl1.Size = new System.Drawing.Size(669, 445);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             // 
@@ -128,7 +148,7 @@
             this.TabSheet_CMD.Location = new System.Drawing.Point(4, 22);
             this.TabSheet_CMD.Name = "TabSheet_CMD";
             this.TabSheet_CMD.Padding = new System.Windows.Forms.Padding(3);
-            this.TabSheet_CMD.Size = new System.Drawing.Size(661, 405);
+            this.TabSheet_CMD.Size = new System.Drawing.Size(661, 423);
             this.TabSheet_CMD.TabIndex = 1;
             this.TabSheet_CMD.Text = "Считыватель";
             this.TabSheet_CMD.UseVisualStyleBackColor = true;
@@ -454,7 +474,7 @@
             this.TabSheet_EPCC1G2.Controls.Add(this.groupBox12);
             this.TabSheet_EPCC1G2.Location = new System.Drawing.Point(4, 22);
             this.TabSheet_EPCC1G2.Name = "TabSheet_EPCC1G2";
-            this.TabSheet_EPCC1G2.Size = new System.Drawing.Size(661, 405);
+            this.TabSheet_EPCC1G2.Size = new System.Drawing.Size(661, 419);
             this.TabSheet_EPCC1G2.TabIndex = 2;
             this.TabSheet_EPCC1G2.Text = "Метка";
             this.TabSheet_EPCC1G2.UseVisualStyleBackColor = true;
@@ -474,6 +494,7 @@
             this.groupBox4.Controls.Add(this.label21);
             this.groupBox4.Controls.Add(this.textBoxFactoryNum);
             this.groupBox4.Controls.Add(this.label20);
+            this.groupBox4.Controls.Add(this.buttCertificateOpen);
             this.groupBox4.Location = new System.Drawing.Point(3, 65);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(655, 161);
@@ -492,11 +513,11 @@
             // 
             // buttCertificateOpen
             // 
-            this.buttCertificateOpen.Location = new System.Drawing.Point(551, 171);
+            this.buttCertificateOpen.Location = new System.Drawing.Point(328, 132);
             this.buttCertificateOpen.Name = "buttCertificateOpen";
             this.buttCertificateOpen.Size = new System.Drawing.Size(75, 23);
             this.buttCertificateOpen.TabIndex = 16;
-            this.buttCertificateOpen.Text = "Открыть";
+            this.buttCertificateOpen.Text = "тест";
             this.buttCertificateOpen.UseVisualStyleBackColor = true;
             this.buttCertificateOpen.Click += new System.EventHandler(this.buttCertificateOpen_Click);
             // 
@@ -640,7 +661,7 @@
             // StatusBar1
             // 
             this.StatusBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.StatusBar1.Location = new System.Drawing.Point(0, 429);
+            this.StatusBar1.Location = new System.Drawing.Point(0, 443);
             this.StatusBar1.Name = "StatusBar1";
             this.StatusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.TStatusPanel,
@@ -696,10 +717,29 @@
             // 
             // gpSecondInf
             // 
-            this.gpSecondInf.Controls.Add(this.buttCertificateOpen);
+            this.gpSecondInf.Controls.Add(this.linkLabel3);
+            this.gpSecondInf.Controls.Add(this.linkLabel2);
+            this.gpSecondInf.Controls.Add(this.linkLabel1);
+            this.gpSecondInf.Controls.Add(this.checkBox4);
+            this.gpSecondInf.Controls.Add(this.checkBox5);
+            this.gpSecondInf.Controls.Add(this.checkBox3);
+            this.gpSecondInf.Controls.Add(this.checkBox2);
+            this.gpSecondInf.Controls.Add(this.checkBox1);
+            this.gpSecondInf.Controls.Add(this.comboBox3);
+            this.gpSecondInf.Controls.Add(this.label9);
+            this.gpSecondInf.Controls.Add(this.comboBox2);
+            this.gpSecondInf.Controls.Add(this.label8);
+            this.gpSecondInf.Controls.Add(this.comboBox1);
+            this.gpSecondInf.Controls.Add(this.label7);
+            this.gpSecondInf.Controls.Add(this.dateTimePicker2);
+            this.gpSecondInf.Controls.Add(this.dateTimePicker1);
+            this.gpSecondInf.Controls.Add(this.label6);
+            this.gpSecondInf.Controls.Add(this.label5);
+            this.gpSecondInf.Controls.Add(this.textBox1);
+            this.gpSecondInf.Controls.Add(this.label4);
             this.gpSecondInf.Location = new System.Drawing.Point(3, 232);
             this.gpSecondInf.Name = "gpSecondInf";
-            this.gpSecondInf.Size = new System.Drawing.Size(655, 170);
+            this.gpSecondInf.Size = new System.Drawing.Size(655, 186);
             this.gpSecondInf.TabIndex = 6;
             this.gpSecondInf.TabStop = false;
             this.gpSecondInf.Text = "Дополнительная информация";
@@ -714,12 +754,197 @@
             this.butSecondInf.UseVisualStyleBackColor = true;
             this.butSecondInf.Click += new System.EventHandler(this.button4_Click_1);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(42, 19);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(254, 20);
+            this.textBox1.TabIndex = 18;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "ОТК";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(112, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Дата выпуска трубы";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 74);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(121, 13);
+            this.label6.TabIndex = 21;
+            this.label6.Text = "Дата установки трубы";
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Location = new System.Drawing.Point(134, 45);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(162, 20);
+            this.dateTimePicker1.TabIndex = 23;
+            // 
+            // dateTimePicker2
+            // 
+            this.dateTimePicker2.Location = new System.Drawing.Point(134, 71);
+            this.dateTimePicker2.Name = "dateTimePicker2";
+            this.dateTimePicker2.Size = new System.Drawing.Size(162, 20);
+            this.dateTimePicker2.TabIndex = 24;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 103);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(70, 13);
+            this.label7.TabIndex = 25;
+            this.label7.Text = "Типоразмер";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(110, 98);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(186, 21);
+            this.comboBox1.TabIndex = 26;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(110, 126);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(186, 21);
+            this.comboBox2.TabIndex = 28;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 131);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(97, 13);
+            this.label8.TabIndex = 27;
+            this.label8.Text = "Группа прочности";
+            // 
+            // comboBox3
+            // 
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(110, 153);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(186, 21);
+            this.comboBox3.TabIndex = 30;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 158);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(54, 13);
+            this.label9.TabIndex = 29;
+            this.label9.Text = "Длина, м";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(393, 22);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(63, 17);
+            this.checkBox1.TabIndex = 33;
+            this.checkBox1.Text = "Резьба";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(393, 44);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(59, 17);
+            this.checkBox2.TabIndex = 34;
+            this.checkBox2.Text = "Муфта";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Location = new System.Drawing.Point(393, 67);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(138, 17);
+            this.checkBox3.TabIndex = 35;
+            this.checkBox3.Text = "Покрытие внутреннее";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(393, 90);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(129, 17);
+            this.checkBox4.TabIndex = 37;
+            this.checkBox4.Text = "Покрытие наружное";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(393, 113);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(162, 17);
+            this.checkBox5.TabIndex = 36;
+            this.checkBox5.Text = "Покрытие межниппельное";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabel1.Location = new System.Drawing.Point(451, 45);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(63, 13);
+            this.linkLabel1.TabIndex = 43;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Подробнее";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // linkLabel2
+            // 
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabel2.Location = new System.Drawing.Point(527, 68);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(63, 13);
+            this.linkLabel2.TabIndex = 44;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "Подробнее";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            // 
+            // linkLabel3
+            // 
+            this.linkLabel3.AutoSize = true;
+            this.linkLabel3.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabel3.Location = new System.Drawing.Point(552, 114);
+            this.linkLabel3.Name = "linkLabel3";
+            this.linkLabel3.Size = new System.Drawing.Size(63, 13);
+            this.linkLabel3.TabIndex = 45;
+            this.linkLabel3.TabStop = true;
+            this.linkLabel3.Text = "Подробнее";
+            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.ClientSize = new System.Drawing.Size(669, 451);
+            this.ClientSize = new System.Drawing.Size(669, 465);
             this.Controls.Add(this.StatusBar1);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -743,6 +968,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Port)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).EndInit();
             this.gpSecondInf.ResumeLayout(false);
+            this.gpSecondInf.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -814,6 +1040,26 @@
         private System.Windows.Forms.TextBox textBoxCertificate;
         private System.Windows.Forms.GroupBox gpSecondInf;
         private System.Windows.Forms.Button butSecondInf;
+        private System.Windows.Forms.LinkLabel linkLabel3;
+        private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label4;
     }
 }
 

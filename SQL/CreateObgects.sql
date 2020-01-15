@@ -72,13 +72,16 @@ create table protection(
 	primary key (protectionId)
 )
 
--- Сертификат:
-if object_id('certificate') is null
-create table [certificate](
-	  certificateId numeric(15,0) identity
-    , [name] varchar(50)
-	, patch varchar(100)
-	primary key (certificateId)
+-- Документ (сертификат):
+if object_id('document') is null
+create table document(
+	  documentId numeric(15,0) identity
+	, objectID numeric(15,0)  -- ID Объекта, к которому относится сертифика
+    , [name] varchar(50)      -- имя файла
+	, type int                -- тип документа 1/2 : труба/покрытие внутреннее
+    , addedDate smalldatetime -- дата добавления в систему
+	, patch varchar(100)      -- каталог расположение
+	primary key (documentId)
 )
 
 -- Муфта:
@@ -102,15 +105,16 @@ if object_id('pipe') is null
 create table pipe(
 	  pipeId numeric(15,0) identity
     , pipeNum numeric(15,0)
-	, factoryNum numeric(15,0)  -- заводской номер
-	, batchNum numeric(15,0)    -- номер партии
-	, smeltingNum numeric(15,0) -- номер плавки
-    , gostThCon varchar(50)     -- гост ТУ
-	, packageNum varchar(50)    -- номер пакета
-	, releaseDate smalldatetime -- дата выпуска
+	, factoryNum numeric(15,0)   -- заводской номер
+	, batchNum numeric(15,0)     -- номер партии
+	, smeltingNum numeric(15,0)  -- номер плавки
+    , gostThCon varchar(50)      -- гост ТУ
+	, packageNum varchar(50)     -- номер пакета
+	, releaseDate smalldatetime  -- дата выпуска
 	, outerCoating int default 0 -- внешнее покрытие (признак 1/0 есть/нет)
+	, [certificate] varchar(50)  -- сертификат
+	, otk varchar(50)           -- информация об ОТК
 
-	, certificateId numeric(15,0) -- сертификат
 	, strengthId numeric(15,0)    -- группа прочности
 	, standardLenId numeric(15,0) -- стандартная длина
 	, pipeTypeId numeric(15,0)    -- тип трубы
@@ -120,7 +124,6 @@ create table pipe(
 	, intercoatingId numeric(15,0) 
 	  
 	  primary key (pipeId)
-	, FOREIGN KEY (certificateId) REFERENCES certificate(certificateId)
 	, FOREIGN KEY (strengthId) REFERENCES strength(strengthId)
 	, FOREIGN KEY (standardLenId) REFERENCES standardLen(standardLenId)
 	, FOREIGN KEY (pipeTypeId) REFERENCES pipeType(pipeTypeId)
@@ -176,9 +179,14 @@ if not exists(select 1 from firm where brief = 'MajorCrack')
 if not exists(select 1 from protection where brief = 'фосфатирование')
 	insert into protection(brief) select 'фосфатирование'
 
--- Сертификат:
-if not exists(select 1 from [certificate] where patch = 'D:\Resources\')
-	insert into [certificate]([name], patch) select 'НК 733536/ 06','D:\Resources\'
+-- Документ (сертификат):
+if not exists(select 1 from document)
+	insert into document(objectID, [name], type, addedDate, patch)
+	select objectID = 1
+	     , [name] = 'Sertifikat_kachestva_postavka_05_05_2019g.pdf'
+		 , type = 1 --труба
+		 , addedDate = '20200115'
+		 , patch = 'D:\Git\Sharp\ObjectsLifeCycle\Certificate'
 
 -- Муфта:
 if not exists(select 1 from coupling where couplingId = 1)
@@ -187,7 +195,7 @@ if not exists(select 1 from coupling where couplingId = 1)
 
 -- Труба:
 if not exists(select 1 from pipe where pipeId = 1)
-	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, certificateId, strengthId, standardLenId, pipeTypeId, pipeDiameterId, couplingId, tagId, intercoatingId ) 
+	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, [certificate], otk, strengthId, standardLenId, pipeTypeId, pipeDiameterId, couplingId, tagId, intercoatingId ) 
 	select pipeNum = 123456789
 	     , factoryNum = 204187
 		 , batchNum = 32605
@@ -195,7 +203,8 @@ if not exists(select 1 from pipe where pipeId = 1)
 		 , gostThCon = '633-80'
 		 , packageNum = 'А39035'
 		 , releaseDate = '20181026'
-		 , certificateId = 1
+		 , [certificate] = 'НК 733536/ 06'
+		 , otk = 'какая то информация об ОТК'
 		 , strengthId = 1
 		 , standardLenId = 1
 		 , pipeTypeId = 1
@@ -213,13 +222,12 @@ select * from pipeDiameter
 select * from intercoating
 select * from firm
 select * from protection
-select * from [certificate]
+select * from document
 select * from coupling
 select * from pipe
 
- select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, cer.[name]
+ select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate]
    from pipe pip
-  inner join certificate cer on  cer.certificateId = pip.certificateId
   inner join strength stren on  stren.strengthId = pip.strengthId
   inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
   inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId

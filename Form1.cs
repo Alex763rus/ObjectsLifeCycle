@@ -761,7 +761,6 @@ namespace UHFReader09demomain
                      return;
                  }
                 tagId = temps.Substring(2, daw[0] * 2);
-                MessageBox.Show(tagId);
                 textBoxTagId.Text = tagId;
                 //-------------------------------------
                 sqlFieldFill(tagId);
@@ -1081,7 +1080,7 @@ namespace UHFReader09demomain
             
 
 
-                Form frm = new Form();
+            Form frm = new Form();
             frm.WindowState = FormWindowState.Maximized;
 
             WebBrowser webBrowser = new WebBrowser();
@@ -1113,10 +1112,60 @@ namespace UHFReader09demomain
             {
                 gpSecondInf.Visible = true;
                 butSecondInf.Text = "Скрыть";
-                this.Size = new System.Drawing.Size(685, 490);
+                this.Size = new System.Drawing.Size(685, 504);
                // tabControl1.Size = new System.Drawing.Size(686, 503);
             }
 
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //муфта подробнее
+            Form frm = new Form();
+            // frm.WindowState = FormWindowState.Maximized;
+            DataGridView dataGridView = new DataGridView();
+            dataGridView.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            // dataGridView.add
+            //dataGridView.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+
+            //frm.Controls.Add(dataGridView); //new Point(oldbutton.Location.X, oldbutton.Location.Y + oldbutton.Height + 10);
+
+
+            int n = 5; // количество столбцов
+  
+
+            DataGridViewTextBoxColumn[] column = new DataGridViewTextBoxColumn[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                column[i] = new DataGridViewTextBoxColumn(); // выделяем память для объекта
+                column[i].Name = "Header" + i;
+            }
+            column[0].HeaderText = "Группа прочности";
+            column[1].HeaderText = "Диаметр, мм";
+            column[2].HeaderText = "Номер партии";
+            column[3].HeaderText = "Номер плавки";
+            column[4].HeaderText = "Защита/упрочнение";
+
+            dataGridView.Columns.AddRange(column);
+            dataGridView.AutoResizeColumns();
+
+            dataGridView.Rows.Add();  // добавление строк
+
+            frm.Controls.Add(dataGridView);
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            frm.Show();
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //покрытие внутреннее подробнее
+        }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //покрытие межниппельное подробнее
         }
     }
 }
