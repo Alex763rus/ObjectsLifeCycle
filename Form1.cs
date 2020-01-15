@@ -174,18 +174,8 @@ namespace UHFReader09demomain
         
         private void ClearLastInfo()
         { 
-            ComboBox_AlreadyOpenCOM.Refresh();
-              RefreshStatus();
-              Edit_Type.Text = "";
-              Edit_Version.Text = "";
-              ISO180006B.Checked=false;
-              EPCC1G2.Checked=false;
-              Edit_ComAdr.Text = "";
-              Edit_powerdBm.Text = "";
-              Edit_scantime.Text = "";
-              Edit_dminfre.Text = "";
-              Edit_dmaxfre.Text = "";
-            //  PageControl1.TabIndex = 0;
+            
+
         }
         private void InitComList()
         {
@@ -215,7 +205,7 @@ namespace UHFReader09demomain
               i=40;
            
               ComboBox_PowerDbm.SelectedIndex = 13;
-              radioButton_band1.Checked = true;
+ 
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -234,13 +224,14 @@ namespace UHFReader09demomain
               Timer_G2_Alarm.Enabled = false;
               timer1.Enabled = false;
 
-              Button3.Enabled = false;
               Button5.Enabled = false;
               Button1.Enabled = false;
               button2.Enabled = false;
 
               gpSecondInf.Visible = false;
-              ComboBox_baud2.SelectedIndex = 3;
+              this.Size = new System.Drawing.Size(685, 316);
+             // tabControl1.Size = new System.Drawing.Size(669, 267);
+               ComboBox_baud2.SelectedIndex = 3;
         }
 
         private void OpenPort_Click(object sender, EventArgs e)
@@ -337,7 +328,6 @@ namespace UHFReader09demomain
               {
                 ComboBox_AlreadyOpenCOM.Items.Add("COM"+Convert.ToString(fOpenComIndex)) ;
                 ComboBox_AlreadyOpenCOM.SelectedIndex = ComboBox_AlreadyOpenCOM.SelectedIndex + 1;
-                Button3.Enabled = true ;
                 Button5.Enabled = true;
                 Button1.Enabled = true;
                 button2.Enabled = true;
@@ -349,7 +339,7 @@ namespace UHFReader09demomain
 
             if ((ComboBox_AlreadyOpenCOM.Items.Count != 0)&(fOpenComIndex != -1) & (openresult != 0X35) & (openresult != 0X30)&(fCmdRet==0)) 
               {
-                fComAdr = Convert.ToByte(Edit_ComAdr.Text,16);
+               // fComAdr = Convert.ToByte(Edit_ComAdr.Text,16);
                 temp = ComboBox_AlreadyOpenCOM.SelectedItem.ToString();
                 frmcomportindex = Convert.ToInt32(temp.Substring(3, temp.Length - 3));
               }
@@ -361,8 +351,9 @@ namespace UHFReader09demomain
             int port;
             //string SelectCom ;
             string temp;
-            ClearLastInfo();
-              try
+            ComboBox_AlreadyOpenCOM.Refresh();
+            RefreshStatus();
+            try
               {
                 if (ComboBox_AlreadyOpenCOM.SelectedIndex  < 0 )
                 {
@@ -404,7 +395,6 @@ namespace UHFReader09demomain
                   ComboBox_AlreadyOpenCOM.Items.Clear();
                   ComboBox_AlreadyOpenCOM.Refresh();
                   RefreshStatus();
-                  Button3.Enabled = false;
                   Button5.Enabled = false;
                   Button1.Enabled = false;
                   button2.Enabled = false;
@@ -424,87 +414,55 @@ namespace UHFReader09demomain
              byte dminfre = 0;
              byte powerdBm=0;
              byte FreBand = 0;
-             Edit_Version.Text = "";
-              Edit_ComAdr.Text = "";
-              Edit_scantime.Text = "";
-              Edit_Type.Text = "";
-              ISO180006B.Checked=false;
-              EPCC1G2.Checked=false;
-              Edit_powerdBm.Text = "";
-              Edit_dminfre.Text = "";
-              Edit_dmaxfre.Text = "";
               fCmdRet = StaticClassReaderB.GetReaderInformation(ref fComAdr, VersionInfo, ref ReaderType, TrType, ref dmaxfre, ref dminfre, ref powerdBm, ref ScanTime, frmcomportindex);
               if (fCmdRet == 0)
               {
-                  Edit_Version.Text = Convert.ToString(VersionInfo[0], 10).PadLeft(2, '0') + "." + Convert.ToString(VersionInfo[1], 10).PadLeft(2, '0');
-
                       if (powerdBm > 13)
                           ComboBox_PowerDbm.SelectedIndex = 13;
                       else
                           ComboBox_PowerDbm.SelectedIndex = powerdBm;
-                  Edit_ComAdr.Text = Convert.ToString(fComAdr, 16).PadLeft(2, '0');
                   Edit_NewComAdr.Text = Convert.ToString(fComAdr, 16).PadLeft(2, '0');
-                  Edit_scantime.Text = Convert.ToString(ScanTime, 10).PadLeft(2, '0') + "*100ms";
                   ComboBox_scantime.SelectedIndex = ScanTime - 3;
-                  Edit_powerdBm.Text = Convert.ToString(powerdBm, 10).PadLeft(2, '0');
 
                   FreBand= Convert.ToByte(((dmaxfre & 0xc0)>> 4)|(dminfre >> 6)) ;
                   switch (FreBand)
                   {
                       case 0:
                           {
-                              radioButton_band1.Checked = true;
                               fdminfre = 902.6 + (dminfre & 0x3F) * 0.4;
                               fdmaxfre = 902.6 + (dmaxfre & 0x3F) * 0.4;
                           }
                           break;
                       case 1:
                           {
-                              radioButton_band2.Checked = true;
                               fdminfre = 920.125 + (dminfre & 0x3F) * 0.25;
                               fdmaxfre = 920.125 + (dmaxfre & 0x3F) * 0.25;
                           }
                           break;
                       case 2:
                           {
-                              radioButton_band3.Checked = true;
                               fdminfre = 902.75 + (dminfre & 0x3F) * 0.5;
                               fdmaxfre = 902.75 + (dmaxfre & 0x3F) * 0.5;
                           }
                           break;
                       case 3:
                           {
-                              radioButton_band4.Checked = true;
                               fdminfre = 917.1 + (dminfre & 0x3F) * 0.2;
                               fdmaxfre = 917.1 + (dmaxfre & 0x3F) * 0.2;
                           }
                           break;
                       case 4:
                           {
-                              radioButton_band5.Checked = true;
                               fdminfre = 865.1 + (dminfre & 0x3F) * 0.2;
                               fdmaxfre = 865.1 + (dmaxfre & 0x3F) * 0.2;
                           }
                           break;
                   }
-                  Edit_dminfre.Text = Convert.ToString(fdminfre) + "MHz";
-                  Edit_dmaxfre.Text = Convert.ToString(fdmaxfre) + "MHz";
                   if (fdmaxfre != fdminfre)
                       CheckBox_SameFre.Checked = false;
                   ComboBox_dminfre.SelectedIndex = dminfre & 0x3F;
                   ComboBox_dmaxfre.SelectedIndex = dmaxfre & 0x3F;
-               //   if (ReaderType == 0x08)
-                      Edit_Type.Text = "UHFReader09";
-                  if ((TrType[0] & 0x02) == 0x02) //第二个字节低第四位代表支持的协议“ISO/IEC 15693”
-                  {
-                      ISO180006B.Checked = true;
-                      EPCC1G2.Checked = true;
-                  }
-                  else
-                  {
-                      ISO180006B.Checked = false;
-                      EPCC1G2.Checked = false;
-                  }
+
               }
               AddCmdLog("GetReaderInformation","GetReaderInformation", fCmdRet);
         }
@@ -515,16 +473,7 @@ namespace UHFReader09demomain
               string returninfo="";
               string returninfoDlg="";
               string setinfo;
-              if (radioButton_band1.Checked)
-                  band = 0;
-              if (radioButton_band2.Checked)
-                  band = 1;
-              if (radioButton_band3.Checked)
-                  band = 2;
-              if (radioButton_band4.Checked)
-                  band = 3;
-              if (radioButton_band5.Checked)
-                  band = 4;
+              band = 0;
               if (Edit_NewComAdr.Text == "")
                   return;
               progressBar1.Visible = true;
@@ -1157,13 +1106,15 @@ namespace UHFReader09demomain
             {
                 gpSecondInf.Visible = false;
                 butSecondInf.Text = "Подробнее";
-                this.Size = new System.Drawing.Size(686, 283);
+                this.Size = new System.Drawing.Size(685, 316);
+               // tabControl1.Size = new System.Drawing.Size(686, 283);
             }
             else
             {
                 gpSecondInf.Visible = true;
                 butSecondInf.Text = "Скрыть";
-                this.Size = new System.Drawing.Size(686, 503);
+                this.Size = new System.Drawing.Size(685, 490);
+               // tabControl1.Size = new System.Drawing.Size(686, 503);
             }
 
         }
