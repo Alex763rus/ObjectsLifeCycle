@@ -87,7 +87,6 @@
             this.Label1 = new System.Windows.Forms.Label();
             this.TabSheet_EPCC1G2 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.textBoxCertificateName = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
             this.buttCertificateOpen = new System.Windows.Forms.Button();
             this.textBoxPackageNum = new System.Windows.Forms.TextBox();
@@ -117,6 +116,10 @@
             this.Timer_6B_Read = new System.Windows.Forms.Timer(this.components);
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.textBoxCertificate = new System.Windows.Forms.TextBox();
+            this.gpSecondInf = new System.Windows.Forms.GroupBox();
+            this.butSecondInf = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -129,6 +132,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).BeginInit();
+            this.gpSecondInf.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -733,6 +737,7 @@
             // 
             // TabSheet_EPCC1G2
             // 
+            this.TabSheet_EPCC1G2.Controls.Add(this.gpSecondInf);
             this.TabSheet_EPCC1G2.Controls.Add(this.groupBox4);
             this.TabSheet_EPCC1G2.Controls.Add(this.groupBox12);
             this.TabSheet_EPCC1G2.Location = new System.Drawing.Point(4, 22);
@@ -744,9 +749,9 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.textBoxCertificateName);
+            this.groupBox4.Controls.Add(this.butSecondInf);
+            this.groupBox4.Controls.Add(this.textBoxCertificate);
             this.groupBox4.Controls.Add(this.label25);
-            this.groupBox4.Controls.Add(this.buttCertificateOpen);
             this.groupBox4.Controls.Add(this.textBoxPackageNum);
             this.groupBox4.Controls.Add(this.label24);
             this.groupBox4.Controls.Add(this.textBoxGostThCon);
@@ -759,17 +764,10 @@
             this.groupBox4.Controls.Add(this.label20);
             this.groupBox4.Location = new System.Drawing.Point(3, 65);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(655, 104);
+            this.groupBox4.Size = new System.Drawing.Size(655, 131);
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Main information";
-            // 
-            // textBoxCertificateName
-            // 
-            this.textBoxCertificateName.Location = new System.Drawing.Point(81, 71);
-            this.textBoxCertificateName.Name = "textBoxCertificateName";
-            this.textBoxCertificateName.Size = new System.Drawing.Size(134, 20);
-            this.textBoxCertificateName.TabIndex = 18;
+            this.groupBox4.Text = "Основная информация";
             // 
             // label25
             // 
@@ -782,7 +780,7 @@
             // 
             // buttCertificateOpen
             // 
-            this.buttCertificateOpen.Location = new System.Drawing.Point(221, 69);
+            this.buttCertificateOpen.Location = new System.Drawing.Point(551, 171);
             this.buttCertificateOpen.Name = "buttCertificateOpen";
             this.buttCertificateOpen.Size = new System.Drawing.Size(75, 23);
             this.buttCertificateOpen.TabIndex = 16;
@@ -882,7 +880,7 @@
             this.groupBox12.Size = new System.Drawing.Size(655, 56);
             this.groupBox12.TabIndex = 3;
             this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Query Tag";
+            this.groupBox12.Text = "Поиск метки";
             // 
             // textBoxPipeId
             // 
@@ -923,14 +921,14 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(84, 25);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Query Tag";
+            this.button2.Text = "Считывать";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // StatusBar1
             // 
             this.StatusBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.StatusBar1.Location = new System.Drawing.Point(0, 705);
+            this.StatusBar1.Location = new System.Drawing.Point(0, 350);
             this.StatusBar1.Name = "StatusBar1";
             this.StatusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] {
             this.TStatusPanel,
@@ -971,12 +969,45 @@
             // 
             this.Timer_G2_Alarm.Tick += new System.EventHandler(this.Timer_G2_Alarm_Tick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // textBoxCertificate
+            // 
+            this.textBoxCertificate.Location = new System.Drawing.Point(81, 71);
+            this.textBoxCertificate.Name = "textBoxCertificate";
+            this.textBoxCertificate.Size = new System.Drawing.Size(215, 20);
+            this.textBoxCertificate.TabIndex = 18;
+            // 
+            // gpSecondInf
+            // 
+            this.gpSecondInf.Controls.Add(this.buttCertificateOpen);
+            this.gpSecondInf.Location = new System.Drawing.Point(3, 313);
+            this.gpSecondInf.Name = "gpSecondInf";
+            this.gpSecondInf.Size = new System.Drawing.Size(655, 213);
+            this.gpSecondInf.TabIndex = 6;
+            this.gpSecondInf.TabStop = false;
+            this.gpSecondInf.Text = "Дополнительная информация";
+            // 
+            // butSecondInf
+            // 
+            this.butSecondInf.Location = new System.Drawing.Point(452, 96);
+            this.butSecondInf.Name = "butSecondInf";
+            this.butSecondInf.Size = new System.Drawing.Size(109, 23);
+            this.butSecondInf.TabIndex = 19;
+            this.butSecondInf.Text = "Подробнее";
+            this.butSecondInf.UseVisualStyleBackColor = true;
+            this.butSecondInf.Click += new System.EventHandler(this.button4_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ScrollBar;
-            this.ClientSize = new System.Drawing.Size(828, 727);
+            this.ClientSize = new System.Drawing.Size(828, 372);
             this.Controls.Add(this.StatusBar1);
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1003,6 +1034,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).EndInit();
+            this.gpSecondInf.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1083,7 +1115,6 @@
         private System.Windows.Forms.TextBox textBoxPipeId;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox textBoxCertificateName;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button buttCertificateOpen;
         private System.Windows.Forms.TextBox textBoxPackageNum;
@@ -1096,6 +1127,10 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBoxFactoryNum;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.TextBox textBoxCertificate;
+        private System.Windows.Forms.GroupBox gpSecondInf;
+        private System.Windows.Forms.Button butSecondInf;
     }
 }
 

@@ -238,6 +238,8 @@ namespace UHFReader09demomain
               Button5.Enabled = false;
               Button1.Enabled = false;
               button2.Enabled = false;
+
+              gpSecondInf.Visible = false;
               ComboBox_baud2.SelectedIndex = 3;
         }
 
@@ -407,7 +409,7 @@ namespace UHFReader09demomain
                   Button1.Enabled = false;
                   button2.Enabled = false;
 
-                  button2.Text = "Stop";
+                  button2.Text = "Остановить";
                   ComOpen = false;            
                   timer1.Enabled = false;
               }
@@ -775,11 +777,11 @@ namespace UHFReader09demomain
             if (!Timer_Test_.Enabled)
             {
                 AddCmdLog("Inventory", "Exit Query", 0);
-                button2.Text = "Query Tag";
+                button2.Text = "Считывать";
             }
             else
             {
-                button2.Text = "Stop";
+                button2.Text = "Остановить";
             }
         }
         private void Inventory()
@@ -893,7 +895,7 @@ namespace UHFReader09demomain
                 Timer_G2_Alarm.Enabled = false;
                 Timer_G2_Read.Enabled = false;
                 Timer_Test_.Enabled = false;
-                button2.Text = "Query Tag";
+                button2.Text = "Считывать";
                 if (ComOpen)
                 {
                     button2.Enabled = true;
@@ -1023,9 +1025,8 @@ namespace UHFReader09demomain
             try
             {
                 SqlDataReader myReader = null;
-                SqlCommand myCommand = new SqlCommand(" select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, cer.[name] "
+                SqlCommand myCommand = new SqlCommand(" select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate] "
                              + " from pipe pip"
-                             + " inner join certificate cer on  cer.certificateId = pip.certificateId"
                              + " inner join strength stren on  stren.strengthId = pip.strengthId"
                              + " inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId"
                              + " inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId"
@@ -1044,8 +1045,9 @@ namespace UHFReader09demomain
                 textBoxSmeltingNum.Text = (myReader["smeltingNum"].ToString());
                 textBoxGostThCon.Text = (myReader["gostThCon"].ToString());
                 textBoxPackageNum.Text = (myReader["packageNum"].ToString());
-               // textBoxReleaseDate.Text = (myReader["releaseDate"].ToString());
-                textBoxCertificateName.Text = (myReader["name"].ToString());
+                textBoxCertificate.Text = (myReader["certificate"].ToString());
+                // textBoxReleaseDate.Text = (myReader["releaseDate"].ToString());
+                // textBoxCertificateName.Text = (myReader["name"].ToString());
             }
             catch (Exception ex)
             {
@@ -1123,6 +1125,47 @@ namespace UHFReader09demomain
         {
             //to do
             // кнопка открывания сертификата
+            //to do
+            // кнопка открывания сертификата
+
+            //this.webBrowser1.Navigate("D:\\Git\\Sharp\\ObjectsLifeCycle\\Documentation\\Sertifikat_kachestchva_Sinara.pdf");
+            
+
+
+                Form frm = new Form();
+            frm.WindowState = FormWindowState.Maximized;
+
+            WebBrowser webBrowser = new WebBrowser();
+            webBrowser.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+       
+
+
+            frm.Controls.Add(webBrowser); //new Point(oldbutton.Location.X, oldbutton.Location.Y + oldbutton.Height + 10);
+            webBrowser.Navigate("D:\\Git\\Sharp\\ObjectsLifeCycle\\Documentation\\Sertifikat_kachestva_postavka_05_05_2019g.pdf");
+            frm.Show();
+            // Application.Run(new Form1());
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void button4_Click_1(object sender, EventArgs e) // Дополнительная информация
+        {
+            if (gpSecondInf.Visible)
+            {
+                gpSecondInf.Visible = false;
+                butSecondInf.Text = "Подробнее";
+                this.Size = new System.Drawing.Size(686, 283);
+            }
+            else
+            {
+                gpSecondInf.Visible = true;
+                butSecondInf.Text = "Скрыть";
+                this.Size = new System.Drawing.Size(686, 503);
+            }
+
         }
     }
 }
