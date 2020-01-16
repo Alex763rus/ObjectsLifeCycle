@@ -42,7 +42,7 @@ create table pipeType(
 if object_id('pipeDiameter') is null
 create table pipeDiameter(
 	  pipeDiameterId numeric(15,0) identity
-	, pipeDiameterVal float
+	, pipeDiameterVal varchar(20)
 	primary key (pipeDiameterId)
 )
 
@@ -111,17 +111,18 @@ create table pipe(
     , gostThCon varchar(50)      -- гост ТУ
 	, packageNum varchar(50)     -- номер пакета
 	, releaseDate smalldatetime  -- дата выпуска
-	, outerCoating int default 0 -- внешнее покрытие (признак 1/0 есть/нет)
+	, outerCoating int default 0 -- внешнее наружнее покрытие (признак 1/0 есть/нет)
+	, carving int default 0      -- резьба(признак 1/0 есть/нет)
 	, [certificate] varchar(50)  -- сертификат
-	, otk varchar(50)           -- информация об ОТК
+	, otk varchar(50)            -- информация об ОТК
 
-	, strengthId numeric(15,0)    -- группа прочности
-	, standardLenId numeric(15,0) -- стандартная длина
-	, pipeTypeId numeric(15,0)    -- тип трубы
+	, strengthId numeric(15,0)     -- группа прочности
+	, standardLenId numeric(15,0)  -- стандартная длина
+	, pipeTypeId numeric(15,0)     -- тип трубы
 	, pipeDiameterId numeric(15,0) -- диаметр трубы
 	, couplingId numeric(15,0)     -- муфта
 	, tagId numeric(15,0)          -- метка
-	, intercoatingId numeric(15,0) 
+	, intercoatingId numeric(15,0) -- Межнипельное покрытие:
 	  
 	  primary key (pipeId)
 	, FOREIGN KEY (strengthId) REFERENCES strength(strengthId)
@@ -162,10 +163,10 @@ if not exists(select 1 from pipeType where pipeTypeVal = 'НКТВ')
 	insert into pipeType(pipeTypeVal) select 'НКТВ'
 
 -- Диаметр:
-if not exists(select 1 from pipeDiameter where pipeDiameterVal = 60)
-	insert into pipeDiameter(pipeDiameterVal) select 60
-if not exists(select 1 from pipeDiameter where pipeDiameterVal = 73)
-	insert into pipeDiameter(pipeDiameterVal) select 73
+if not exists(select 1 from pipeDiameter where pipeDiameterVal = '73х5,5')
+	insert into pipeDiameter(pipeDiameterVal) select '73х5,5'
+if not exists(select 1 from pipeDiameter where pipeDiameterVal = '73')
+	insert into pipeDiameter(pipeDiameterVal) select '73'
 
 -- Межнипельное покрытие:
 if not exists(select 1 from intercoating where brief = 'Русма-1')
@@ -195,7 +196,7 @@ if not exists(select 1 from coupling where couplingId = 1)
 
 -- Труба:
 if not exists(select 1 from pipe where pipeId = 1)
-	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, [certificate], otk, strengthId, standardLenId, pipeTypeId, pipeDiameterId, couplingId, tagId, intercoatingId ) 
+	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, [certificate], otk, outerCoating, strengthId, standardLenId, pipeTypeId, pipeDiameterId, couplingId, tagId, intercoatingId ) 
 	select pipeNum = 123456789
 	     , factoryNum = 204187
 		 , batchNum = 32605
@@ -205,6 +206,8 @@ if not exists(select 1 from pipe where pipeId = 1)
 		 , releaseDate = '20181026'
 		 , [certificate] = 'НК 733536/ 06'
 		 , otk = 'какая то информация об ОТК'
+		 , outerCoating = 1
+
 		 , strengthId = 1
 		 , standardLenId = 1
 		 , pipeTypeId = 1
@@ -212,7 +215,7 @@ if not exists(select 1 from pipe where pipeId = 1)
 		 , couplingId = 1
 		 , tagId = 1
 		 , intercoatingId = 1
-
+		 
 /*
 select * from tag
 select * from strength
@@ -225,20 +228,28 @@ select * from protection
 select * from document
 select * from coupling
 select * from pipe
-
- select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate]
+*/
+ select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk
+ ,year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate
+ ,year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall
+ ,pipeTyp.pipeTypeId  as typeDiametr, stren.strengthId, standartLe.standardLenId
+ , pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating
    from pipe pip
   inner join strength stren on  stren.strengthId = pip.strengthId
   inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
   inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId
   inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId
-  inner join coupling coup on  coup.couplingId = pip.couplingId
+  left join coupling coup on  coup.couplingId = pip.couplingId
   inner join tag t on  t.tagId = pip.tagId
-  inner join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
+  left join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
   where t.tagNum = 'E2003A33D5297889349F9AA6'
-*/
---==============================================
-   --drop database ObjectsLifeCycle
 
+--==============================================
+   
+   /*
+   use master
+   go
+   drop database ObjectsLifeCycle
+   */
 
 

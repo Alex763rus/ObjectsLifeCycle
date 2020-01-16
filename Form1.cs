@@ -33,7 +33,12 @@ namespace UHFReader09demomain
         private string fInventory_EPC_List;
         private int frmcomportindex;
         private bool ComOpen=false;
-        public Form1()
+
+
+        SqlConnection myConnection;
+        private int tagId;
+
+public Form1()
         {
             InitializeComponent();
         }
@@ -172,11 +177,7 @@ namespace UHFReader09demomain
             }
         }
         
-        private void ClearLastInfo()
-        { 
-            
 
-        }
         private void InitComList()
         {
             int i = 0;
@@ -204,8 +205,6 @@ namespace UHFReader09demomain
               ComboBox_scantime.SelectedIndex = 7;
               i=40;
            
-              ComboBox_PowerDbm.SelectedIndex = 13;
- 
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -224,14 +223,44 @@ namespace UHFReader09demomain
               Timer_G2_Alarm.Enabled = false;
               timer1.Enabled = false;
 
-              Button5.Enabled = false;
-              Button1.Enabled = false;
-              button2.Enabled = false;
+               button2.Enabled = false;
 
               gpSecondInf.Visible = false;
+              tagId = 0;
               this.Size = new System.Drawing.Size(685, 316);
              // tabControl1.Size = new System.Drawing.Size(669, 267);
                ComboBox_baud2.SelectedIndex = 3;
+
+
+
+            //открыть соединение
+            try
+            {
+                myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" + "Trusted_Connection=yes;" + "database=ObjectsLifeCycle; " + "connection timeout=30");
+                myConnection.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Ошибка при соединении с базой");
+                return;
+            }
+
+            fillComboBoxFromSql("select pipeDiameterVal from pipeDiameter", comboBoxTypeDiametr);
+            fillComboBoxFromSql("select name from strength", comboBoxStrength);
+            fillComboBoxFromSql("select lengthVal from standardLen", comboBoxStandardLen);
+
+        }
+        private void fillComboBoxFromSql(string query, ComboBox comboBox)
+        {
+            SqlCommand myCommand = new SqlCommand(query, myConnection);
+            SqlDataReader myReader = myCommand.ExecuteReader();
+
+            while (myReader.Read())
+            {
+                comboBox.Items.Add(myReader[0].ToString());
+            }
+            myReader.Close();
+
         }
 
         private void OpenPort_Click(object sender, EventArgs e)
@@ -241,9 +270,7 @@ namespace UHFReader09demomain
             openresult = 30;
             string temp;
             Cursor = Cursors.WaitCursor;
-              if  (Edit_CmdComAddr.Text=="")
-              Edit_CmdComAddr.Text="FF";
-              fComAdr = Convert.ToByte(Edit_CmdComAddr.Text,16); // $FF;
+              fComAdr = Convert.ToByte("FF",16); // $FF;
               try
               {
                   if (ComboBox_COM.SelectedIndex == 0)//Auto
@@ -258,7 +285,6 @@ namespace UHFReader09demomain
                     if (openresult == 0 )
                     {
                         ComOpen = true;
-                       // Button3_Click(sender, e); //自动执行读取写卡器信息
                         if (fBaud > 3)
                         {
                             ComboBox_baud.SelectedIndex = Convert.ToInt32(fBaud - 2);
@@ -328,8 +354,6 @@ namespace UHFReader09demomain
               {
                 ComboBox_AlreadyOpenCOM.Items.Add("COM"+Convert.ToString(fOpenComIndex)) ;
                 ComboBox_AlreadyOpenCOM.SelectedIndex = ComboBox_AlreadyOpenCOM.SelectedIndex + 1;
-                Button5.Enabled = true;
-                Button1.Enabled = true;
                 button2.Enabled = true;
             
                 ComOpen = true;
@@ -339,7 +363,6 @@ namespace UHFReader09demomain
 
             if ((ComboBox_AlreadyOpenCOM.Items.Count != 0)&(fOpenComIndex != -1) & (openresult != 0X35) & (openresult != 0X30)&(fCmdRet==0)) 
               {
-               // fComAdr = Convert.ToByte(Edit_ComAdr.Text,16);
                 temp = ComboBox_AlreadyOpenCOM.SelectedItem.ToString();
                 frmcomportindex = Convert.ToInt32(temp.Substring(3, temp.Length - 3));
               }
@@ -349,7 +372,6 @@ namespace UHFReader09demomain
         private void ClosePort_Click(object sender, EventArgs e)
         {
             int port;
-            //string SelectCom ;
             string temp;
             ComboBox_AlreadyOpenCOM.Refresh();
             RefreshStatus();
@@ -395,8 +417,6 @@ namespace UHFReader09demomain
                   ComboBox_AlreadyOpenCOM.Items.Clear();
                   ComboBox_AlreadyOpenCOM.Refresh();
                   RefreshStatus();
-                  Button5.Enabled = false;
-                  Button1.Enabled = false;
                   button2.Enabled = false;
 
                   button2.Text = "Остановить";
@@ -417,12 +437,7 @@ namespace UHFReader09demomain
               fCmdRet = StaticClassReaderB.GetReaderInformation(ref fComAdr, VersionInfo, ref ReaderType, TrType, ref dmaxfre, ref dminfre, ref powerdBm, ref ScanTime, frmcomportindex);
               if (fCmdRet == 0)
               {
-                      if (powerdBm > 13)
-                          ComboBox_PowerDbm.SelectedIndex = 13;
-                      else
-                          ComboBox_PowerDbm.SelectedIndex = powerdBm;
-                  Edit_NewComAdr.Text = Convert.ToString(fComAdr, 16).PadLeft(2, '0');
-                  ComboBox_scantime.SelectedIndex = ScanTime - 3;
+                 ComboBox_scantime.SelectedIndex = ScanTime - 3;
 
                   FreBand= Convert.ToByte(((dmaxfre & 0xc0)>> 4)|(dminfre >> 6)) ;
                   switch (FreBand)
@@ -458,8 +473,6 @@ namespace UHFReader09demomain
                           }
                           break;
                   }
-                  if (fdmaxfre != fdminfre)
-                      CheckBox_SameFre.Checked = false;
                   ComboBox_dminfre.SelectedIndex = dminfre & 0x3F;
                   ComboBox_dmaxfre.SelectedIndex = dmaxfre & 0x3F;
 
@@ -474,14 +487,12 @@ namespace UHFReader09demomain
               string returninfoDlg="";
               string setinfo;
               band = 0;
-              if (Edit_NewComAdr.Text == "")
-                  return;
               progressBar1.Visible = true;
               progressBar1.Minimum = 0;
               dminfre = Convert.ToByte(((band & 3) << 6) | (ComboBox_dminfre.SelectedIndex & 0x3F));
               dmaxfre = Convert.ToByte(((band & 0x0c) << 4) | (ComboBox_dmaxfre.SelectedIndex & 0x3F));
-                  aNewComAdr = Convert.ToByte(Edit_NewComAdr.Text);
-                  powerDbm = Convert.ToByte(ComboBox_PowerDbm.SelectedIndex);
+                  aNewComAdr = Convert.ToByte("00");
+                  powerDbm = Convert.ToByte(13);
                   fBaud = Convert.ToByte(ComboBox_baud.SelectedIndex);
                   if (fBaud > 2)
                       fBaud = Convert.ToByte(fBaud + 2);
@@ -661,64 +672,16 @@ namespace UHFReader09demomain
             
         }
 
-        private void CheckBox_SameFre_CheckedChanged(object sender, EventArgs e)
-        {
-             if (CheckBox_SameFre.Checked)
-              ComboBox_dmaxfre.SelectedIndex = ComboBox_dminfre.SelectedIndex;
-        }
-
 
         private void ComboBox_dfreSelect(object sender, EventArgs e)
         {
-             if (CheckBox_SameFre.Checked )
-             {
-                ComboBox_dminfre.SelectedIndex =ComboBox_dmaxfre.SelectedIndex;
-             }
-              else if  (ComboBox_dminfre.SelectedIndex> ComboBox_dmaxfre.SelectedIndex )
+        if  (ComboBox_dminfre.SelectedIndex> ComboBox_dmaxfre.SelectedIndex )
              {
                  ComboBox_dminfre.SelectedIndex = ComboBox_dmaxfre.SelectedIndex;
                 MessageBox.Show("Min.Frequency is equal or lesser than Max.Frequency", "Error Information");
               }
         }
-        public void ChangeSubItem(ListViewItem ListItem, int subItemIndex, string ItemText)
-        {
-            if (subItemIndex == 1)
-            {
-                if (ItemText=="")
-                {
-                    ListItem.SubItems[subItemIndex].Text = ItemText;
-                    if (ListItem.SubItems[subItemIndex + 2].Text == "")
-                    {
-                        ListItem.SubItems[subItemIndex + 2].Text = "1";
-                    }
-                    else
-                    {
-                        ListItem.SubItems[subItemIndex + 2].Text = Convert.ToString(Convert.ToInt32(ListItem.SubItems[subItemIndex + 2].Text) + 1);
-                    }
-                }
-                else 
-                if (ListItem.SubItems[subItemIndex].Text != ItemText)
-                {
-                    ListItem.SubItems[subItemIndex].Text = ItemText;
-                    ListItem.SubItems[subItemIndex+2].Text = "1";
-                }
-                else
-                {
-                    ListItem.SubItems[subItemIndex + 2].Text = Convert.ToString(Convert.ToInt32(ListItem.SubItems[subItemIndex + 2].Text) + 1);
-                    if( (Convert.ToUInt32(ListItem.SubItems[subItemIndex + 2].Text)>9999))
-                        ListItem.SubItems[subItemIndex + 2].Text="1";
-                }
-
-            }
-            if (subItemIndex == 2)
-            {
-                if (ListItem.SubItems[subItemIndex].Text != ItemText)
-                {
-                    ListItem.SubItems[subItemIndex].Text = ItemText;
-                }
-            }
-
-        }
+      
         private void button2_Click(object sender, EventArgs e)
         {
             Timer_Test_.Enabled = !Timer_Test_.Enabled;
@@ -739,7 +702,7 @@ namespace UHFReader09demomain
               int Totallen = 0;
               byte[] EPC=new byte[5000];
               string temps;
-            string tagId;
+            string tagNum;
               fIsInventoryScan = true;
               byte AdrTID = 0;
               byte LenTID = 0;
@@ -760,17 +723,21 @@ namespace UHFReader09demomain
                      fIsInventoryScan = false;
                      return;
                  }
-                tagId = temps.Substring(2, daw[0] * 2);
-                textBoxTagId.Text = tagId;
+                tagNum = temps.Substring(2, daw[0] * 2);
+                textBoxTagId.Text = tagNum;
                 //-------------------------------------
-                sqlFieldFill(tagId);
-                //  MessageBox.Show(temps.Substring(2, EPClen * 2));
+                if (myConnection != null)
+                {
+                    sqlFieldFill(tagNum);
+                }
+                else
+                {
+                    MessageBox.Show("Отсутствует соединение с базой", "Ошибка", MessageBoxButtons.OK);
+                }
 
+                    //-------------------------------------
 
-
-                //-------------------------------------
-
-            }
+                }
             fIsInventoryScan = false;
             if (fAppClosed)
                 Close();
@@ -957,36 +924,31 @@ namespace UHFReader09demomain
 
             //====================
 
-            SqlConnection myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" +
-                           "Trusted_Connection=yes;" +
-                           "database=ObjectsLifeCycle; " +
-                           "connection timeout=30");
-            try
-            {
-                myConnection.Open();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "ERROR1");
-            }
+
 
             try
             {
                 SqlDataReader myReader = null;
-                SqlCommand myCommand = new SqlCommand(" select pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate] "
+                SqlCommand myCommand = new SqlCommand(" select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk,"
+                             + " year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate,"
+                             + " year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall,"
+                             + " pipeTyp.pipeTypeId as typeDiametr, stren.strengthId, standartLe.standardLenId,"
+                             + " pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating"
                              + " from pipe pip"
                              + " inner join strength stren on  stren.strengthId = pip.strengthId"
                              + " inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId"
                              + " inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId"
                              + " inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId"
-                             + " inner join coupling coup on  coup.couplingId = pip.couplingId"
+                             + " left join coupling coup on  coup.couplingId = pip.couplingId"
                              + " inner join tag t on  t.tagId = pip.tagId"
-                             + " inner join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId"
+                             + " left join intercoating intercoat on intercoat.intercoatingId = pip.intercoatingId"
                              + " where t.tagNum = '" 
                              + tagNum + "'"
                             , myConnection);
                 myReader = myCommand.ExecuteReader();
                 myReader.Read();
+                tagId = Convert.ToInt32(myReader["tagId"]);
+
                 textBoxPipeId.Text = (myReader["pipeNum"].ToString());
                 textBoxFactoryNum.Text = (myReader["factoryNum"].ToString());
                 textBoxBatchNum.Text = (myReader["batchNum"].ToString());
@@ -994,8 +956,27 @@ namespace UHFReader09demomain
                 textBoxGostThCon.Text = (myReader["gostThCon"].ToString());
                 textBoxPackageNum.Text = (myReader["packageNum"].ToString());
                 textBoxCertificate.Text = (myReader["certificate"].ToString());
-                // textBoxReleaseDate.Text = (myReader["releaseDate"].ToString());
-                // textBoxCertificateName.Text = (myReader["name"].ToString());
+                textBoxOTK.Text = (myReader["otk"].ToString());
+                dateTimeReleaseDate.Value = new DateTime(Convert.ToInt32(myReader["yeReleasDate"]), Convert.ToInt32(myReader["monReleasDate"]), Convert.ToInt32(myReader["dayReleasDate"]));
+                dateTimeTagInstall.Value = new DateTime(Convert.ToInt32(myReader["yeDateInstall"]), Convert.ToInt32(myReader["monDateInstall"]), Convert.ToInt32(myReader["dayDateInstall"]));
+
+                comboBoxTypeDiametr.SelectedIndex = Convert.ToInt32(myReader["typeDiametr"]) - 1;
+                comboBoxStrength.SelectedIndex = Convert.ToInt32(myReader["strengthId"]) - 1;
+                comboBoxStandardLen.SelectedIndex = Convert.ToInt32(myReader["standardLenId"]) - 1;
+
+                checkBoxCarving.Checked = Convert.ToInt32(myReader["carving"].ToString()) != 0;
+                checkBoxIsCoupling.Checked = Convert.ToInt32(myReader["isCoupling"].ToString()) != 0;
+                checkBoxIsOuterCoating.Checked = Convert.ToInt32(myReader["isOuterCoating"].ToString()) != 0;
+                checkBoxIsIntercoating.Checked = Convert.ToInt32(myReader["isIntercoating"].ToString()) != 0;
+                
+
+
+
+
+
+
+
+                myReader.Close();
             }
             catch (Exception ex)
             {
@@ -1005,7 +986,7 @@ namespace UHFReader09demomain
             //===============================
             // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
             //myCommand.ExecuteNonQuery();
-
+            /*
             try
             {
                 myConnection.Close();
@@ -1013,7 +994,7 @@ namespace UHFReader09demomain
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
+            }*/
 
         }
         private void button4_Click(object sender, EventArgs e)
@@ -1049,6 +1030,7 @@ namespace UHFReader09demomain
                     Console.WriteLine(myReader["Column1"].ToString());
                     Console.WriteLine(myReader["Column2"].ToString());
                 }
+                myReader.Close();
             }
             catch (Exception ex)
             {
@@ -1058,7 +1040,7 @@ namespace UHFReader09demomain
             //===============================
             // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
             //myCommand.ExecuteNonQuery();
-
+            /*
             try
             {
                 myConnection.Close();
@@ -1066,7 +1048,7 @@ namespace UHFReader09demomain
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
+            }*/
         }
 
         private void buttCertificateOpen_Click(object sender, EventArgs e)
@@ -1120,6 +1102,7 @@ namespace UHFReader09demomain
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            /*
             //муфта подробнее
             Form frm = new Form();
             // frm.WindowState = FormWindowState.Maximized;
@@ -1156,6 +1139,33 @@ namespace UHFReader09demomain
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             frm.Show();
+            */
+
+            Form frm = new Form();
+            // frm.WindowState = FormWindowState.Maximized;
+            DataGridView dataGridView = new DataGridView();
+
+            DataSet ds;
+            SqlDataAdapter adapter;
+            string sql = "select * from firm";
+
+
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.AllowUserToAddRows = false;
+
+             adapter = new SqlDataAdapter(sql, myConnection);
+
+             ds = new DataSet();
+            adapter.Fill(ds);
+             dataGridView.DataSource = ds.Tables[0];
+
+            frm.Controls.Add(dataGridView);
+            frm.Show();
+ 
+            // делаем недоступным столбец id для изменения
+            //dataGridView.Columns["firmId"].ReadOnly = true;
+
+
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1167,5 +1177,7 @@ namespace UHFReader09demomain
         {
             //покрытие межниппельное подробнее
         }
+
+
     }
 }
