@@ -1,11 +1,11 @@
-if db_id('ObjectsLifeCycle') is null
+п»їif db_id('ObjectsLifeCycle') is null
 	Create database ObjectsLifeCycle
 go
 
 use ObjectsLifeCycle
 go
 
--- Тег:
+-- РўРµРі:
 if object_id('tag') is null
 	create table tag(
 		  tagId numeric(15,0) identity
@@ -14,7 +14,7 @@ if object_id('tag') is null
 		primary key (tagId)
 	)
 
--- Группа прочности:
+-- Р“СЂСѓРїРїР° РїСЂРѕС‡РЅРѕСЃС‚Рё:
 if object_id('strength') is null
 create table strength(
 	  strengthId numeric(15,0) identity
@@ -22,7 +22,7 @@ create table strength(
 	primary key (strengthId)
 )
 
--- Стандартная длина:
+-- РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РґР»РёРЅР°:
 if object_id('standardLen') is null
 create table standardLen(
 	  standardLenId numeric(15,0) identity
@@ -30,7 +30,7 @@ create table standardLen(
 	primary key (standardLenId)
 )
 
--- Тип трубы:
+-- РўРёРї С‚СЂСѓР±С‹:
 if object_id('pipeType') is null
 create table pipeType(
 	  pipeTypeId numeric(15,0) identity
@@ -38,7 +38,7 @@ create table pipeType(
 	primary key (pipeTypeId)
 )
 
--- Диаметр:
+-- Р”РёР°РјРµС‚СЂ:
 if object_id('pipeDiameter') is null
 create table pipeDiameter(
 	  pipeDiameterId numeric(15,0) identity
@@ -46,16 +46,16 @@ create table pipeDiameter(
 	primary key (pipeDiameterId)
 )
 
--- Межнипельное покрытие:
-if object_id('intercoating') is null
-create table intercoating(
-	  intercoatingId numeric(15,0) identity
+-- РњРµР¶РЅРёРїРµР»СЊРЅРѕРµ РїРѕРєСЂС‹С‚РёРµ:
+if object_id('betwHipple') is null
+create table betwHipple(
+	  betwHippleId numeric(15,0) identity
 	, brief varchar(25)
 	, discript varchar(100)
-	primary key (intercoatingId)
+	primary key (betwHippleId)
 )
 
--- Фирма:
+-- Р¤РёСЂРјР°:
 if object_id('firm') is null
 create table firm(
 	  firmId numeric(15,0) identity
@@ -64,7 +64,7 @@ create table firm(
 	primary key (firmId)
 )
 
--- Защита:
+-- Р—Р°С‰РёС‚Р°:
 if object_id('protection') is null
 create table protection(
 	  protectionId numeric(15,0) identity
@@ -72,24 +72,75 @@ create table protection(
 	primary key (protectionId)
 )
 
--- Документ (сертификат):
+
+-- РћР±СЉРµРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°РєР»Р°РґС‹РІР°РµС‚СЃСЏ СѓСЃР»РѕРІРёРµ:
+if object_id('caseObject') is null
+create table caseObject(
+	  caseObjectId numeric(15,0) identity
+    , caseObjectValue varchar(50)  --РѕР±СЉРµРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°РєР»Р°РґС‹РІР°РµС‚СЃСЏ СѓСЃР»РѕРІРёРµ
+	primary key (caseObjectId)
+)
+
+-- РўРёРї СѓСЃР»РѕРІРёСЏ (Р±РѕР»СЊС€Рµ, РјРµРЅСЊС€Рµ):
+if object_id('caseType') is null
+create table caseType(
+	  caseTypeId numeric(15,0) identity
+    , caseTypeValue varchar(50)
+	primary key (caseTypeId)
+)
+
+-- РЎСЂР°РІРЅРёРІР°РµРјР°СЏ РІРµР»РёС‡РёРЅР°:
+if object_id('caseResult') is null
+create table caseResult(
+	  caseResultId numeric(15,0) identity
+    , caseResultValue varchar(50)
+	primary key (caseResultId)
+)
+
+-- Р’РЅСѓС‚СЂРµРЅРЅРµРµ РїРѕРєСЂС‹С‚РёРµ:
+if object_id('intercoating') is null
+create table intercoating(
+	  intercoatingId numeric(15,0) identity
+    , techCase varchar(50)  --РўРЈ
+	, thickness float       --С‚РѕР»С‰РёРЅР°
+	, color varchar(20)     --С†РІРµС‚
+    , firmId numeric(15,0)  --С„РёСЂРјР°
+	primary key (intercoatingId)
+)
+
+-- Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ СѓСЃР»РѕРІРёСЏ РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїРѕРєСЂС‹С‚РёСЏ:
+if object_id('intercoatingCaseRelation') is null
+create table intercoatingCaseRelation(
+	  intercoatingCaseRelationId numeric(15,0) identity
+	, intercoatingId numeric(15,0) --id РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїРѕРєСЂС‹С‚РёСЏ
+	, caseObjectId numeric(15,0)   --РѕР±СЉРµРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°РєР»Р°РґС‹РІР°РµС‚СЃСЏ СѓСЃР»РѕРІРёРµ
+	, caseTypeId numeric(15,0)     --С‚РёРї СѓСЃР»РѕРІРёСЏ (Р±РѕР»СЊС€Рµ, РјРµРЅСЊС€Рµ)
+	, caseResultId numeric(15,0)   --СЃСЂР°РІРЅРёРІР°РµРјР°СЏ РІРµР»РёС‡РёРЅР°
+	  primary key (intercoatingCaseRelationId)
+	, FOREIGN KEY (intercoatingId) REFERENCES intercoating(intercoatingId)
+	, FOREIGN KEY (caseObjectId) REFERENCES caseObject(caseObjectId)
+	, FOREIGN KEY (caseTypeId) REFERENCES caseType(caseTypeId)
+	, FOREIGN KEY (caseResultId) REFERENCES caseResult(caseResultId)
+)
+
+-- Р”РѕРєСѓРјРµРЅС‚ (СЃРµСЂС‚РёС„РёРєР°С‚):
 if object_id('document') is null
 create table document(
 	  documentId numeric(15,0) identity
-	, objectID numeric(15,0)  -- ID Объекта, к которому относится сертифика
-    , [name] varchar(50)      -- имя файла
-	, type int                -- тип документа 1/2 : труба/покрытие внутреннее
-    , addedDate smalldatetime -- дата добавления в систему
-	, patch varchar(100)      -- каталог расположение
+	, objectID numeric(15,0)  -- ID РћР±СЉРµРєС‚Р°, Рє РєРѕС‚РѕСЂРѕРјСѓ РѕС‚РЅРѕСЃРёС‚СЃСЏ СЃРµСЂС‚РёС„РёРєР°
+    , [name] varchar(50)      -- РёРјСЏ С„Р°Р№Р»Р°
+	, type int                -- С‚РёРї РґРѕРєСѓРјРµРЅС‚Р° 1/2 : С‚СЂСѓР±Р°/РїРѕРєСЂС‹С‚РёРµ РІРЅСѓС‚СЂРµРЅРЅРµРµ
+    , addedDate smalldatetime -- РґР°С‚Р° РґРѕР±Р°РІР»РµРЅРёСЏ РІ СЃРёСЃС‚РµРјСѓ
+	, patch varchar(100)      -- РєР°С‚Р°Р»РѕРі СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
 	primary key (documentId)
 )
 
--- Муфта:
+-- РњСѓС„С‚Р°:
 if object_id('coupling') is null
 create table coupling(
 	  couplingId numeric(15,0) identity
-    , batchNum numeric(15,0)    -- номер партии
-	, smeltingNum numeric(15,0) -- номер плавки
+    , batchNum numeric(15,0)    -- РЅРѕРјРµСЂ РїР°СЂС‚РёРё
+	, smeltingNum numeric(15,0) -- РЅРѕРјРµСЂ РїР»Р°РІРєРё
 
 	, pipeDiameterId numeric(15,0)
 	, protectionId numeric(15,0)
@@ -100,55 +151,55 @@ create table coupling(
 	, FOREIGN KEY (strengthId) REFERENCES strength(strengthId)
 )
 
--- Труба:
+-- РўСЂСѓР±Р°:
 if object_id('pipe') is null
 create table pipe(
 	  pipeId numeric(15,0) identity
     , pipeNum numeric(15,0)
-	, factoryNum numeric(15,0)   -- заводской номер
-	, batchNum numeric(15,0)     -- номер партии
-	, smeltingNum numeric(15,0)  -- номер плавки
-    , gostThCon varchar(50)      -- гост ТУ
-	, packageNum varchar(50)     -- номер пакета
-	, releaseDate smalldatetime  -- дата выпуска
-	, outerCoating int default 0 -- внешнее наружнее покрытие (признак 1/0 есть/нет)
-	, carving int default 0      -- резьба(признак 1/0 есть/нет)
-	, [certificate] varchar(50)  -- сертификат
-	, otk varchar(50)            -- информация об ОТК
+	, factoryNum numeric(15,0)   -- Р·Р°РІРѕРґСЃРєРѕР№ РЅРѕРјРµСЂ
+	, batchNum numeric(15,0)     -- РЅРѕРјРµСЂ РїР°СЂС‚РёРё
+	, smeltingNum numeric(15,0)  -- РЅРѕРјРµСЂ РїР»Р°РІРєРё
+    , gostThCon varchar(50)      -- РіРѕСЃС‚ РўРЈ
+	, packageNum varchar(50)     -- РЅРѕРјРµСЂ РїР°РєРµС‚Р°
+	, releaseDate smalldatetime  -- РґР°С‚Р° РІС‹РїСѓСЃРєР°
+	, outerCoating int default 0 -- РІРЅРµС€РЅРµРµ РЅР°СЂСѓР¶РЅРµРµ РїРѕРєСЂС‹С‚РёРµ (РїСЂРёР·РЅР°Рє 1/0 РµСЃС‚СЊ/РЅРµС‚)
+	, carving int default 0      -- СЂРµР·СЊР±Р°(РїСЂРёР·РЅР°Рє 1/0 РµСЃС‚СЊ/РЅРµС‚)
+	, [certificate] varchar(50)  -- СЃРµСЂС‚РёС„РёРєР°С‚
+	, otk varchar(50)            -- РёРЅС„РѕСЂРјР°С†РёСЏ РѕР± РћРўРљ
 
-	, strengthId numeric(15,0)     -- группа прочности
-	, standardLenId numeric(15,0)  -- стандартная длина
-	, pipeTypeId numeric(15,0)     -- тип трубы
-	, pipeDiameterId numeric(15,0) -- диаметр трубы
-	, couplingId numeric(15,0)     -- муфта
-	, tagId numeric(15,0)          -- метка
-	, intercoatingId numeric(15,0) -- Межнипельное покрытие:
+	, strengthId numeric(15,0)     -- РіСЂСѓРїРїР° РїСЂРѕС‡РЅРѕСЃС‚Рё
+	, standardLenId numeric(15,0)  -- СЃС‚Р°РЅРґР°СЂС‚РЅР°СЏ РґР»РёРЅР°
+	, pipeTypeId numeric(15,0)     -- С‚РёРї С‚СЂСѓР±С‹
+	, tagId numeric(15,0)          -- РјРµС‚РєР°
+	, couplingId numeric(15,0)     -- РјСѓС„С‚Р°
+	, intercoatingId numeric(15,0) -- Р’РЅСѓС‚СЂРµРЅРЅРµРµ РїРѕРєСЂС‹С‚РёРµ
+	, betwHippleId numeric(15,0)   -- РњРµР¶РЅРёРїРµР»СЊРЅРѕРµ РїРѕРєСЂС‹С‚РёРµ:
 	  
 	  primary key (pipeId)
 	, FOREIGN KEY (strengthId) REFERENCES strength(strengthId)
 	, FOREIGN KEY (standardLenId) REFERENCES standardLen(standardLenId)
 	, FOREIGN KEY (pipeTypeId) REFERENCES pipeType(pipeTypeId)
-	, FOREIGN KEY (pipeDiameterId) REFERENCES pipeDiameter(pipeDiameterId)
 	, FOREIGN KEY (couplingId) REFERENCES coupling(couplingId)
 	, FOREIGN KEY (tagId) REFERENCES tag(tagId)
 	, FOREIGN KEY (intercoatingId) REFERENCES intercoating(intercoatingId)
+	, FOREIGN KEY (betwHippleId) REFERENCES betwHipple(betwHippleId)
 
 )
 
---================Зполнение тестовыми данными:
--- Тег:
+--================Р—РїРѕР»РЅРµРЅРёРµ С‚РµСЃС‚РѕРІС‹РјРё РґР°РЅРЅС‹РјРё:
+-- РўРµРі:
 if not exists(select 1 from tag where tagNum = 'E2003A33D5297889349F9AA6')
 	insert into tag(tagNum, dateInstall) select 'E2003A33D5297889349F9AA6', '20200112'
 
--- Группа прочности:
-if not exists(select 1 from strength where [name] = 'Д')
-	insert into strength([name]) select 'Д'
-if not exists(select 1 from strength where [name] = 'Д(А)')
-	insert into strength([name]) select 'Д(А)'
-if not exists(select 1 from strength where [name] = 'Д(Б)')
-	insert into strength([name]) select 'Д(Б)'
+-- Р“СЂСѓРїРїР° РїСЂРѕС‡РЅРѕСЃС‚Рё:
+if not exists(select 1 from strength where [name] = 'Р”')
+	insert into strength([name]) select 'Р”'
+if not exists(select 1 from strength where [name] = 'Р”(Рђ)')
+	insert into strength([name]) select 'Р”(Рђ)'
+if not exists(select 1 from strength where [name] = 'Р”(Р‘)')
+	insert into strength([name]) select 'Р”(Р‘)'
 
--- Стандартная длина:
+-- РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РґР»РёРЅР°:
 if not exists(select 1 from standardLen where lengthVal = 9.5)
 	insert into standardLen(lengthVal) select 9.5
 if not exists(select 1 from standardLen where lengthVal = 6)
@@ -156,65 +207,97 @@ if not exists(select 1 from standardLen where lengthVal = 6)
 if not exists(select 1 from standardLen where lengthVal = 7)
 	insert into standardLen(lengthVal) select 7
 
--- Тип трубы:
-if not exists(select 1 from pipeType where pipeTypeVal = 'НКТ')
-	insert into pipeType(pipeTypeVal) select 'НКТ'
-if not exists(select 1 from pipeType where pipeTypeVal = 'НКТВ')
-	insert into pipeType(pipeTypeVal) select 'НКТВ'
+-- РўРёРї С‚СЂСѓР±С‹:
+if not exists(select 1 from pipeType where pipeTypeVal = 'РќРљРў 73x5.5')
+	insert into pipeType(pipeTypeVal) select 'РќРљРў 73x5.5'
+if not exists(select 1 from pipeType where pipeTypeVal = 'РќРљРў Г60')
+	insert into pipeType(pipeTypeVal) select 'РќРљРў Г60'
 
--- Диаметр:
-if not exists(select 1 from pipeDiameter where pipeDiameterVal = '73х5,5')
-	insert into pipeDiameter(pipeDiameterVal) select '73х5,5'
-if not exists(select 1 from pipeDiameter where pipeDiameterVal = '73')
-	insert into pipeDiameter(pipeDiameterVal) select '73'
+-- РњРµР¶РЅРёРїРµР»СЊРЅРѕРµ РїРѕРєСЂС‹С‚РёРµ:
+if not exists(select 1 from betwHipple where brief = 'Р СѓСЃРјР°-1')
+	insert into betwHipple(brief, discript) select 'Р СѓСЃРјР°-1', 'РЎРІРѕР±РѕРґРЅС‹Рµ СЂРµР·СЊР±РѕРІС‹Рµ С‡Р°СЃС‚Рё РЅРёРїРїРµР»СЏ Рё РјСѓС„С‚С‹ РїРѕРєСЂС‹С‚С‹ СЃРјР°Р·РєРѕР№'
 
--- Межнипельное покрытие:
-if not exists(select 1 from intercoating where brief = 'Русма-1')
-	insert into intercoating(brief, discript) select 'Русма-1', 'Свободные резьбовые части ниппеля и муфты покрыты смазкой'
+-- Р”РёР°РјРµС‚СЂ:
+if not exists(select 1 from pipeDiameter where pipeDiameterVal = '93.17')
+	insert into pipeDiameter(pipeDiameterVal) select '93.17'
 
--- Фирма:
+-- Р¤РёСЂРјР°:
 if not exists(select 1 from firm where brief = 'MajorCrack')
 	insert into firm(brief, [name]) select 'MajorCrack', 'MSPLAG17'
 
--- Защита:
-if not exists(select 1 from protection where brief = 'фосфатирование')
-	insert into protection(brief) select 'фосфатирование'
+-- Р—Р°С‰РёС‚Р°:
+if not exists(select 1 from protection where brief = 'С„РѕСЃС„Р°С‚РёСЂРѕРІР°РЅРёРµ')
+	insert into protection(brief) select 'С„РѕСЃС„Р°С‚РёСЂРѕРІР°РЅРёРµ'
 
--- Документ (сертификат):
+-- Р”РѕРєСѓРјРµРЅС‚ (СЃРµСЂС‚РёС„РёРєР°С‚):
 if not exists(select 1 from document)
 	insert into document(objectID, [name], type, addedDate, patch)
 	select objectID = 1
 	     , [name] = 'Sertifikat_kachestva_postavka_05_05_2019g.pdf'
-		 , type = 1 --труба
+		 , type = 1 --С‚СЂСѓР±Р°
 		 , addedDate = '20200115'
 		 , patch = 'D:\Git\Sharp\ObjectsLifeCycle\Certificate'
 
--- Муфта:
-if not exists(select 1 from coupling where couplingId = 1)
+-- РњСѓС„С‚Р°:
+if not exists(select 1 from coupling)
 	insert into coupling(batchNum, smeltingNum, pipeDiameterId, protectionId, strengthId) 
 	select 9812, 739111, 1,1,1
 
--- Труба:
+-- РћР±СЉРµРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°РєР»Р°РґС‹РІР°РµС‚СЃСЏ СѓСЃР»РѕРІРёРµ:
+if not exists(select 1 from caseObject where caseObjectId = 1)
+begin
+	insert into caseObject(caseObjectValue) select 'Р”РёСЌР»РµРєС‚СЂ СЃРїР»РѕС€РЅ, РєР’/РјРј'
+	insert into caseObject(caseObjectValue) select 'РђРґРіРµР·РёСЏ, РњРїР°'
+end
+
+-- РўРёРї СѓСЃР»РѕРІРёСЏ (Р±РѕР»СЊС€Рµ, РјРµРЅСЊС€Рµ):
+if not exists(select 1 from caseType where caseTypeId = 1)
+	insert into caseType(caseTypeValue) select 'РќРµ РјРµРЅРµРµ'
+
+-- РЎСЂР°РІРЅРёРІР°РµРјР°СЏ РІРµР»РёС‡РёРЅР°:
+if not exists(select 1 from caseResult where caseResultId = 1)
+begin
+	insert into caseResult(caseResultValue) select '5'
+	insert into caseResult(caseResultValue) select '10'
+end
+
+-- Р’РЅСѓС‚СЂРµРЅРЅРµРµ РїРѕРєСЂС‹С‚РёРµ:
+if not exists(select 1 from intercoating where intercoatingId = 1)
+	insert into intercoating(techCase, thickness, color, firmId)
+	select techCase  = '22.20.43-007-69730070-2018' --РўРЈ
+	     , thickness = '115'
+		 , color     = 'Р±РµР»С‹Р№'
+		 , firmId    = 1
+
+-- Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ СѓСЃР»РѕРІРёСЏ РґР»СЏ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ РїРѕРєСЂС‹С‚РёСЏ:
+if not exists(select 1 from intercoatingCaseRelation where intercoatingCaseRelationId = 1)
+begin
+	insert into intercoatingCaseRelation(intercoatingId, caseObjectId, caseTypeId, caseResultId) select 1, 1, 1, 1
+	insert into intercoatingCaseRelation(intercoatingId, caseObjectId, caseTypeId, caseResultId) select 1, 1, 1, 1
+end
+
+-- РўСЂСѓР±Р°:
 if not exists(select 1 from pipe where pipeId = 1)
-	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, [certificate], otk, outerCoating, strengthId, standardLenId, pipeTypeId, pipeDiameterId, couplingId, tagId, intercoatingId ) 
+	insert into pipe(pipeNum, factoryNum, batchNum, smeltingNum, gostThCon, packageNum, releaseDate, [certificate], otk, outerCoating, carving, strengthId, standardLenId, pipeTypeId, couplingId, tagId, intercoatingId, betwHippleId ) 
 	select pipeNum = 123456789
 	     , factoryNum = 204187
 		 , batchNum = 32605
 		 , smeltingNum = 1825846
 		 , gostThCon = '633-80'
-		 , packageNum = 'А39035'
+		 , packageNum = 'Рђ39035'
 		 , releaseDate = '20181026'
-		 , [certificate] = 'НК 733536/ 06'
-		 , otk = 'какая то информация об ОТК'
+		 , [certificate] = 'РќРљ 733536/ 06'
+		 , otk = 'РєР°РєР°СЏ С‚Рѕ РёРЅС„РѕСЂРјР°С†РёСЏ РѕР± РћРўРљ'
 		 , outerCoating = 1
+		 , carving = 1
 
 		 , strengthId = 1
 		 , standardLenId = 1
 		 , pipeTypeId = 1
-		 , pipeDiameterId = 1
 		 , couplingId = 1
 		 , tagId = 1
 		 , intercoatingId = 1
+		 , betwHippleId = 1
 		 
 /*
 select * from tag
@@ -228,22 +311,64 @@ select * from protection
 select * from document
 select * from coupling
 select * from pipe
+
+select * from caseObject
+select * from caseType
+select * from caseResult
+select * from intercoating
+select * from intercoatingCaseRelation
+
 */
- select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk
+
+
+   select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk
  ,year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate
  ,year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall
  ,pipeTyp.pipeTypeId  as typeDiametr, stren.strengthId, standartLe.standardLenId
- , pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating
+ , pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating, isnull( betw.betwHippleId,0) as isBetwHipple
    from pipe pip
   inner join strength stren on  stren.strengthId = pip.strengthId
   inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
   inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId
-  inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId
   left join coupling coup on  coup.couplingId = pip.couplingId
   inner join tag t on  t.tagId = pip.tagId
   left join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
+  left join betwHipple betw on betw.betwHippleId = pip.betwHippleId
   where t.tagNum = 'E2003A33D5297889349F9AA6'
 
+
+
+
+  /*
+    select betw.brief, betw.discript
+    from pipe pip
+   inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId
+   where pip.tagId = 1
+
+    select stren.name, diam.pipeDiameterVal, coup.batchNum, coup.smeltingNum, prot.brief
+    from pipe pip
+   inner join coupling coup on coup.couplingId = pip.couplingId
+   inner join protection prot on prot.protectionId = coup.protectionId
+   inner join pipeDiameter diam on diam.pipeDiameterId = coup.pipeDiameterId
+   inner join strength stren on stren.strengthId = coup.strengthId
+   where pip.tagId = 1
+
+
+  select f.brief, f.name, ic.techCase, ic.thickness, ic.color
+    from pipe pip
+   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
+   inner join firm f on f.firmId = ic.firmId
+   where pip.tagId = 1
+
+  select co.caseObjectValue, ct.caseTypeValue, cr.caseResultValue
+    from pipe pip
+   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
+   inner join intercoatingCaseRelation icr on icr.intercoatingId = ic.intercoatingId
+   inner join caseObject co on co.caseObjectId = icr.caseObjectId
+   inner join caseType ct on ct.caseTypeId = icr.caseTypeId
+   inner join caseResult cr on cr.caseResultId = icr.caseResultId
+   where pip.tagId = 1
+ */
 --==============================================
    
    /*

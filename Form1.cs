@@ -231,7 +231,9 @@ public Form1()
              // tabControl1.Size = new System.Drawing.Size(669, 267);
                ComboBox_baud2.SelectedIndex = 3;
 
-
+            linkLabelCoupling.Visible = false;
+            linkLabelIntercoating.Visible = false;
+            linkLabelBetwHipple.Visible = false;
 
             //открыть соединение
             try
@@ -245,7 +247,7 @@ public Form1()
                 return;
             }
 
-            fillComboBoxFromSql("select pipeDiameterVal from pipeDiameter", comboBoxTypeDiametr);
+            fillComboBoxFromSql("select pipeTypeVal from pipeType", comboBoxTypeDiametr);
             fillComboBoxFromSql("select name from strength", comboBoxStrength);
             fillComboBoxFromSql("select lengthVal from standardLen", comboBoxStandardLen);
 
@@ -260,7 +262,6 @@ public Form1()
                 comboBox.Items.Add(myReader[0].ToString());
             }
             myReader.Close();
-
         }
 
         private void OpenPort_Click(object sender, EventArgs e)
@@ -933,15 +934,15 @@ public Form1()
                              + " year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate,"
                              + " year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall,"
                              + " pipeTyp.pipeTypeId as typeDiametr, stren.strengthId, standartLe.standardLenId,"
-                             + " pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating"
+                             + " pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating, isnull( betw.betwHippleId,0) as isBetwHipple"
                              + " from pipe pip"
                              + " inner join strength stren on  stren.strengthId = pip.strengthId"
                              + " inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId"
                              + " inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId"
-                             + " inner join pipeDiameter pipeDiam on  pipeDiam.pipeDiameterId = pip.pipeDiameterId"
                              + " left join coupling coup on  coup.couplingId = pip.couplingId"
                              + " inner join tag t on  t.tagId = pip.tagId"
                              + " left join intercoating intercoat on intercoat.intercoatingId = pip.intercoatingId"
+                             + " left join betwHipple betw on betw.betwHippleId = pip.betwHippleId"
                              + " where t.tagNum = '" 
                              + tagNum + "'"
                             , myConnection);
@@ -967,9 +968,12 @@ public Form1()
                 checkBoxCarving.Checked = Convert.ToInt32(myReader["carving"].ToString()) != 0;
                 checkBoxIsCoupling.Checked = Convert.ToInt32(myReader["isCoupling"].ToString()) != 0;
                 checkBoxIsOuterCoating.Checked = Convert.ToInt32(myReader["isOuterCoating"].ToString()) != 0;
-                checkBoxIsIntercoating.Checked = Convert.ToInt32(myReader["isIntercoating"].ToString()) != 0;
-                
+                checkBoxIsBetwHipple.Checked = Convert.ToInt32(myReader["isBetwHipple"].ToString()) != 0;
+                checkBoxIntercoating.Checked = Convert.ToInt32(myReader["isIntercoating"].ToString()) != 0;
 
+                linkLabelCoupling.Visible = checkBoxIsCoupling.Checked;
+                linkLabelIntercoating.Visible = checkBoxIntercoating.Checked;
+                linkLabelBetwHipple.Visible = checkBoxIsBetwHipple.Checked;
 
 
 
@@ -1102,80 +1106,109 @@ public Form1()
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            /*
             //муфта подробнее
+            const int size = 400;
             Form frm = new Form();
-            // frm.WindowState = FormWindowState.Maximized;
-            DataGridView dataGridView = new DataGridView();
-            dataGridView.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
-            // dataGridView.add
-            //dataGridView.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            RichTextBox tb = new RichTextBox();
 
-            //frm.Controls.Add(dataGridView); //new Point(oldbutton.Location.X, oldbutton.Location.Y + oldbutton.Height + 10);
-
-
-            int n = 5; // количество столбцов
-  
-
-            DataGridViewTextBoxColumn[] column = new DataGridViewTextBoxColumn[n];
-
-            for (int i = 0; i < n; i++)
+            SqlCommand myCommand = new SqlCommand(" select stren.name, diam.pipeDiameterVal, coup.batchNum, coup.smeltingNum, prot.brief"
+                                                + " from pipe pip"
+                                                + " inner join coupling coup on coup.couplingId = pip.couplingId"
+                                                + " inner join protection prot on prot.protectionId = coup.protectionId"
+                                                + " inner join pipeDiameter diam on diam.pipeDiameterId = coup.pipeDiameterId"
+                                                + " inner join strength stren on stren.strengthId = coup.strengthId"
+                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlDataReader myReader = myCommand.ExecuteReader();
+            while (myReader.Read())
             {
-                column[i] = new DataGridViewTextBoxColumn(); // выделяем память для объекта
-                column[i].Name = "Header" + i;
+                tb.Text += "Группа прочности: "  + myReader[0].ToString() + "\r\n";
+                tb.Text += "Диаметр, мм:"        + myReader[1].ToString() + "\r\n";
+                tb.Text += "Номер партии: "      + myReader[2].ToString() + "\r\n";
+                tb.Text += "Номер плавки: "      + myReader[3].ToString() + "\r\n";
+                tb.Text += "Защита/упрочнение: " + myReader[4].ToString() + "\r\n";
             }
-            column[0].HeaderText = "Группа прочности";
-            column[1].HeaderText = "Диаметр, мм";
-            column[2].HeaderText = "Номер партии";
-            column[3].HeaderText = "Номер плавки";
-            column[4].HeaderText = "Защита/упрочнение";
+            myReader.Close();
 
-            dataGridView.Columns.AddRange(column);
-            dataGridView.AutoResizeColumns();
-
-            dataGridView.Rows.Add();  // добавление строк
-
-            frm.Controls.Add(dataGridView);
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+            tb.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            frm.Controls.Add(tb);
+            tb.Size = new Size(size, size);
+            frm.Size = new Size(size, size);
             frm.Show();
-            */
-
-            Form frm = new Form();
-            // frm.WindowState = FormWindowState.Maximized;
-            DataGridView dataGridView = new DataGridView();
-
-            DataSet ds;
-            SqlDataAdapter adapter;
-            string sql = "select * from firm";
-
-
-            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.AllowUserToAddRows = false;
-
-             adapter = new SqlDataAdapter(sql, myConnection);
-
-             ds = new DataSet();
-            adapter.Fill(ds);
-             dataGridView.DataSource = ds.Tables[0];
-
-            frm.Controls.Add(dataGridView);
-            frm.Show();
- 
-            // делаем недоступным столбец id для изменения
-            //dataGridView.Columns["firmId"].ReadOnly = true;
-
 
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             //покрытие внутреннее подробнее
+            const int size = 400;
+            Form frm = new Form();
+            RichTextBox tb = new RichTextBox();
+
+            SqlCommand myCommand = new SqlCommand(" select f.brief, f.name, ic.techCase, ic.thickness, ic.color"
+                                                + " from pipe pip"
+                                                + " inner join intercoating ic on ic.intercoatingId = pip.intercoatingId"
+                                                + " inner join firm f on f.firmId = ic.firmId"
+                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlDataReader myReader = myCommand.ExecuteReader();
+            while (myReader.Read())
+            {
+                tb.Text += "Производитель: " + myReader[0].ToString() + " " + myReader[1].ToString() + "\r\n";
+                tb.Text += "Техническое условие: " + myReader[2].ToString() + "\r\n";
+                tb.Text += "Толщина, мкм: " + myReader[3].ToString() + "\r\n";
+                tb.Text += "Цвет: " + myReader[4].ToString() + "\r\n";
+            }
+            myReader.Close();
+
+            myCommand = new SqlCommand(" select co.caseObjectValue, ct.caseTypeValue, cr.caseResultValue"
+                                    + " from pipe pip"
+                                    + " inner join intercoating ic on ic.intercoatingId = pip.intercoatingId"
+                                    + " inner join intercoatingCaseRelation icr on icr.intercoatingId = ic.intercoatingId"
+                                    + " inner join caseObject co on co.caseObjectId = icr.caseObjectId"
+                                    + " inner join caseType ct on ct.caseTypeId = icr.caseTypeId"
+                                    + " inner join caseResult cr on cr.caseResultId = icr.caseResultId"
+                                    + " where pip.tagId = " + tagId, myConnection);
+            myReader = myCommand.ExecuteReader();
+
+            tb.Text += "\r\n" + "Характеристики: " + "\r\n";
+            while (myReader.Read())
+            {
+                tb.Text += myReader[0].ToString() + " " + myReader[1].ToString() + " " + myReader[2].ToString() + "\r\n";
+
+            }
+            myReader.Close();
+
+            tb.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            frm.Controls.Add(tb);
+            tb.Size = new Size(size, size);
+            frm.Size = new Size(size, size);
+            frm.Show();
         }
 
         private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             //покрытие межниппельное подробнее
+            const int h = 700;
+            const int l = 400;
+            Form frm = new Form();
+            RichTextBox tb = new RichTextBox();
+
+            SqlCommand myCommand = new SqlCommand(" select betw.brief, betw.discript"
+                                                + " from pipe pip"
+                                                + " inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId"
+                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlDataReader myReader = myCommand.ExecuteReader();
+            while (myReader.Read())
+            {
+                tb.Text += "Название: " + myReader[0].ToString() + "\r\n";
+                tb.Text += "Описание: " + myReader[1].ToString() + "\r\n";
+            }
+            myReader.Close();
+
+            tb.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            frm.Controls.Add(tb);
+            tb.Size = new Size(h, l);
+            frm.Size = new Size(h, l);
+            frm.Show();
         }
 
 

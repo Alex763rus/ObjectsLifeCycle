@@ -38,7 +38,9 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.ComboBox_dmaxfre = new System.Windows.Forms.ComboBox();
+            this.ComboBox_dminfre = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ComboBox_baud2 = new System.Windows.Forms.ComboBox();
@@ -51,12 +53,12 @@
             this.Label1 = new System.Windows.Forms.Label();
             this.TabSheet_EPCC1G2 = new System.Windows.Forms.TabPage();
             this.gpSecondInf = new System.Windows.Forms.GroupBox();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabelBetwHipple = new System.Windows.Forms.LinkLabel();
+            this.linkLabelIntercoating = new System.Windows.Forms.LinkLabel();
+            this.linkLabelCoupling = new System.Windows.Forms.LinkLabel();
             this.checkBoxIsOuterCoating = new System.Windows.Forms.CheckBox();
-            this.checkBoxIsIntercoating = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsBetwHipple = new System.Windows.Forms.CheckBox();
+            this.checkBoxIntercoating = new System.Windows.Forms.CheckBox();
             this.checkBoxIsCoupling = new System.Windows.Forms.CheckBox();
             this.checkBoxCarving = new System.Windows.Forms.CheckBox();
             this.comboBoxStandardLen = new System.Windows.Forms.ComboBox();
@@ -104,8 +106,6 @@
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.label14 = new System.Windows.Forms.Label();
-            this.ComboBox_dminfre = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -213,6 +213,16 @@
             this.ComboBox_dmaxfre.TabIndex = 7;
             this.ComboBox_dmaxfre.SelectedIndexChanged += new System.EventHandler(this.ComboBox_dfreSelect);
             // 
+            // ComboBox_dminfre
+            // 
+            this.ComboBox_dminfre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboBox_dminfre.FormattingEnabled = true;
+            this.ComboBox_dminfre.Location = new System.Drawing.Point(95, 18);
+            this.ComboBox_dminfre.Name = "ComboBox_dminfre";
+            this.ComboBox_dminfre.Size = new System.Drawing.Size(100, 21);
+            this.ComboBox_dminfre.TabIndex = 6;
+            this.ComboBox_dminfre.SelectedIndexChanged += new System.EventHandler(this.ComboBox_dfreSelect);
+            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -221,6 +231,15 @@
             this.label15.Size = new System.Drawing.Size(83, 13);
             this.label15.TabIndex = 3;
             this.label15.Text = "Max.Frequency:";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 21);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(80, 13);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Min.Frequency:";
             // 
             // progressBar1
             // 
@@ -341,12 +360,12 @@
             // 
             // gpSecondInf
             // 
-            this.gpSecondInf.Controls.Add(this.linkLabel3);
-            this.gpSecondInf.Controls.Add(this.linkLabel2);
-            this.gpSecondInf.Controls.Add(this.linkLabel1);
+            this.gpSecondInf.Controls.Add(this.linkLabelBetwHipple);
+            this.gpSecondInf.Controls.Add(this.linkLabelIntercoating);
+            this.gpSecondInf.Controls.Add(this.linkLabelCoupling);
             this.gpSecondInf.Controls.Add(this.checkBoxIsOuterCoating);
-            this.gpSecondInf.Controls.Add(this.checkBoxIsIntercoating);
-            this.gpSecondInf.Controls.Add(this.checkBox3);
+            this.gpSecondInf.Controls.Add(this.checkBoxIsBetwHipple);
+            this.gpSecondInf.Controls.Add(this.checkBoxIntercoating);
             this.gpSecondInf.Controls.Add(this.checkBoxIsCoupling);
             this.gpSecondInf.Controls.Add(this.checkBoxCarving);
             this.gpSecondInf.Controls.Add(this.comboBoxStandardLen);
@@ -368,41 +387,41 @@
             this.gpSecondInf.TabStop = false;
             this.gpSecondInf.Text = "Дополнительная информация";
             // 
-            // linkLabel3
+            // linkLabelBetwHipple
             // 
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.linkLabel3.Location = new System.Drawing.Point(552, 114);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(63, 13);
-            this.linkLabel3.TabIndex = 45;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "Подробнее";
-            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
+            this.linkLabelBetwHipple.AutoSize = true;
+            this.linkLabelBetwHipple.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabelBetwHipple.Location = new System.Drawing.Point(552, 114);
+            this.linkLabelBetwHipple.Name = "linkLabelBetwHipple";
+            this.linkLabelBetwHipple.Size = new System.Drawing.Size(63, 13);
+            this.linkLabelBetwHipple.TabIndex = 45;
+            this.linkLabelBetwHipple.TabStop = true;
+            this.linkLabelBetwHipple.Text = "Подробнее";
+            this.linkLabelBetwHipple.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel3_LinkClicked);
             // 
-            // linkLabel2
+            // linkLabelIntercoating
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.linkLabel2.Location = new System.Drawing.Point(527, 68);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(63, 13);
-            this.linkLabel2.TabIndex = 44;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "Подробнее";
-            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            this.linkLabelIntercoating.AutoSize = true;
+            this.linkLabelIntercoating.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabelIntercoating.Location = new System.Drawing.Point(527, 68);
+            this.linkLabelIntercoating.Name = "linkLabelIntercoating";
+            this.linkLabelIntercoating.Size = new System.Drawing.Size(63, 13);
+            this.linkLabelIntercoating.TabIndex = 44;
+            this.linkLabelIntercoating.TabStop = true;
+            this.linkLabelIntercoating.Text = "Подробнее";
+            this.linkLabelIntercoating.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
-            // linkLabel1
+            // linkLabelCoupling
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.linkLabel1.Location = new System.Drawing.Point(451, 45);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(63, 13);
-            this.linkLabel1.TabIndex = 43;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Подробнее";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabelCoupling.AutoSize = true;
+            this.linkLabelCoupling.Cursor = System.Windows.Forms.Cursors.Default;
+            this.linkLabelCoupling.Location = new System.Drawing.Point(451, 45);
+            this.linkLabelCoupling.Name = "linkLabelCoupling";
+            this.linkLabelCoupling.Size = new System.Drawing.Size(63, 13);
+            this.linkLabelCoupling.TabIndex = 43;
+            this.linkLabelCoupling.TabStop = true;
+            this.linkLabelCoupling.Text = "Подробнее";
+            this.linkLabelCoupling.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // checkBoxIsOuterCoating
             // 
@@ -414,25 +433,25 @@
             this.checkBoxIsOuterCoating.Text = "Покрытие наружное";
             this.checkBoxIsOuterCoating.UseVisualStyleBackColor = true;
             // 
-            // checkBoxIsIntercoating
+            // checkBoxIsBetwHipple
             // 
-            this.checkBoxIsIntercoating.AutoSize = true;
-            this.checkBoxIsIntercoating.Location = new System.Drawing.Point(393, 113);
-            this.checkBoxIsIntercoating.Name = "checkBoxIsIntercoating";
-            this.checkBoxIsIntercoating.Size = new System.Drawing.Size(162, 17);
-            this.checkBoxIsIntercoating.TabIndex = 36;
-            this.checkBoxIsIntercoating.Text = "Покрытие межниппельное";
-            this.checkBoxIsIntercoating.UseVisualStyleBackColor = true;
+            this.checkBoxIsBetwHipple.AutoSize = true;
+            this.checkBoxIsBetwHipple.Location = new System.Drawing.Point(393, 113);
+            this.checkBoxIsBetwHipple.Name = "checkBoxIsBetwHipple";
+            this.checkBoxIsBetwHipple.Size = new System.Drawing.Size(162, 17);
+            this.checkBoxIsBetwHipple.TabIndex = 36;
+            this.checkBoxIsBetwHipple.Text = "Покрытие межниппельное";
+            this.checkBoxIsBetwHipple.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // checkBoxIntercoating
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(393, 67);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(138, 17);
-            this.checkBox3.TabIndex = 35;
-            this.checkBox3.Text = "Покрытие внутреннее";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBoxIntercoating.AutoSize = true;
+            this.checkBoxIntercoating.Location = new System.Drawing.Point(393, 67);
+            this.checkBoxIntercoating.Name = "checkBoxIntercoating";
+            this.checkBoxIntercoating.Size = new System.Drawing.Size(138, 17);
+            this.checkBoxIntercoating.TabIndex = 35;
+            this.checkBoxIntercoating.Text = "Покрытие внутреннее";
+            this.checkBoxIntercoating.UseVisualStyleBackColor = true;
             // 
             // checkBoxIsCoupling
             // 
@@ -799,25 +818,6 @@
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 21);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 13);
-            this.label14.TabIndex = 2;
-            this.label14.Text = "Min.Frequency:";
-            // 
-            // ComboBox_dminfre
-            // 
-            this.ComboBox_dminfre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_dminfre.FormattingEnabled = true;
-            this.ComboBox_dminfre.Location = new System.Drawing.Point(95, 18);
-            this.ComboBox_dminfre.Name = "ComboBox_dminfre";
-            this.ComboBox_dminfre.Size = new System.Drawing.Size(100, 21);
-            this.ComboBox_dminfre.TabIndex = 6;
-            this.ComboBox_dminfre.SelectedIndexChanged += new System.EventHandler(this.ComboBox_dfreSelect);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -908,12 +908,12 @@
         private System.Windows.Forms.TextBox textBoxCertificate;
         private System.Windows.Forms.GroupBox gpSecondInf;
         private System.Windows.Forms.Button butSecondInf;
-        private System.Windows.Forms.LinkLabel linkLabel3;
-        private System.Windows.Forms.LinkLabel linkLabel2;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel linkLabelBetwHipple;
+        private System.Windows.Forms.LinkLabel linkLabelIntercoating;
+        private System.Windows.Forms.LinkLabel linkLabelCoupling;
         private System.Windows.Forms.CheckBox checkBoxIsOuterCoating;
-        private System.Windows.Forms.CheckBox checkBoxIsIntercoating;
-        private System.Windows.Forms.CheckBox checkBox3;
+        private System.Windows.Forms.CheckBox checkBoxIsBetwHipple;
+        private System.Windows.Forms.CheckBox checkBoxIntercoating;
         private System.Windows.Forms.CheckBox checkBoxIsCoupling;
         private System.Windows.Forms.CheckBox checkBoxCarving;
         private System.Windows.Forms.ComboBox comboBoxStandardLen;
