@@ -186,6 +186,47 @@ create table pipe(
 
 )
 
+-- Типичные операции:
+if object_id('typicalOperation') is null
+create table typicalOperation(
+	  typicalOperationId numeric(15,0) identity
+    , value varchar(100)
+	primary key (typicalOperationId)
+)
+
+-- Пользователь:
+if object_id('employee') is null
+create table employee(
+	  employeeId numeric(15,0) identity
+	, name varchar(30) 
+	, patronymic varchar(30) 
+	, surname varchar(30) 
+	, access int --1/2 admin/просмотр
+	, userlogin varchar(30) 
+	, userPassword varchar(30) 
+	, isActive int default 1 --1/0 активный/не активный
+	primary key (employeeId)
+)
+
+-- Жизненный цикл:
+if object_id('lifeCycle') is null
+create table lifeCycle(
+	  lifeCycleId numeric(15,0) identity
+	, lifeCycleDateAdded smalldatetime default getDate()
+	, comment varchar(200)
+	, geoposition varchar(50)
+
+	, tagId numeric(15,0)              -- метка
+	, typicalOperationId numeric(15,0) -- операция
+	, firmId numeric(15,0)
+	, employeeId numeric(15,0) --toDo переделать на сервер
+	primary key (lifeCycleId)
+	, FOREIGN KEY (tagId) REFERENCES tag(tagId)
+	, FOREIGN KEY (typicalOperationId) REFERENCES typicalOperation(typicalOperationId)
+	, FOREIGN KEY (firmId) REFERENCES firm(firmId)
+	, FOREIGN KEY (employeeId) REFERENCES employee(employeeId)
+)
+
 --================Зполнение тестовыми данными:
 -- Тег:
 if not exists(select 1 from tag where tagNum = 'E2003A33D5297889349F9AA6')
@@ -223,7 +264,11 @@ if not exists(select 1 from pipeDiameter where pipeDiameterVal = '93.17')
 
 -- Фирма:
 if not exists(select 1 from firm where brief = 'MajorCrack')
+begin
 	insert into firm(brief, [name]) select 'MajorCrack', 'MSPLAG17'
+	insert into firm(brief, [name]) select 'ОМК', 'ОМК'
+end
+	
 
 -- Защита:
 if not exists(select 1 from protection where brief = 'фосфатирование')
@@ -231,12 +276,21 @@ if not exists(select 1 from protection where brief = 'фосфатировани
 
 -- Документ (сертификат):
 if not exists(select 1 from document)
+begin
 	insert into document(objectID, [name], type, addedDate, patch)
 	select objectID = 1
 	     , [name] = 'Sertifikat_kachestva_postavka_05_05_2019g.pdf'
 		 , type = 1 --труба
 		 , addedDate = '20200115'
 		 , patch = 'D:\Git\Sharp\ObjectsLifeCycle\Certificate'
+	union all
+	select objectID = 1
+	     , [name] = 'Sertifikat_kachestchva_Sinara.pdf'
+		 , type = 2 --внутреннее покрытие
+		 , addedDate = '20200118'
+		 , patch = 'D:\Git\Sharp\ObjectsLifeCycle\Certificate'
+end
+
 
 -- Муфта:
 if not exists(select 1 from coupling)
@@ -298,6 +352,38 @@ if not exists(select 1 from pipe where pipeId = 1)
 		 , tagId = 1
 		 , intercoatingId = 1
 		 , betwHippleId = 1
+
+-- Пользователь:
+if not exists(select 1 from employee)
+begin
+	insert into employee(name, patronymic, surname, access, userlogin, userPassword) select 'Иванов', 'Иван', 'Иванович', 1, 'admin', 'admin'
+	insert into employee(name, patronymic, surname, access, userlogin, userPassword) select 'Петров', 'Петр', 'Петрович', 1, 'watch', 'watch'
+end
+
+-- Типичные операции:
+if not exists(select 1 from typicalOperation)
+begin
+	insert into typicalOperation(value) 
+	select 'Изготовление НКТ'
+	union all select 'Нанесение резьбы'
+	union all select 'Защита резьбы'
+	union all select 'Нанесение покрытия'
+	union all select 'Отправка трубы Заказчику'
+end
+
+-- Жизненный цикл:
+if not exists(select 1 from lifeCycle)
+begin
+	insert into lifeCycle(comment, geoposition, tagId, typicalOperationId, firmId, employeeId) 
+	          select 'Комментарий к операции', '', 1, 1, 2, 1
+	union all select 'Комментарий к операции', '', 1, 2, 2, 1
+	union all select 'Комментарий к операции', '', 1, 3, 2, 1
+	union all select 'Комментарий к операции', '', 1, 4, 2, 1
+
+	update lifeCycle set lifeCycleDateAdded = dateadd(day, typicalOperationId, lifeCycleDateAdded)
+end
+
+
 		 
 /*
 select * from tag
@@ -318,9 +404,14 @@ select * from caseResult
 select * from intercoating
 select * from intercoatingCaseRelation
 
+select * from employee
+select * lifeCycle
+select * typicalOperation
+
 */
 
 
+  /*
    select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk
  ,year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate
  ,year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall
@@ -336,10 +427,29 @@ select * from intercoatingCaseRelation
   left join betwHipple betw on betw.betwHippleId = pip.betwHippleId
   where t.tagNum = 'E2003A33D5297889349F9AA6'
 
+  select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch   
+    from pipe pip
+   inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe
+   where pip.tagId = 1
+   union all
+  select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch
+    from pipe pip
+   inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating
+   where pip.tagId = 1
+
+    select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch  
+                                         from pipe pip
+                                         inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe
+                                        where pip.tagId = 1
+                                         union all
+                                        select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch
+                                         from pipe pip
+                                         inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating
+                                     where pip.tagId =1
+ 
 
 
 
-  /*
     select betw.brief, betw.discript
     from pipe pip
    inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId
@@ -368,6 +478,14 @@ select * from intercoatingCaseRelation
    inner join caseType ct on ct.caseTypeId = icr.caseTypeId
    inner join caseResult cr on cr.caseResultId = icr.caseResultId
    where pip.tagId = 1
+
+     select lc.lifeCycleDateAdded, lc.lifeCycleId, toper.value, fi.brief, emp.surname + ' ' + LEFT(emp.name,1) + '. ' + LEFT(emp.patronymic,1) + '.', lc.geoposition
+    from lifeCycle lc
+inner join typicalOperation toper on toper.typicalOperationId = lc.typicalOperationId
+inner join employee emp on emp.employeeId = lc.employeeId
+inner join firm fi on fi.firmId = lc.firmId
+   where lc.tagId = 1 order by lifeCycleDateAdded asc
+   select Comment from lifeCycle where lifeCycleId = 1
  */
 --==============================================
    
@@ -378,3 +496,4 @@ select * from intercoatingCaseRelation
    */
 
 
+ 

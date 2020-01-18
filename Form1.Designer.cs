@@ -94,6 +94,21 @@
             this.textBoxTagId = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonDocOpen = new System.Windows.Forms.Button();
+            this.dataGridViewDocument = new System.Windows.Forms.DataGridView();
+            this.documentNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DocumentType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DocumentName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DocumentAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DocumentPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.dataGridLifeCicle = new System.Windows.Forms.DataGridView();
             this.StatusBar1 = new System.Windows.Forms.StatusBar();
             this.TStatusPanel = new System.Windows.Forms.StatusBarPanel();
             this.Port = new System.Windows.Forms.StatusBarPanel();
@@ -106,6 +121,13 @@
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.lfNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lifeCicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfOperation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfFirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfMainHuman = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ldGeoposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -114,6 +136,12 @@
             this.gpSecondInf.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDocument)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridLifeCicle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).BeginInit();
@@ -123,6 +151,8 @@
             // 
             this.tabControl1.Controls.Add(this.TabSheet_CMD);
             this.tabControl1.Controls.Add(this.TabSheet_EPCC1G2);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(0, 1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -768,6 +798,147 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.groupBox5);
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(661, 419);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Документы";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Location = new System.Drawing.Point(8, 233);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(645, 177);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "groupBox5";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.buttonDocOpen);
+            this.groupBox2.Controls.Add(this.dataGridViewDocument);
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(650, 224);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Сертификаты";
+            // 
+            // buttonDocOpen
+            // 
+            this.buttonDocOpen.Location = new System.Drawing.Point(569, 194);
+            this.buttonDocOpen.Name = "buttonDocOpen";
+            this.buttonDocOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttonDocOpen.TabIndex = 1;
+            this.buttonDocOpen.Text = "Открыть";
+            this.buttonDocOpen.UseVisualStyleBackColor = true;
+            this.buttonDocOpen.Click += new System.EventHandler(this.buttonDocOpen_Click);
+            // 
+            // dataGridViewDocument
+            // 
+            this.dataGridViewDocument.AllowUserToOrderColumns = true;
+            this.dataGridViewDocument.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDocument.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.documentNum,
+            this.DocumentType,
+            this.DocumentName,
+            this.DocumentAddedDate,
+            this.DocumentPath});
+            this.dataGridViewDocument.Location = new System.Drawing.Point(6, 19);
+            this.dataGridViewDocument.Name = "dataGridViewDocument";
+            this.dataGridViewDocument.Size = new System.Drawing.Size(638, 169);
+            this.dataGridViewDocument.TabIndex = 0;
+            // 
+            // documentNum
+            // 
+            this.documentNum.HeaderText = "№";
+            this.documentNum.Name = "documentNum";
+            this.documentNum.Width = 40;
+            // 
+            // DocumentType
+            // 
+            this.DocumentType.HeaderText = "Тип документа";
+            this.DocumentType.Name = "DocumentType";
+            this.DocumentType.Width = 120;
+            // 
+            // DocumentName
+            // 
+            this.DocumentName.HeaderText = "Название документа";
+            this.DocumentName.Name = "DocumentName";
+            // 
+            // DocumentAddedDate
+            // 
+            this.DocumentAddedDate.HeaderText = "Дата добавления документа";
+            this.DocumentAddedDate.Name = "DocumentAddedDate";
+            // 
+            // DocumentPath
+            // 
+            this.DocumentPath.HeaderText = "Разположение";
+            this.DocumentPath.Name = "DocumentPath";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.groupBox6);
+            this.tabPage2.Controls.Add(this.groupBox7);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(661, 419);
+            this.tabPage2.TabIndex = 4;
+            this.tabPage2.Text = "Жизненный цикл";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Location = new System.Drawing.Point(5, 233);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(650, 177);
+            this.groupBox6.TabIndex = 3;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "groupBox6";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.button1);
+            this.groupBox7.Controls.Add(this.dataGridLifeCicle);
+            this.groupBox7.Location = new System.Drawing.Point(5, 3);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(650, 224);
+            this.groupBox7.TabIndex = 2;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Все действия";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(569, 194);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Подробнее";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // dataGridLifeCicle
+            // 
+            this.dataGridLifeCicle.AllowUserToOrderColumns = true;
+            this.dataGridLifeCicle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridLifeCicle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.lfNum,
+            this.lifeCicleId,
+            this.lfAddedDate,
+            this.lfOperation,
+            this.lfFirm,
+            this.lfMainHuman,
+            this.ldGeoposit});
+            this.dataGridLifeCicle.Location = new System.Drawing.Point(6, 19);
+            this.dataGridLifeCicle.Name = "dataGridLifeCicle";
+            this.dataGridLifeCicle.Size = new System.Drawing.Size(638, 169);
+            this.dataGridLifeCicle.TabIndex = 0;
+            // 
             // StatusBar1
             // 
             this.StatusBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -818,6 +989,43 @@
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
+            // lfNum
+            // 
+            this.lfNum.HeaderText = "№";
+            this.lfNum.Name = "lfNum";
+            this.lfNum.Width = 40;
+            // 
+            // lifeCicleId
+            // 
+            this.lifeCicleId.HeaderText = "ID действия";
+            this.lifeCicleId.Name = "lifeCicleId";
+            // 
+            // lfAddedDate
+            // 
+            this.lfAddedDate.HeaderText = "Дата внесения данных";
+            this.lfAddedDate.Name = "lfAddedDate";
+            // 
+            // lfOperation
+            // 
+            this.lfOperation.HeaderText = "Операция";
+            this.lfOperation.Name = "lfOperation";
+            this.lfOperation.Width = 120;
+            // 
+            // lfFirm
+            // 
+            this.lfFirm.HeaderText = "Компания";
+            this.lfFirm.Name = "lfFirm";
+            // 
+            // lfMainHuman
+            // 
+            this.lfMainHuman.HeaderText = "Ответственный";
+            this.lfMainHuman.Name = "lfMainHuman";
+            // 
+            // ldGeoposit
+            // 
+            this.ldGeoposit.HeaderText = "Геопозиция считывателя";
+            this.ldGeoposit.Name = "ldGeoposit";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -845,6 +1053,12 @@
             this.groupBox4.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox12.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDocument)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridLifeCicle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TStatusPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Port)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Manufacturername)).EndInit();
@@ -930,6 +1144,28 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox ComboBox_dminfre;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.DataGridView dataGridViewDocument;
+        private System.Windows.Forms.Button buttonDocOpen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn documentNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DocumentType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DocumentName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DocumentAddedDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DocumentPath;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridView dataGridLifeCicle;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lfNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lifeCicleId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lfAddedDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lfOperation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lfFirm;
+        private System.Windows.Forms.DataGridViewTextBoxColumn lfMainHuman;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ldGeoposit;
     }
 }
 

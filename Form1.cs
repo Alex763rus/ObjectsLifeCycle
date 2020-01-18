@@ -37,8 +37,10 @@ namespace UHFReader09demomain
 
         SqlConnection myConnection;
         private int tagId;
+        private int access;
+        private int employeeId;
 
-public Form1()
+        public Form1()
         {
             InitializeComponent();
         }
@@ -251,6 +253,8 @@ public Form1()
             fillComboBoxFromSql("select name from strength", comboBoxStrength);
             fillComboBoxFromSql("select lengthVal from standardLen", comboBoxStandardLen);
 
+            access = 1;
+            employeeId = 1;
         }
         private void fillComboBoxFromSql(string query, ComboBox comboBox)
         {
@@ -976,11 +980,25 @@ public Form1()
                 linkLabelBetwHipple.Visible = checkBoxIsBetwHipple.Checked;
 
 
-
-
-
-
                 myReader.Close();
+
+                int pointer = 1;
+                pointer = documentTableFill(" select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch  "
+                                          + " from pipe pip"
+                                          + " inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe"
+                                          + " where pip.tagId = " + tagId, pointer, dataGridViewDocument);
+                pointer = documentTableFill(" select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch"
+                                          + " from pipe pip"
+                                          + " inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating"
+                                          + " where pip.tagId = " + tagId, pointer, dataGridViewDocument);
+                pointer = 1;
+                pointer = documentTableFill(" select lc.lifeCycleId, lc.lifeCycleDateAdded,  toper.value, fi.brief, emp.surname + ' ' + LEFT(emp.name,1) + '. ' + LEFT(emp.patronymic,1) + '.', lc.geoposition "
+                                          + " from lifeCycle lc "
+                                          + " inner join typicalOperation toper on toper.typicalOperationId = lc.typicalOperationId "
+                                          + " inner join employee emp on emp.employeeId = lc.employeeId "
+                                          + " inner join firm fi on fi.firmId = lc.firmId "
+                                          + " where lc.tagId = " + tagId + " order by lifeCycleDateAdded asc", pointer, dataGridLifeCicle);
+
             }
             catch (Exception ex)
             {
@@ -1000,6 +1018,25 @@ public Form1()
                 Console.WriteLine(ex.ToString());
             }*/
 
+        }
+        private int documentTableFill(string query, int pointer, DataGridView dataGridViewDocument)
+        {
+            SqlDataReader myReader = null;
+            SqlCommand myCommand = new SqlCommand(query, myConnection);
+            myReader = myCommand.ExecuteReader();         
+
+            while (myReader.Read())
+            {
+                dataGridViewDocument.Rows.Add();
+                dataGridViewDocument.Rows[pointer - 1].Cells[0].Value = pointer;
+                for (int i = 0; i < dataGridViewDocument.ColumnCount - 1; ++i)
+                {
+                    dataGridViewDocument.Rows[pointer - 1].Cells[i + 1].Value = myReader[i].ToString();
+                }
+                ++pointer;
+            }
+            myReader.Close();
+            return pointer;
         }
         private void button4_Click(object sender, EventArgs e)
         {
@@ -1057,27 +1094,8 @@ public Form1()
 
         private void buttCertificateOpen_Click(object sender, EventArgs e)
         {
-            //to do
-            // кнопка открывания сертификата
-            //to do
-            // кнопка открывания сертификата
-
-            //this.webBrowser1.Navigate("D:\\Git\\Sharp\\ObjectsLifeCycle\\Documentation\\Sertifikat_kachestchva_Sinara.pdf");
-            
 
 
-            Form frm = new Form();
-            frm.WindowState = FormWindowState.Maximized;
-
-            WebBrowser webBrowser = new WebBrowser();
-            webBrowser.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
-       
-
-
-            frm.Controls.Add(webBrowser); //new Point(oldbutton.Location.X, oldbutton.Location.Y + oldbutton.Height + 10);
-            webBrowser.Navigate("D:\\Git\\Sharp\\ObjectsLifeCycle\\Documentation\\Sertifikat_kachestva_postavka_05_05_2019g.pdf");
-            frm.Show();
-            // Application.Run(new Form1());
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
@@ -1134,7 +1152,6 @@ public Form1()
             tb.Size = new Size(size, size);
             frm.Size = new Size(size, size);
             frm.Show();
-
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1211,6 +1228,65 @@ public Form1()
             frm.Show();
         }
 
+        private void buttonDocOpen_Click(object sender, EventArgs e)
+        {
+            //документы -> открыть
+            if (dataGridViewDocument.CurrentRow == null)
+            {
+                MessageBox.Show("Для открытия файла необходимо выделить соответствующую строку таблицы");
+                return;
+            }
+            string patch = Convert.ToString(dataGridViewDocument.Rows[dataGridViewDocument.CurrentRow.Index].Cells["DocumentPath"].Value);
+            string name = Convert.ToString(dataGridViewDocument.Rows[dataGridViewDocument.CurrentRow.Index].Cells["DocumentName"].Value);
 
+            if (String.IsNullOrEmpty(patch) || String.IsNullOrEmpty(name))
+            {
+                MessageBox.Show("Выделенная строка не содержит информации о файле");
+                return;
+            }
+            Form frm = new Form();
+            frm.WindowState = FormWindowState.Maximized;
+
+            WebBrowser webBrowser = new WebBrowser();
+            webBrowser.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+
+            frm.Controls.Add(webBrowser); //new Point(oldbutton.Location.X, oldbutton.Location.Y + oldbutton.Height + 10);
+            webBrowser.Navigate(patch + "\\"+ name);
+            frm.Show();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            //жизненный цикл -> подробнее
+            if (dataGridLifeCicle.CurrentRow == null)
+            {
+                MessageBox.Show("Для открытия файла необходимо выделить соответствующую строку таблицы");
+                return;
+            }
+            string lifeCicleID = Convert.ToString(dataGridLifeCicle.Rows[dataGridLifeCicle.CurrentRow.Index].Cells["lifeCicleId"].Value);
+            if (String.IsNullOrEmpty(lifeCicleID) || String.IsNullOrEmpty(lifeCicleID))
+            {
+                MessageBox.Show("Выделенная строка не содержит информации");
+                return;
+            }
+  
+            const int size = 400;
+            Form frm = new Form();
+            RichTextBox tb = new RichTextBox();
+
+            SqlCommand myCommand = new SqlCommand("select Comment from lifeCycle where lifeCycleId = 1", myConnection);
+            SqlDataReader myReader = myCommand.ExecuteReader();
+            myReader.Read();
+            tb.Text += myReader[0].ToString() + "\r\n";
+
+            myReader.Close();
+
+            tb.Anchor = (AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top);
+            frm.Controls.Add(tb);
+            tb.Size = new Size(size, size);
+            frm.Size = new Size(size, size);
+            frm.Show();
+
+        }
     }
 }
