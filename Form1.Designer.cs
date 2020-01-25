@@ -32,6 +32,16 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabSheet_CMD = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.labelAutorizationStatus = new System.Windows.Forms.Label();
+            this.labelDatabaseStatus = new System.Windows.Forms.Label();
+            this.labelTagReaderStatus = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
+            this.textBoxLogin = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ComboBox_AlreadyOpenCOM = new System.Windows.Forms.ComboBox();
@@ -83,7 +93,6 @@
             this.label18 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonDocOpen = new System.Windows.Forms.Button();
             this.dataGridViewDocument = new System.Windows.Forms.DataGridView();
@@ -93,7 +102,6 @@
             this.DocumentAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DocumentPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridLifeCicle = new System.Windows.Forms.DataGridView();
@@ -115,8 +123,13 @@
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.labelFioAutorization = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
             this.TabSheet_EPCC1G2.SuspendLayout();
             this.gpSecondInf.SuspendLayout();
@@ -149,6 +162,8 @@
             // TabSheet_CMD
             // 
             this.TabSheet_CMD.BackColor = System.Drawing.Color.Transparent;
+            this.TabSheet_CMD.Controls.Add(this.groupBox8);
+            this.TabSheet_CMD.Controls.Add(this.groupBox3);
             this.TabSheet_CMD.Controls.Add(this.progressBar1);
             this.TabSheet_CMD.Controls.Add(this.GroupBox1);
             this.TabSheet_CMD.Location = new System.Drawing.Point(4, 22);
@@ -158,6 +173,106 @@
             this.TabSheet_CMD.TabIndex = 1;
             this.TabSheet_CMD.Text = "Считыватель";
             this.TabSheet_CMD.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.labelFioAutorization);
+            this.groupBox8.Controls.Add(this.labelAutorizationStatus);
+            this.groupBox8.Controls.Add(this.labelDatabaseStatus);
+            this.groupBox8.Controls.Add(this.labelTagReaderStatus);
+            this.groupBox8.Location = new System.Drawing.Point(6, 129);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(647, 47);
+            this.groupBox8.TabIndex = 45;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Строка состояний:";
+            // 
+            // labelAutorizationStatus
+            // 
+            this.labelAutorizationStatus.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.labelAutorizationStatus.Location = new System.Drawing.Point(198, 16);
+            this.labelAutorizationStatus.Name = "labelAutorizationStatus";
+            this.labelAutorizationStatus.Size = new System.Drawing.Size(100, 20);
+            this.labelAutorizationStatus.TabIndex = 2;
+            this.labelAutorizationStatus.Text = "Авторизация";
+            this.labelAutorizationStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelDatabaseStatus
+            // 
+            this.labelDatabaseStatus.Location = new System.Drawing.Point(92, 16);
+            this.labelDatabaseStatus.Name = "labelDatabaseStatus";
+            this.labelDatabaseStatus.Size = new System.Drawing.Size(100, 20);
+            this.labelDatabaseStatus.TabIndex = 1;
+            this.labelDatabaseStatus.Text = "Соединение с БД";
+            this.labelDatabaseStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTagReaderStatus
+            // 
+            this.labelTagReaderStatus.Location = new System.Drawing.Point(6, 16);
+            this.labelTagReaderStatus.MaximumSize = new System.Drawing.Size(80, 20);
+            this.labelTagReaderStatus.Name = "labelTagReaderStatus";
+            this.labelTagReaderStatus.Size = new System.Drawing.Size(80, 20);
+            this.labelTagReaderStatus.TabIndex = 0;
+            this.labelTagReaderStatus.Text = "Считыватель";
+            this.labelTagReaderStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.button3);
+            this.groupBox3.Controls.Add(this.textBoxPassword);
+            this.groupBox3.Controls.Add(this.textBoxLogin);
+            this.groupBox3.Controls.Add(this.label10);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Location = new System.Drawing.Point(291, 7);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(362, 116);
+            this.groupBox3.TabIndex = 44;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Авторизация в системе";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(140, 69);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(100, 23);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "Авторизоваться";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.Location = new System.Drawing.Point(68, 43);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.PasswordChar = '*';
+            this.textBoxPassword.Size = new System.Drawing.Size(172, 20);
+            this.textBoxPassword.TabIndex = 3;
+            this.textBoxPassword.UseSystemPasswordChar = true;
+            // 
+            // textBoxLogin
+            // 
+            this.textBoxLogin.Location = new System.Drawing.Point(68, 16);
+            this.textBoxLogin.Name = "textBoxLogin";
+            this.textBoxLogin.Size = new System.Drawing.Size(172, 20);
+            this.textBoxLogin.TabIndex = 2;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(7, 46);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(48, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Пароль:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(41, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Логин:";
             // 
             // progressBar1
             // 
@@ -176,7 +291,7 @@
             this.GroupBox1.Controls.Add(this.Label1);
             this.GroupBox1.Location = new System.Drawing.Point(5, 7);
             this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(136, 222);
+            this.GroupBox1.Size = new System.Drawing.Size(280, 116);
             this.GroupBox1.TabIndex = 40;
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Считыватель";
@@ -201,7 +316,7 @@
             // 
             // ClosePort
             // 
-            this.ClosePort.Location = new System.Drawing.Point(5, 112);
+            this.ClosePort.Location = new System.Drawing.Point(149, 82);
             this.ClosePort.Name = "ClosePort";
             this.ClosePort.Size = new System.Drawing.Size(125, 25);
             this.ClosePort.TabIndex = 5;
@@ -211,7 +326,7 @@
             // 
             // OpenPort
             // 
-            this.OpenPort.Location = new System.Drawing.Point(5, 41);
+            this.OpenPort.Location = new System.Drawing.Point(149, 30);
             this.OpenPort.Name = "OpenPort";
             this.OpenPort.Size = new System.Drawing.Size(125, 25);
             this.OpenPort.TabIndex = 4;
@@ -223,9 +338,9 @@
             // 
             this.ComboBox_COM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBox_COM.FormattingEnabled = true;
-            this.ComboBox_COM.Location = new System.Drawing.Point(65, 14);
+            this.ComboBox_COM.Location = new System.Drawing.Point(8, 33);
             this.ComboBox_COM.Name = "ComboBox_COM";
-            this.ComboBox_COM.Size = new System.Drawing.Size(65, 21);
+            this.ComboBox_COM.Size = new System.Drawing.Size(122, 21);
             this.ComboBox_COM.TabIndex = 1;
             // 
             // Label1
@@ -659,15 +774,6 @@
             this.tabPage1.Text = "Документы";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Location = new System.Drawing.Point(8, 233);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(645, 177);
-            this.groupBox5.TabIndex = 1;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "groupBox5";
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.buttonDocOpen);
@@ -741,15 +847,6 @@
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Жизненный цикл";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox6
-            // 
-            this.groupBox6.Location = new System.Drawing.Point(5, 233);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(650, 177);
-            this.groupBox6.TabIndex = 3;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "groupBox6";
             // 
             // groupBox7
             // 
@@ -868,6 +965,33 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // labelFioAutorization
+            // 
+            this.labelFioAutorization.AutoSize = true;
+            this.labelFioAutorization.Location = new System.Drawing.Point(304, 20);
+            this.labelFioAutorization.Name = "labelFioAutorization";
+            this.labelFioAutorization.Size = new System.Drawing.Size(0, 13);
+            this.labelFioAutorization.TabIndex = 3;
+            this.labelFioAutorization.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Location = new System.Drawing.Point(5, 233);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(650, 177);
+            this.groupBox6.TabIndex = 3;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "groupBox6";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Location = new System.Drawing.Point(8, 233);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(645, 177);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "groupBox5";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -884,6 +1008,10 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.TabSheet_CMD.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.TabSheet_EPCC1G2.ResumeLayout(false);
@@ -973,7 +1101,6 @@
         private System.Windows.Forms.TextBox textBoxOTK;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DataGridView dataGridViewDocument;
         private System.Windows.Forms.Button buttonDocOpen;
@@ -983,7 +1110,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn DocumentAddedDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn DocumentPath;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridLifeCicle;
@@ -993,6 +1119,19 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn lfFirm;
         private System.Windows.Forms.DataGridViewTextBoxColumn lfMainHuman;
         private System.Windows.Forms.DataGridViewTextBoxColumn ldGeoposit;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBoxPassword;
+        private System.Windows.Forms.TextBox textBoxLogin;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Label labelAutorizationStatus;
+        private System.Windows.Forms.Label labelDatabaseStatus;
+        private System.Windows.Forms.Label labelTagReaderStatus;
+        private System.Windows.Forms.Label labelFioAutorization;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox groupBox6;
     }
 }
 
