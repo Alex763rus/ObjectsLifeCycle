@@ -30,7 +30,7 @@ namespace UHFReader09demomain
         private bool fIsInventoryScan;
         private bool fisinventoryscan_6B;
         private byte[] fOperEPC=new byte[36];
-        private byte[] fPassWord=new byte[4];
+        
         private byte[] fOperID_6B=new byte[8];
         private int CardNum1 = 0;
         ArrayList list = new ArrayList();
@@ -1213,52 +1213,15 @@ namespace UHFReader09demomain
                 MessageBox.Show("Address of Tag Data is NULL", "Information");
                 return;
             }
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("Length of Data(Read/Block Erase) is NULL", "Information");
-                return;
-            }
-            if (Edit_AccessCode2.Text == "")
+                  if (Edit_AccessCode2.Text == "")
             {
                 MessageBox.Show("(PassWord) is NULL", "Information");
                 return;
             }
-            if (Convert.ToInt32(Edit_WordPtr.Text,16) + Convert.ToInt32(textBox1.Text) > 120)
-                return;
                Timer_G2_Read.Enabled =!Timer_G2_Read.Enabled;
                if (Timer_G2_Read.Enabled)
                {
-                   DestroyCode.Enabled = false;
-                   AccessCode.Enabled = false;
-                   NoProect.Enabled = false;
-                   Proect.Enabled = false;
-                   Always.Enabled = false;
-                   AlwaysNot.Enabled = false;
-                   NoProect2.Enabled = false;
-                   Proect2.Enabled = false;
-                   Always2.Enabled = false;
-                   AlwaysNot2.Enabled = false;
-                   P_Reserve.Enabled = false;
-                   P_EPC.Enabled = false;
-                   P_TID.Enabled = false;
-                   P_User.Enabled = false;
-                   Button_WriteEPC_G2.Enabled = false;
-                   Button_SetMultiReadProtect_G2.Enabled = false;
-                   Button_RemoveReadProtect_G2.Enabled = false;
-                   Button_CheckReadProtected_G2.Enabled = false;
-                   button4.Enabled = false;
-
-                   Button_DestroyCard.Enabled = false;
-                   Button_SetReadProtect_G2.Enabled = false;
-                   Button_SetEASAlarm_G2.Enabled = false;
-                   Alarm_G2.Enabled = false;
-                   NoAlarm_G2.Enabled = false;
-                   Button_LockUserBlock_G2.Enabled = false;
-                   button2.Enabled = false;
-                   Button_DataWrite.Enabled = false;
-                   BlockWrite.Enabled = false;
-                   Button_BlockErase.Enabled = false;
-                   Button_SetProtectState.Enabled = false;
+ 
                    SpeedButton_Read_G2.Text = "Stop";
                }
                else
@@ -1337,15 +1300,17 @@ namespace UHFReader09demomain
 
         private void Timer_G2_Read_Tick(object sender, EventArgs e)
         {
+           
             if (fIsInventoryScan)
                 return;
             fIsInventoryScan = true;
-                byte WordPtr, ENum;
+            
+            byte WordPtr, ENum;
                 byte Num = 0;
                 byte Mem = 0;
                 byte EPClength=0;
                 string str;
-                byte[] CardData=new  byte[320];
+                
                 if ((maskadr_textbox.Text=="")||(maskLen_textBox.Text=="") )            
               {
                   fIsInventoryScan = false;
@@ -1357,11 +1322,7 @@ namespace UHFReader09demomain
               MaskFlag = 0;
               Maskadr = Convert.ToByte(maskadr_textbox.Text,16);
               MaskLen = Convert.ToByte(maskLen_textBox.Text,16);
-              if (textBox1.Text == "")
-              {
-                  fIsInventoryScan = false;
-                  return;
-              }
+
                 if (ComboBox_EPC2.Items.Count == 0)
                 {
                     fIsInventoryScan = false;
@@ -1378,10 +1339,10 @@ namespace UHFReader09demomain
                    // fIsInventoryScan = false;
                   //  return;
                 }
-                ENum = Convert.ToByte(str.Length / 4);
+          
+            ENum = Convert.ToByte(str.Length / 4);
                 EPClength = Convert.ToByte(str.Length / 2);
-                byte[] EPC = new byte[ENum];
-                EPC = HexStringToByteArray(str);
+
                 if (C_Reserve.Checked)
                     Mem = 0;
                 if (C_EPC.Checked)
@@ -1390,33 +1351,56 @@ namespace UHFReader09demomain
                     Mem = 2;
                 if (C_User.Checked)
                     Mem = 3;
-                if (Edit_AccessCode2.Text == "")
-                {
-                    fIsInventoryScan = false;
-                    return;
-                }
-                if (Edit_WordPtr.Text == "")
-                {
-                    fIsInventoryScan = false;
-                    return;
-                }
-                WordPtr = Convert.ToByte(Edit_WordPtr.Text, 16);
-                Num = Convert.ToByte(textBox1.Text);
+               
+
                 if (Edit_AccessCode2.Text.Length != 8)
                 {
                     fIsInventoryScan = false;
                     return;
                 }
-                fPassWord = HexStringToByteArray(Edit_AccessCode2.Text);
-                fCmdRet = StaticClassReaderB.ReadCard_G2(ref fComAdr, EPC, Mem, WordPtr, Num, fPassWord,Maskadr,MaskLen,MaskFlag, CardData, EPClength, ref ferrorcode, frmcomportindex);
-                if (fCmdRet == 0)
+
+            //===========================================
+
+            // fCmdRet = StaticClassReaderB.ReadCard_G2(ref fComAdr, EPC, Mem, WordPtr, Num, fPassWord,Maskadr,MaskLen,MaskFlag, CardData, EPClength, ref ferrorcode, frmcomportindex);
+            int ferrorcode;
+
+            byte MyNum = 0;
+            MyNum = Convert.ToByte("8");
+
+            byte MyWordPtr;
+            MyWordPtr = Convert.ToByte("00", 16);//с какого начать читать
+
+            byte MyfComAdr = 0xff;
+
+            str = ComboBox_EPC2.SelectedItem.ToString();//str = стринга номера метки
+            byte[] EPC = new byte[ENum];
+            EPC = HexStringToByteArray(str);
+
+            byte[] CardData = new byte[320]; //result
+            fCmdRet = StaticClassReaderB.ReadCard_G2(ref MyfComAdr, EPC, 3, Convert.ToByte("00", 16), Convert.ToByte("8"), HexStringToByteArray("000000"), 0, 0, 0, CardData, 12, ref ferrorcode, 3);
+            if (fCmdRet == 0)
                 {
-                    byte[] daw = new byte[Num*2];
-                    Array.Copy(CardData, daw, Num * 2);
+                //MessageBox.Show("TYT");
+                //MessageBox.Show(Convert.ToString(EPC), "EPC");
+                //MessageBox.Show(Convert.ToString(WordPtr), "WordPtr");
+                //MessageBox.Show(Convert.ToString(Num), "Num");
+                //MessageBox.Show(Convert.ToString(fPassWord), "fPassWord");
+                //MessageBox.Show(Convert.ToString(Maskadr), "Maskadr");
+                //MessageBox.Show(Convert.ToString(MaskLen), "MaskLen");
+                //MessageBox.Show(Convert.ToString(MaskFlag), "MaskFlag");
+                //MessageBox.Show(Convert.ToString(CardData), "CardData");
+                //MessageBox.Show(Convert.ToString(EPClength), "EPClength");
+                //MessageBox.Show(Convert.ToString(frmcomportindex), "frmcomportindex");
+               
+
+                byte[] daw = new byte[MyNum * 2];
+                    Array.Copy(CardData, daw, MyNum * 2);
                     listBox1.Items.Add(ByteArrayToHexString(daw));
                     listBox1.SelectedIndex = listBox1.Items.Count - 1;
                     AddCmdLog("ReadData", "Read", fCmdRet);
-                }
+
+                MessageBox.Show(Convert.ToString(ByteArrayToHexString(daw)), "ByteArrayToHexString(daw)");
+            }
                 if (ferrorcode != -1)
              {
                   StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +
@@ -1431,167 +1415,12 @@ namespace UHFReader09demomain
 
         private void Button_DataWrite_Click(object sender, EventArgs e)
         {
-            byte WordPtr, ENum;
-            byte Num = 0;
-            byte Mem = 0;
-            byte WNum = 0;
-            byte EPClength = 0;
-            byte Writedatalen = 0;
-            int  WrittenDataNum = 0;
-            string s2, str;
-            byte[] CardData = new byte[320];
-            byte[] writedata = new byte[230];
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-            if (ComboBox_EPC2.Items.Count == 0)
-                return;
-            if (ComboBox_EPC2.SelectedItem == null)
-                return;
-            str = ComboBox_EPC2.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            EPClength = Convert.ToByte(ENum * 2);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            if (C_Reserve.Checked)
-                Mem = 0;
-            if (C_EPC.Checked)
-                Mem = 1;
-            if (C_TID.Checked)
-                Mem = 2;
-            if (C_User.Checked)
-                Mem = 3;
-            if (Edit_WordPtr.Text == "")
-            {
-                MessageBox.Show("Address of Tag Data is NULL", "Information");
-                return;
-            }
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("Length of Data(Read/Block Erase) is NULL", "Information");
-                return;
-            }
-            if (Convert.ToInt32(Edit_WordPtr.Text) + Convert.ToInt32(textBox1.Text) > 120)
-                return;
-            if (Edit_AccessCode2.Text == "")
-            {
-                return;
-            }
-            WordPtr = Convert.ToByte(Edit_WordPtr.Text, 16);
-            Num = Convert.ToByte(textBox1.Text);
-            if (Edit_AccessCode2.Text.Length != 8)
-            {
-                return;
-            }
-            fPassWord = HexStringToByteArray(Edit_AccessCode2.Text);
-            if (Edit_WriteData.Text == "")
-                return;
-            s2 = Edit_WriteData.Text;
-            if (s2.Length % 4 != 0)
-            {
-                MessageBox.Show("The Number must be 4 times.", "Wtite");
-                return;
-            }
-            WNum = Convert.ToByte(s2.Length / 4);
-            byte[] Writedata = new byte[WNum * 2];
-            Writedata = HexStringToByteArray(s2);
-            Writedatalen = Convert.ToByte(WNum * 2);
-            if ((checkBox_pc.Checked) && (C_EPC.Checked))
-            {
-                WordPtr = 1;
-                Writedatalen = Convert.ToByte(Edit_WriteData.Text.Length / 2 + 2);
-                Writedata = HexStringToByteArray(textBox_pc.Text + Edit_WriteData.Text);
-            }
-            fCmdRet = StaticClassReaderB.WriteCard_G2(ref fComAdr, EPC, Mem, WordPtr, Writedatalen, Writedata, fPassWord,Maskadr,MaskLen,MaskFlag, WrittenDataNum, EPClength, ref ferrorcode, frmcomportindex);
-            AddCmdLog("Write data", "Write", fCmdRet, ferrorcode);
-            if (fCmdRet == 0)
-            {
-             StatusBar1.Panels[0].Text =DateTime.Now.ToLongTimeString() +  "'Write'Command Response=0x00" +
-                  "(completely write Data successfully)";
-            }    
+        
         }
 
         private void Button_BlockErase_Click(object sender, EventArgs e)
         {
-            byte WordPtr, ENum;
-            byte Num = 0;
-            byte Mem = 0;
-            byte EPClength = 0;
-            string str;
-            byte[] CardData = new byte[320];
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-            if (ComboBox_EPC2.Items.Count == 0)
-                return;
-            if (ComboBox_EPC2.SelectedItem == null)
-                return;
-            str = ComboBox_EPC2.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            EPClength = Convert.ToByte(str.Length / 2);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            if (C_Reserve.Checked)
-                Mem = 0;
-            if (C_EPC.Checked)
-                Mem = 1;
-            if (C_TID.Checked)
-                Mem = 2;
-            if (C_User.Checked)
-                Mem = 3;
-            if (Edit_WordPtr.Text == "")
-            {
-                MessageBox.Show("Address of Tag Data is NULL", "Information");
-                return;
-            }
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("Length of Data(Read/Block Erase) is NULL", "Information");
-                return;
-            }
-            if (Convert.ToInt32(Edit_WordPtr.Text) + Convert.ToInt32(textBox1.Text) > 120)
-                return;
-            if (Edit_AccessCode2.Text == "")
-                return;
-            WordPtr = Convert.ToByte(Edit_WordPtr.Text, 16);
-            if ((Mem == 1) & (WordPtr < 2))
-            {
-                MessageBox.Show("the length of start Address of erasing EPC area is equal or greater than 0x01!", "Information");
-                return;
-            }
-            Num = Convert.ToByte(textBox1.Text);
-            if (Edit_AccessCode2.Text.Length != 8)
-            {
-                return;
-            }
-            fPassWord = HexStringToByteArray(Edit_AccessCode2.Text);
-            fCmdRet = StaticClassReaderB.EraseCard_G2(ref fComAdr, EPC, Mem, WordPtr, Num, fPassWord,Maskadr,MaskLen,MaskFlag,EPClength, ref ferrorcode, frmcomportindex);
-            AddCmdLog("EraseCard", "Erase data", fCmdRet);
-            if (fCmdRet == 0)
-            {
-                 StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Block Erase'Command Response=0x00" +
-                     "(Block Erase successfully)";
-            }       
+       
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -1601,299 +1430,42 @@ namespace UHFReader09demomain
 
         private void Button_SetProtectState_Click(object sender, EventArgs e)
         {
-              byte select=0;
-              byte setprotect=0;
-              byte EPClength;
-              string str;
-              byte ENum;
-              if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-              {
-                  fIsInventoryScan = false;
-                  return;
-              }
-              if (checkBox1.Checked)
-                  MaskFlag = 1;
-              else
-                  MaskFlag = 0;
-              Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-              MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-              if (ComboBox_EPC1.Items.Count == 0)
-                  return;
-              if (ComboBox_EPC1.SelectedItem == null)
-                  return;
-              str = ComboBox_EPC1.SelectedItem.ToString();
-              if (str == "")
-                  return;
-              ENum = Convert.ToByte(str.Length / 4);             
-              EPClength = Convert.ToByte(str.Length / 2);
-              byte[] EPC = new byte[ENum];
-              EPC = HexStringToByteArray(str);
-              if (textBox2.Text.Length != 8)
-              {
-                  MessageBox.Show("Access Password Less Than 8 digit!Please input again!","Information");
-                  return;
-              }
-              fPassWord = HexStringToByteArray(textBox2.Text);
-              if ((P_Reserve.Checked) & (DestroyCode.Checked))
-                  select = 0x00;
-              else if ((P_Reserve.Checked) & (AccessCode.Checked))
-                  select = 0x01;
-              else if (P_EPC.Checked)
-                  select = 0x02;
-              else if (P_TID.Checked)
-                  select = 0x03;
-              else if (P_User.Checked)
-                  select = 0x04;
-              if (P_Reserve.Checked)
-              {
-                  if (NoProect.Checked )
-                   setprotect=0x00;
-                  else if (Proect.Checked)
-                   setprotect=0x02;
-                  else if (Always.Checked )
-                  {
-                   setprotect=0x01;
-                   if(MessageBox.Show(this, "Set readable and writeable Confirmed?", "Information", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                         return;
-                  }
-                  else if (AlwaysNot.Checked )
-                  {
-                   setprotect=0x03;
-                   if(MessageBox.Show(this, "Set never readable and writeable Confirmed?", "Information", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                         return;
-                  }
-        }
-        else
-              {
-                  if (NoProect2.Checked)
-                   setprotect=0x00;
-                  else if (Proect2.Checked)
-                   setprotect=0x02;
-                  else if (Always2.Checked)
-                  {
-                   setprotect=0x01;
-                   if(MessageBox.Show(this, "Set writeable Confirmed?", "Information", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                         return;
-                  }
-                  else if (AlwaysNot2.Checked )
-                  {
-                   setprotect=0x03;
-                  if(MessageBox.Show(this, "Set never writeable Confirmed?", "Information", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                         return;
-                  }
-              }
-
-              fCmdRet = StaticClassReaderB.SetCardProtect_G2(ref fComAdr, EPC, select, setprotect, fPassWord,Maskadr,MaskLen,MaskFlag, EPClength, ref ferrorcode, frmcomportindex); ;
-            AddCmdLog("SetCardProtect", "SetProtect", fCmdRet);
+              
         }
 
         private void Button_DestroyCard_Click(object sender, EventArgs e)
         {
-            byte EPClength;
-            string str;
-            byte ENum;
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-            StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + "";
-            if (MessageBox.Show(this, "Kill the Tag  Confirmed?", "Information", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
-                return;
-            if (Edit_DestroyCode.Text.Length != 8)
-            {
-                MessageBox.Show("Kill Password Less Than 8 digit!Please input again!", "Information");
-                return;
-            }
-            if (ComboBox_EPC3.Items.Count == 0)
-                return;
-            if (ComboBox_EPC3.SelectedItem == null)
-                return;
-            str = ComboBox_EPC3.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            EPClength = Convert.ToByte(str.Length / 2);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            fPassWord = HexStringToByteArray(Edit_DestroyCode.Text);
-            fCmdRet = StaticClassReaderB.DestroyCard_G2(ref fComAdr, EPC, fPassWord,Maskadr,MaskLen,MaskFlag, EPClength, ref ferrorcode, frmcomportindex);
-            AddCmdLog("DestroyCard", "Kill Tag", fCmdRet);
-            if (fCmdRet == 0)
-                StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + " 'Kill Tag'Command Response=0x00" +
-                          "(Kill successfully)";
+       
         }
 
         private void Button_WriteEPC_G2_Click(object sender, EventArgs e)
         {
-              byte[] WriteEPC =new byte[100];
-              byte WriteEPClen;
-              byte ENum;
-              if (Edit_AccessCode3.Text.Length < 8)
-              {
-                  MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                  return;
-              }
-             if ((Edit_WriteEPC.Text.Length%4) !=0) 
-            {
-                    MessageBox.Show("Please input Data in words in hexadecimal form!","Information");
-                    return;
-            }
-            WriteEPClen=Convert.ToByte(Edit_WriteEPC.Text.Length/ 2) ;
-            ENum = Convert.ToByte(Edit_WriteEPC.Text.Length / 4);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(Edit_WriteEPC.Text);
-            fPassWord = HexStringToByteArray(Edit_AccessCode3.Text);
-            fCmdRet = StaticClassReaderB.WriteEPC_G2(ref fComAdr, fPassWord, EPC, WriteEPClen, ref ferrorcode, frmcomportindex);
-              AddCmdLog("WriteEPC_G2", "Write EPC", fCmdRet);
-              if (fCmdRet == 0)
-                  StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + " 'Write EPC'Command Response=0x00" +
-                            "(Write EPC successfully)";
+           
         }
 
         private void Button_SetReadProtect_G2_Click(object sender, EventArgs e)
         {
-            byte EPClength;
-            byte ENum;
-            string str;
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-             if (Edit_AccessCode4.Text.Length < 8)
-              {
-                  MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                  return;
-              }
-              if (ComboBox_EPC4.Items.Count == 0)
-                  return;
-              if (ComboBox_EPC4.SelectedItem == null)
-                  return;
-              str = ComboBox_EPC4.SelectedItem.ToString();
-              if (str == "")
-                  return;
-              ENum = Convert.ToByte(str.Length / 4);
-              EPClength = Convert.ToByte(str.Length / 2);
-              byte[] EPC = new byte[ENum];
-              EPC = HexStringToByteArray(str);
-              fPassWord = HexStringToByteArray(Edit_AccessCode4.Text);
-              fCmdRet = StaticClassReaderB.SetReadProtect_G2(ref fComAdr, EPC, fPassWord,Maskadr,MaskLen,MaskFlag, EPClength, ref ferrorcode, frmcomportindex);
-            AddCmdLog("SetReadProtect_G2", "Set Single Tag Read Protection", fCmdRet);
-              if (fCmdRet==0)
-              {
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Set Single Tag Read Protection'Command Response=0x00" +
-                        "Set Single Tag Read Protection successfully";
-              }
+          
         }
 
         private void Button_SetMultiReadProtect_G2_Click(object sender, EventArgs e)
         {
-            if (Edit_AccessCode4.Text.Length < 8)
-            {
-                MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                return;
-            }
-            fPassWord = HexStringToByteArray(Edit_AccessCode4.Text);
-             fCmdRet=StaticClassReaderB.SetMultiReadProtect_G2(ref fComAdr,fPassWord,ref ferrorcode,frmcomportindex);
-              AddCmdLog("SetMultiReadProtect_G2", "Set Single Tag Read Protection without EPC", fCmdRet);
-              if (fCmdRet==0)            
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Set Single Tag Read Protection without EPC'Command Response=0x00" +
-                        "(Set Single Tag Read Protection without EPC successfully)";
+           
         }
 
         private void Button_RemoveReadProtect_G2_Click(object sender, EventArgs e)
         {
-            if (Edit_AccessCode4.Text.Length < 8)
-            {
-                MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                return;
-            }
-            fPassWord = HexStringToByteArray(Edit_AccessCode4.Text);
-             fCmdRet=StaticClassReaderB.RemoveReadProtect_G2(ref fComAdr,fPassWord,ref ferrorcode,frmcomportindex);
-              AddCmdLog("RemoveReadProtect_G2", "Reset Single Tag Read Protection", fCmdRet);
-              if (fCmdRet==0)
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Reset Single Tag Read Protection'Command Response=0x00" +
-                        "(Reset Single Tag Read Protection successfully)";
+          
         }
 
         private void Button_CheckReadProtected_G2_Click(object sender, EventArgs e)
         {
-            byte readpro=2;
-              fCmdRet=StaticClassReaderB.CheckReadProtected_G2(ref fComAdr,ref readpro,ref ferrorcode,frmcomportindex);
-              AddCmdLog("CheckReadProtected_G2", "Detect Single Tag Read Protection", fCmdRet);
-              if (fCmdRet==0)
-              {
-               if (readpro==0)
-              StatusBar1.Panels[0].Text =DateTime.Now.ToLongTimeString() +  " 'Detect Single Tag Read Protection'Command Response=0x00" +
-                        "(Single Tag is unprotected)";
-               if (readpro==1)
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Detect Single Tag Read Protection'Command Response=0x01" +
-                        "(Single Tag is protected)";
-              }
+          
         }
 
         private void Button_SetEASAlarm_G2_Click(object sender, EventArgs e)
         {
-            byte EPClength=0;
-            byte  EAS=0;
-            byte ENum;
-            string str;
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-            if (Edit_AccessCode5.Text.Length < 8)
-            {
-                MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                return;
-            }
-            if (ComboBox_EPC5.Items.Count == 0)
-                return;
-            if (ComboBox_EPC5.SelectedItem == null)
-                return;
-            str = ComboBox_EPC5.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            EPClength = Convert.ToByte(str.Length / 2);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            fPassWord = HexStringToByteArray(Edit_AccessCode5.Text);
-             if (Alarm_G2.Checked) 
-             EAS= 1;
-             else 
-             EAS=0;
-         fCmdRet = StaticClassReaderB.SetEASAlarm_G2(ref fComAdr, EPC, fPassWord,Maskadr,MaskLen,MaskFlag, EAS, EPClength, ref ferrorcode, frmcomportindex);
-              AddCmdLog("SetEASAlarm_G2", "Alarm Setting", fCmdRet);     //v2.1 change
-              if (fCmdRet==0)
-              {
-                  if (Alarm_G2.Checked)                                //v2.1 add
-                      StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + " 'Alarm Setting'Command Response=0x00" +
-                                "(Set EAS Alarm successfully)";
-                  else
-                      StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + " 'Alarm Setting'Command Response=0x00" +
-                                "(Clear EAS Alarm successfully)";
-              }
+          
             
         }
 
@@ -2034,44 +1606,7 @@ namespace UHFReader09demomain
 
         private void Button_LockUserBlock_G2_Click(object sender, EventArgs e)
         {
-             byte EPClength = 0;
-             byte BlockNum = 0;
-             byte ENum;
-             string str;
-             if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-             {
-                 fIsInventoryScan = false;
-                 return;
-             }
-             if (checkBox1.Checked)
-                 MaskFlag = 1;
-             else
-                 MaskFlag = 0;
-             Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-             MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-             if (Edit_AccessCode6.Text.Length < 8)
-             {
-                 MessageBox.Show("Access Password Less Than 8 digit!Please input again!", "Information");
-                 return;
-             }
-             if (ComboBox_EPC6.Items.Count == 0)
-                 return;
-             if (ComboBox_EPC6.SelectedItem == null)
-                 return;
-             str = ComboBox_EPC6.SelectedItem.ToString();
-             if (str == "")
-                 return;
-             ENum = Convert.ToByte(str.Length / 4);
-             EPClength = Convert.ToByte(str.Length / 2);
-             byte[] EPC = new byte[ENum];
-             EPC = HexStringToByteArray(str);
-             fPassWord = HexStringToByteArray(Edit_AccessCode6.Text);
-             BlockNum=Convert.ToByte(ComboBox_BlockNum.SelectedIndex*2) ;
-             fCmdRet=StaticClassReaderB.LockUserBlock_G2(ref fComAdr,EPC,fPassWord,Maskadr,MaskLen,MaskFlag,BlockNum,EPClength,ref ferrorcode,frmcomportindex);
-              AddCmdLog("LockUserBlock_G2", "Lock User Block", fCmdRet);
-              if (fCmdRet==0)
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() +  " 'Lock User Block'Command Response=0x00" +
-                        "(Lock successfully)";
+            
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -2924,94 +2459,7 @@ namespace UHFReader09demomain
 
         private void BlockWrite_Click(object sender, EventArgs e)
         {
-            byte WordPtr, ENum;
-            byte Num = 0;
-            byte Mem = 0;
-            byte WNum = 0;
-            byte EPClength = 0;
-            byte Writedatalen = 0;
-            int WrittenDataNum = 0;
-            string s2, str;
-            byte[] CardData = new byte[320];
-            byte[] writedata = new byte[230];
-            if ((maskadr_textbox.Text == "") || (maskLen_textBox.Text == ""))
-            {
-                fIsInventoryScan = false;
-                return;
-            }
-            if (checkBox1.Checked)
-                MaskFlag = 1;
-            else
-                MaskFlag = 0;
-            Maskadr = Convert.ToByte(maskadr_textbox.Text, 16);
-            MaskLen = Convert.ToByte(maskLen_textBox.Text, 16);
-            if (ComboBox_EPC2.Items.Count == 0)
-                return;
-            if (ComboBox_EPC2.SelectedItem == null)
-                return;
-            str = ComboBox_EPC2.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            EPClength = Convert.ToByte(ENum * 2);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            if (C_Reserve.Checked)
-                Mem = 0;
-            if (C_EPC.Checked)
-                Mem = 1;
-            if (C_TID.Checked)
-                Mem = 2;
-            if (C_User.Checked)
-                Mem = 3;
-            if (Edit_WordPtr.Text == "")
-            {
-                MessageBox.Show("Address of Tag Data is NULL", "Information");
-                return;
-            }
-            if (textBox1.Text == "")
-            {
-                MessageBox.Show("Length of Data(Read/Block Erase) is NULL", "Information");
-                return;
-            }
-            if (Convert.ToInt32(Edit_WordPtr.Text) + Convert.ToInt32(textBox1.Text) > 120)
-                return;
-            if (Edit_AccessCode2.Text == "")
-            {
-                return;
-            }
-            WordPtr = Convert.ToByte(Edit_WordPtr.Text, 16);
-            Num = Convert.ToByte(textBox1.Text);
-            if (Edit_AccessCode2.Text.Length != 8)
-            {
-                return;
-            }
-            fPassWord = HexStringToByteArray(Edit_AccessCode2.Text);
-            if (Edit_WriteData.Text == "")
-                return;
-            s2 = Edit_WriteData.Text;
-            if (s2.Length % 4 != 0)
-            {
-                MessageBox.Show("The Number must be 4 times.", "Write");
-                return;
-            }
-            WNum = Convert.ToByte(s2.Length / 4);
-            byte[] Writedata = new byte[WNum * 2];
-            Writedata = HexStringToByteArray(s2);
-            Writedatalen = Convert.ToByte(WNum * 2);
-            if ((checkBox_pc.Checked) && (C_EPC.Checked))
-            {
-                WordPtr = 1;
-                Writedatalen = Convert.ToByte(Edit_WriteData.Text.Length / 2 + 2);
-                Writedata = HexStringToByteArray(textBox_pc.Text + Edit_WriteData.Text);
-            }
-            fCmdRet = StaticClassReaderB.WriteBlock_G2(ref fComAdr, EPC, Mem, WordPtr, Writedatalen, Writedata, fPassWord, Maskadr, MaskLen, MaskFlag, WrittenDataNum, EPClength, ref ferrorcode, frmcomportindex);
-            AddCmdLog("Write Block", "WriteBlock", fCmdRet, ferrorcode);
-            if (fCmdRet == 0)
-            {
-                StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + "'WriteBlock'Command Response=0x00" +
-                     "(completely write Data successfully)";
-            }    
+          
         }
 
         private void radioButton_band5_CheckedChanged(object sender, EventArgs e)
