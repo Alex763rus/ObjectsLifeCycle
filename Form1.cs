@@ -213,24 +213,17 @@ namespace UHFReader09demomain
               gpSecondInf.Visible = false;
               tagId = 0;
               this.Size = new System.Drawing.Size(685, 316);
-
-            labelTagReaderStatus.BackColor = System.Drawing.Color.Red;
-            labelDatabaseStatus.BackColor = System.Drawing.Color.Red;
-            labelAutorizationStatus.BackColor = System.Drawing.Color.Red;
+             // tabControl1.Size = new System.Drawing.Size(669, 267);
 
             linkLabelCoupling.Visible = false;
             linkLabelIntercoating.Visible = false;
             linkLabelBetwHipple.Visible = false;
 
-            textBoxLogin.Text = "admin";
-            textBoxPassword.Text = "admin";
-                
             //открыть соединение
             try
             {
                 myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" + "Trusted_Connection=yes;" + "database=ObjectsLifeCycle; " + "connection timeout=30");
                 myConnection.Open();
-                labelDatabaseStatus.BackColor = System.Drawing.Color.Lime;
             }
             catch (Exception ex)
             {
@@ -329,8 +322,8 @@ namespace UHFReader09demomain
               {
                 ComboBox_AlreadyOpenCOM.Items.Add("COM"+Convert.ToString(fOpenComIndex)) ;
                 ComboBox_AlreadyOpenCOM.SelectedIndex = ComboBox_AlreadyOpenCOM.SelectedIndex + 1;
-                labelTagReaderStatus.BackColor = System.Drawing.Color.Lime;
                 button2.Enabled = true;
+            
                 ComOpen = true;
               }
               if ((fOpenComIndex == -1) &&(openresult == 0x30)) 
@@ -393,7 +386,7 @@ namespace UHFReader09demomain
                   ComboBox_AlreadyOpenCOM.Refresh();
                   RefreshStatus();
                   button2.Enabled = false;
-                  labelTagReaderStatus.BackColor = System.Drawing.Color.Red;
+
                   button2.Text = "Остановить";
                   ComOpen = false;            
                   timer1.Enabled = false;
@@ -640,6 +633,19 @@ namespace UHFReader09demomain
             {
                 MessageBox.Show(ex.ToString(), "ERROR2");
             }
+
+            //===============================
+            // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
+            //myCommand.ExecuteNonQuery();
+            /*
+            try
+            {
+                myConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }*/
 
         }
         private void dataGridWiewFill(string query, DataGridView dataGridViewDocument)
@@ -933,62 +939,5 @@ namespace UHFReader09demomain
         {
               InitializeComponent();
         }
-
-        private void button3_Click_1(object sender, EventArgs e)
-        {
-            //Авторизоваться
-
-            SqlDataReader myReader = null;
-
-            SqlCommand myCommand = new SqlCommand(" select * from v_EmployeeAutorization where userlogin = '" + textBoxLogin.Text + "' and userPassword = '" + textBoxPassword.Text + "'", myConnection);
-            myReader = myCommand.ExecuteReader();
-            if (myReader.Read())
-            {
-                access = Convert.ToInt32(myReader["access"]);
-                employeeId = Convert.ToInt32(myReader["employeeId"]);
-                labelFioAutorization.Text = (myReader["fio"].ToString());
-
-                labelAutorizationStatus.BackColor = System.Drawing.Color.Lime;
-                MessageBox.Show("Успешная авторизация в системе!", "Информация");
-            }
-            else
-            {
-                MessageBox.Show("Неверно введены логин или пароль", "Ошибка");
-            }
-
-
-  
-
-            //textBoxPipeId.Text = (myReader["pipeNum"].ToString());
-            //textBoxFactoryNum.Text = (myReader["factoryNum"].ToString());
-            //textBoxBatchNum.Text = (myReader["batchNum"].ToString());
-            //textBoxSmeltingNum.Text = (myReader["smeltingNum"].ToString());
-            //textBoxGostThCon.Text = (myReader["gostThCon"].ToString());
-            //textBoxPackageNum.Text = (myReader["packageNum"].ToString());
-            //textBoxCertificate.Text = (myReader["certificate"].ToString());
-            //textBoxOTK.Text = (myReader["otk"].ToString());
-            //dateTimeReleaseDate.Value = new DateTime(Convert.ToInt32(myReader["yeReleasDate"]), Convert.ToInt32(myReader["monReleasDate"]), Convert.ToInt32(myReader["dayReleasDate"]));
-            //dateTimeTagInstall.Value = new DateTime(Convert.ToInt32(myReader["yeDateInstall"]), Convert.ToInt32(myReader["monDateInstall"]), Convert.ToInt32(myReader["dayDateInstall"]));
-
-            //comboBoxTypeDiametr.SelectedIndex = Convert.ToInt32(myReader["typeDiametr"]) - 1;
-            //comboBoxStrength.SelectedIndex = Convert.ToInt32(myReader["strengthId"]) - 1;
-            //comboBoxStandardLen.SelectedIndex = Convert.ToInt32(myReader["standardLenId"]) - 1;
-
-            //checkBoxCarving.Checked = Convert.ToInt32(myReader["carving"].ToString()) != 0;
-            //checkBoxIsCoupling.Checked = Convert.ToInt32(myReader["isCoupling"].ToString()) != 0;
-            //checkBoxIsOuterCoating.Checked = Convert.ToInt32(myReader["isOuterCoating"].ToString()) != 0;
-            //checkBoxIsBetwHipple.Checked = Convert.ToInt32(myReader["isBetwHipple"].ToString()) != 0;
-            //checkBoxIntercoating.Checked = Convert.ToInt32(myReader["isIntercoating"].ToString()) != 0;
-
-            //linkLabelCoupling.Visible = checkBoxIsCoupling.Checked;
-            //linkLabelIntercoating.Visible = checkBoxIntercoating.Checked;
-            //linkLabelBetwHipple.Visible = checkBoxIsBetwHipple.Checked;
-
-            myReader.Close();
-
-            //dataGridWiewFill(" select * from v_Document where tagId = " + tagId + " order by num", dataGridViewDocument);
-            //dataGridWiewFill(" select * from v_LifeCicle where tagId = " + tagId + " order by dateAdded", dataGridLifeCicle);
-        }
-
     }
  }
