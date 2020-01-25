@@ -369,6 +369,26 @@ CREATE VIEW v_BetwHippleDeail AS
    inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId
 go
 
+if object_id('v_EmployeeAutorization') is not null
+drop VIEW v_EmployeeAutorization
+go
+CREATE VIEW v_EmployeeAutorization AS   
+  select employeeId = employeeId
+       , surname = surname
+       , name = name
+	   , patronymic = patronymic
+	   , access = access
+	   , userlogin = userlogin
+	   , userPassword = userPassword
+	   , fio = surname + ' ' + name + ' ' + ' ' + patronymic + '. Права: '
+	       + case access 
+		       when 1 then 'Администратор'
+			   when 1 then 'Пользователь'
+			   when 1 then 'Гость'
+			 end
+    from employee emp
+   where isActive = 1
+go
 
 --================Заполнение тестовыми данными:
 -- Тег:
