@@ -226,8 +226,151 @@ create table lifeCycle(
 	, FOREIGN KEY (firmId) REFERENCES firm(firmId)
 	, FOREIGN KEY (employeeId) REFERENCES employee(employeeId)
 )
+--================View:
+if object_id('v_Document') is not null
+drop VIEW v_Document
+go
+CREATE VIEW v_Document AS   
+with documentsCte(Documenttype, docPipName, addedDate, patch, tagId) as
+(
+	select Documenttype = 'Труба'
+	     , docPipName = docPip.name
+		 , addedDate = docPip.addedDate
+		 , patch = docPip.patch
+		 , tagId = pip.tagId
+    from pipe pip
+   inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe
+   union all
+	select Documenttype = 'Внутреннее покрытие'
+	     , docPipName = docInter.name
+		 , addedDate = docInter.addedDate
+		 , patch = docInter.patch
+		 , tagId = pip.tagId
+      from pipe pip
+   inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating
+)
+   select ROW_NUMBER() OVER(ORDER BY Documenttype ASC) AS num, * 
+     from documentsCte
+go
 
---================Зполнение тестовыми данными:
+if object_id('v_LifeCicle') is not null
+drop VIEW v_LifeCicle
+go
+CREATE VIEW v_LifeCicle AS   
+select lifeCycleId = lc.lifeCycleId
+     , dateAdded = lc.lifeCycleDateAdded
+	 , operationName = toper.value
+	 , firmName = fi.brief
+	 , fio = emp.surname + ' ' + LEFT(emp.name,1) + '. ' + LEFT(emp.patronymic,1) + '.'
+	 , geoposition = lc.geoposition
+	 , tagId = lc.tagId
+  from lifeCycle lc
+ inner join typicalOperation toper on toper.typicalOperationId = lc.typicalOperationId
+ inner join employee emp on emp.employeeId = lc.employeeId
+ inner join firm fi on fi.firmId = lc.firmId
+go
+
+if object_id('v_mainInf') is not null
+drop VIEW v_mainInf
+go
+CREATE VIEW v_mainInf AS   
+   select tagId = t.tagId
+        , pipeNum = pip.pipeNum
+		, factoryNum = pip.factoryNum
+		, batchNum = pip.batchNum
+		, smeltingNum = pip.smeltingNum
+		, gostThCon = pip.gostThCon
+		, packageNum = pip.packageNum
+		, releaseDate = pip.releaseDate
+		, certificate = pip.[certificate]
+		, otk = pip.otk
+        , yeReleasDate = year(pip.releaseDate) 
+		, monReleasDate = month(pip.releaseDate) 
+		, dayReleasDate = day(pip.releaseDate) 
+        , yeDateInstall = year(t.dateInstall) 
+		, monDateInstall = month(t.dateInstall) 
+		, dayDateInstall = day(t.dateInstall) 
+        , typeDiametr = pipeTyp.pipeTypeId
+		, strengthId = stren.strengthId
+		, standardLenId = standartLe.standardLenId
+        , carving = pip.carving
+		, isCoupling = isnull(coup.couplingId,0)
+		, isOuterCoating = pip.outerCoating
+		, isIntercoating = isnull(intercoat.intercoatingId,0)
+		, isBetwHipple = isnull( betw.betwHippleId,0)
+		, tagNum = t.tagNum
+   from pipe pip
+  inner join strength stren on  stren.strengthId = pip.strengthId
+  inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
+  inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId
+  left join coupling coup on  coup.couplingId = pip.couplingId
+  inner join tag t on  t.tagId = pip.tagId
+  left join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
+  left join betwHipple betw on betw.betwHippleId = pip.betwHippleId
+go
+
+if object_id('v_CouplingDetail') is not null
+drop VIEW v_CouplingDetail
+go
+CREATE VIEW v_CouplingDetail AS   
+select strenName = stren.name
+     , pipeDiameterVal = diam.pipeDiameterVal
+	 , batchNum = coup.batchNum
+	 , smeltingNum = coup.smeltingNum
+	 , protectionBrief = prot.brief
+	 , tagId = pip.tagId
+  from pipe pip
+ inner join coupling coup on coup.couplingId = pip.couplingId
+ inner join protection prot on prot.protectionId = coup.protectionId
+ inner join pipeDiameter diam on diam.pipeDiameterId = coup.pipeDiameterId
+ inner join strength stren on stren.strengthId = coup.strengthId
+go
+
+if object_id('v_IntercoatingDetail') is not null
+drop VIEW v_IntercoatingDetail
+go
+CREATE VIEW v_IntercoatingDetail AS   
+  select firmBrief = f.brief
+       , firmName = f.name
+	   , techCase = ic.techCase
+	   , thickness = ic.thickness
+	   , color = ic.color
+	   , tagId = pip.tagId
+    from pipe pip
+   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
+   inner join firm f on f.firmId = ic.firmId
+
+go
+
+if object_id('v_caseObjectDeail') is not null
+drop VIEW v_caseObjectDeail
+go
+CREATE VIEW v_caseObjectDeail AS   
+  select caseObjectValue = co.caseObjectValue
+       , caseTypeValue = ct.caseTypeValue
+	   , caseResultValue = cr.caseResultValue
+	   , tagId = pip.tagId
+    from pipe pip
+   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
+   inner join intercoatingCaseRelation icr on icr.intercoatingId = ic.intercoatingId
+   inner join caseObject co on co.caseObjectId = icr.caseObjectId
+   inner join caseType ct on ct.caseTypeId = icr.caseTypeId
+   inner join caseResult cr on cr.caseResultId = icr.caseResultId
+go
+
+if object_id('v_BetwHippleDeail') is not null
+drop VIEW v_BetwHippleDeail
+go
+CREATE VIEW v_BetwHippleDeail AS   
+  select betwHippleBrief = betw.brief
+       , betwHippleDiscript = betw.discript
+	   , tagId = pip.tagId
+    from pipe pip
+   inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId
+go
+
+
+--================Заполнение тестовыми данными:
 -- Тег:
 if not exists(select 1 from tag where tagNum = 'E2003A33D5297889349F9AA6')
 	insert into tag(tagNum, dateInstall) select 'E2003A33D5297889349F9AA6', '20200112'
@@ -356,8 +499,8 @@ if not exists(select 1 from pipe where pipeId = 1)
 -- Пользователь:
 if not exists(select 1 from employee)
 begin
-	insert into employee(name, patronymic, surname, access, userlogin, userPassword) select 'Иванов', 'Иван', 'Иванович', 1, 'admin', 'admin'
-	insert into employee(name, patronymic, surname, access, userlogin, userPassword) select 'Петров', 'Петр', 'Петрович', 1, 'watch', 'watch'
+	insert into employee(surname, name, patronymic,  access, userlogin, userPassword) select 'Иванов', 'Иван', 'Иванович', 1, 'admin', 'admin'
+	insert into employee(surname, name, patronymic,  access, userlogin, userPassword) select 'Петров', 'Петр', 'Петрович', 1, 'watch', 'watch'
 end
 
 -- Типичные операции:
@@ -412,80 +555,7 @@ select * typicalOperation
 
 
   /*
-   select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk
- ,year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate
- ,year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall
- ,pipeTyp.pipeTypeId  as typeDiametr, stren.strengthId, standartLe.standardLenId
- , pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating, isnull( betw.betwHippleId,0) as isBetwHipple
-   from pipe pip
-  inner join strength stren on  stren.strengthId = pip.strengthId
-  inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId
-  inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId
-  left join coupling coup on  coup.couplingId = pip.couplingId
-  inner join tag t on  t.tagId = pip.tagId
-  left join intercoating intercoat on  intercoat.intercoatingId = pip.intercoatingId
-  left join betwHipple betw on betw.betwHippleId = pip.betwHippleId
-  where t.tagNum = 'E2003A33D5297889349F9AA6'
 
-  select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch   
-    from pipe pip
-   inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe
-   where pip.tagId = 1
-   union all
-  select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch
-    from pipe pip
-   inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating
-   where pip.tagId = 1
-
-    select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch  
-                                         from pipe pip
-                                         inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe
-                                        where pip.tagId = 1
-                                         union all
-                                        select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch
-                                         from pipe pip
-                                         inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating
-                                     where pip.tagId =1
- 
-
-
-
-    select betw.brief, betw.discript
-    from pipe pip
-   inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId
-   where pip.tagId = 1
-
-    select stren.name, diam.pipeDiameterVal, coup.batchNum, coup.smeltingNum, prot.brief
-    from pipe pip
-   inner join coupling coup on coup.couplingId = pip.couplingId
-   inner join protection prot on prot.protectionId = coup.protectionId
-   inner join pipeDiameter diam on diam.pipeDiameterId = coup.pipeDiameterId
-   inner join strength stren on stren.strengthId = coup.strengthId
-   where pip.tagId = 1
-
-
-  select f.brief, f.name, ic.techCase, ic.thickness, ic.color
-    from pipe pip
-   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
-   inner join firm f on f.firmId = ic.firmId
-   where pip.tagId = 1
-
-  select co.caseObjectValue, ct.caseTypeValue, cr.caseResultValue
-    from pipe pip
-   inner join intercoating ic on ic.intercoatingId = pip.intercoatingId
-   inner join intercoatingCaseRelation icr on icr.intercoatingId = ic.intercoatingId
-   inner join caseObject co on co.caseObjectId = icr.caseObjectId
-   inner join caseType ct on ct.caseTypeId = icr.caseTypeId
-   inner join caseResult cr on cr.caseResultId = icr.caseResultId
-   where pip.tagId = 1
-
-     select lc.lifeCycleDateAdded, lc.lifeCycleId, toper.value, fi.brief, emp.surname + ' ' + LEFT(emp.name,1) + '. ' + LEFT(emp.patronymic,1) + '.', lc.geoposition
-    from lifeCycle lc
-inner join typicalOperation toper on toper.typicalOperationId = lc.typicalOperationId
-inner join employee emp on emp.employeeId = lc.employeeId
-inner join firm fi on fi.firmId = lc.firmId
-   where lc.tagId = 1 order by lifeCycleDateAdded asc
-   select Comment from lifeCycle where lifeCycleId = 1
  */
 --==============================================
    
@@ -494,6 +564,3 @@ inner join firm fi on fi.firmId = lc.firmId
    go
    drop database ObjectsLifeCycle
    */
-
-
- 

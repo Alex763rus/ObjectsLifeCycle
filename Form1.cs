@@ -43,6 +43,8 @@ namespace UHFReader09demomain
         public Form1()
         {
             InitializeComponent();
+            this.Visible = false;
+            //autorization();
         }
         private void RefreshStatus()
         { 
@@ -255,6 +257,7 @@ namespace UHFReader09demomain
 
             access = 1;
             employeeId = 1;
+            this.Visible = false;
         }
         private void fillComboBoxFromSql(string query, ComboBox comboBox)
         {
@@ -750,7 +753,7 @@ namespace UHFReader09demomain
         private void Timer_Test__Tick(object sender, EventArgs e)
         {
             if (fIsInventoryScan)
-                return;           
+                return;
             Inventory();
         }
 
@@ -927,29 +930,10 @@ namespace UHFReader09demomain
         private void sqlFieldFill(string tagNum)
         {
 
-            //====================
-
-
-
             try
             {
                 SqlDataReader myReader = null;
-                SqlCommand myCommand = new SqlCommand(" select t.tagId, pip.pipeNum, pip.factoryNum, pip.batchNum, pip.smeltingNum, pip.gostThCon, pip.packageNum, pip.releaseDate, pip.[certificate], pip.otk,"
-                             + " year(pip.releaseDate) yeReleasDate, month(pip.releaseDate) monReleasDate, day(pip.releaseDate) dayReleasDate,"
-                             + " year(t.dateInstall) yeDateInstall, month(t.dateInstall) monDateInstall, day(t.dateInstall) dayDateInstall,"
-                             + " pipeTyp.pipeTypeId as typeDiametr, stren.strengthId, standartLe.standardLenId,"
-                             + " pip.carving, isnull(coup.couplingId,0) as isCoupling, pip.outerCoating as isOuterCoating, isnull(intercoat.intercoatingId,0) as isIntercoating, isnull( betw.betwHippleId,0) as isBetwHipple"
-                             + " from pipe pip"
-                             + " inner join strength stren on  stren.strengthId = pip.strengthId"
-                             + " inner join standardLen standartLe on  standartLe.standardLenId = pip.standardLenId"
-                             + " inner join pipeType pipeTyp on  pipeTyp.pipeTypeId = pip.pipeTypeId"
-                             + " left join coupling coup on  coup.couplingId = pip.couplingId"
-                             + " inner join tag t on  t.tagId = pip.tagId"
-                             + " left join intercoating intercoat on intercoat.intercoatingId = pip.intercoatingId"
-                             + " left join betwHipple betw on betw.betwHippleId = pip.betwHippleId"
-                             + " where t.tagNum = '" 
-                             + tagNum + "'"
-                            , myConnection);
+                SqlCommand myCommand = new SqlCommand(" select * from v_mainInf where tagNum = '" + tagNum + "'", myConnection);
                 myReader = myCommand.ExecuteReader();
                 myReader.Read();
                 tagId = Convert.ToInt32(myReader["tagId"]);
@@ -979,26 +963,10 @@ namespace UHFReader09demomain
                 linkLabelIntercoating.Visible = checkBoxIntercoating.Checked;
                 linkLabelBetwHipple.Visible = checkBoxIsBetwHipple.Checked;
 
-
                 myReader.Close();
 
-                int pointer = 1;
-                pointer = documentTableFill(" select 'Труба' as Documenttype, docPip.name, docPip.addedDate, docPip.patch  "
-                                          + " from pipe pip"
-                                          + " inner join document docPip on docPip.objectId = pip.pipeId and docPip.type = 1 --pipe"
-                                          + " where pip.tagId = " + tagId, pointer, dataGridViewDocument);
-                pointer = documentTableFill(" select 'Внутреннее покрытие' as Documenttype, docInter.name, docInter.addedDate, docInter.patch"
-                                          + " from pipe pip"
-                                          + " inner join document docInter on docInter.objectId = pip.intercoatingId and docInter.type = 2 --intercoating"
-                                          + " where pip.tagId = " + tagId, pointer, dataGridViewDocument);
-                pointer = 1;
-                pointer = documentTableFill(" select lc.lifeCycleId, lc.lifeCycleDateAdded,  toper.value, fi.brief, emp.surname + ' ' + LEFT(emp.name,1) + '. ' + LEFT(emp.patronymic,1) + '.', lc.geoposition "
-                                          + " from lifeCycle lc "
-                                          + " inner join typicalOperation toper on toper.typicalOperationId = lc.typicalOperationId "
-                                          + " inner join employee emp on emp.employeeId = lc.employeeId "
-                                          + " inner join firm fi on fi.firmId = lc.firmId "
-                                          + " where lc.tagId = " + tagId + " order by lifeCycleDateAdded asc", pointer, dataGridLifeCicle);
-
+                dataGridWiewFill(" select * from v_Document where tagId = " + tagId + " order by num", dataGridViewDocument);
+                dataGridWiewFill(" select * from v_LifeCicle where tagId = " + tagId + " order by dateAdded", dataGridLifeCicle);
             }
             catch (Exception ex)
             {
@@ -1019,85 +987,22 @@ namespace UHFReader09demomain
             }*/
 
         }
-        private int documentTableFill(string query, int pointer, DataGridView dataGridViewDocument)
+        private void dataGridWiewFill(string query, DataGridView dataGridViewDocument)
         {
             SqlDataReader myReader = null;
             SqlCommand myCommand = new SqlCommand(query, myConnection);
-            myReader = myCommand.ExecuteReader();         
-
-            while (myReader.Read())
+            myReader = myCommand.ExecuteReader();
+            for (int row = 0; myReader.Read(); ++ row)
             {
                 dataGridViewDocument.Rows.Add();
-                dataGridViewDocument.Rows[pointer - 1].Cells[0].Value = pointer;
-                for (int i = 0; i < dataGridViewDocument.ColumnCount - 1; ++i)
+                for (int i = 0; i < dataGridViewDocument.ColumnCount; ++i)
                 {
-                    dataGridViewDocument.Rows[pointer - 1].Cells[i + 1].Value = myReader[i].ToString();
+                    dataGridViewDocument.Rows[row].Cells[i].Value = myReader[i].ToString();
                 }
-                ++pointer;
             }
             myReader.Close();
-            return pointer;
         }
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-
-            //====================
-
-            SqlConnection myConnection = new SqlConnection("server=ALEXPC\\SQLEXPRESS;" +
-                           "Trusted_Connection=yes;" +
-                           "database=ObjectLifeCycle; " +
-                           "connection timeout=30");
-            try
-            {
-                myConnection.Open();
-                MessageBox.Show("OKK");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            try
-            {
-                //MessageBox.Show(ex.ToString());
-                SqlDataReader myReader = null;
-                SqlCommand myCommand = new SqlCommand("select * from testTable",
-                                                         myConnection);
-                myReader = myCommand.ExecuteReader();
-                while (myReader.Read())
-                {
-
-                    Console.WriteLine(myReader["Column1"].ToString());
-                    Console.WriteLine(myReader["Column2"].ToString());
-                }
-                myReader.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-
-            //===============================
-            // SqlCommand myCommand = new SqlCommand("insert into testTable(a) select 2", myConnection);
-            //myCommand.ExecuteNonQuery();
-            /*
-            try
-            {
-                myConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }*/
-        }
-
-        private void buttCertificateOpen_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
+       
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
 
@@ -1129,13 +1034,7 @@ namespace UHFReader09demomain
             Form frm = new Form();
             RichTextBox tb = new RichTextBox();
 
-            SqlCommand myCommand = new SqlCommand(" select stren.name, diam.pipeDiameterVal, coup.batchNum, coup.smeltingNum, prot.brief"
-                                                + " from pipe pip"
-                                                + " inner join coupling coup on coup.couplingId = pip.couplingId"
-                                                + " inner join protection prot on prot.protectionId = coup.protectionId"
-                                                + " inner join pipeDiameter diam on diam.pipeDiameterId = coup.pipeDiameterId"
-                                                + " inner join strength stren on stren.strengthId = coup.strengthId"
-                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlCommand myCommand = new SqlCommand(" select * from v_CouplingDetail where tagId = " + tagId, myConnection);
             SqlDataReader myReader = myCommand.ExecuteReader();
             while (myReader.Read())
             {
@@ -1161,11 +1060,7 @@ namespace UHFReader09demomain
             Form frm = new Form();
             RichTextBox tb = new RichTextBox();
 
-            SqlCommand myCommand = new SqlCommand(" select f.brief, f.name, ic.techCase, ic.thickness, ic.color"
-                                                + " from pipe pip"
-                                                + " inner join intercoating ic on ic.intercoatingId = pip.intercoatingId"
-                                                + " inner join firm f on f.firmId = ic.firmId"
-                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlCommand myCommand = new SqlCommand(" select * from v_IntercoatingDetail where tagId = " + tagId, myConnection);
             SqlDataReader myReader = myCommand.ExecuteReader();
             while (myReader.Read())
             {
@@ -1176,21 +1071,13 @@ namespace UHFReader09demomain
             }
             myReader.Close();
 
-            myCommand = new SqlCommand(" select co.caseObjectValue, ct.caseTypeValue, cr.caseResultValue"
-                                    + " from pipe pip"
-                                    + " inner join intercoating ic on ic.intercoatingId = pip.intercoatingId"
-                                    + " inner join intercoatingCaseRelation icr on icr.intercoatingId = ic.intercoatingId"
-                                    + " inner join caseObject co on co.caseObjectId = icr.caseObjectId"
-                                    + " inner join caseType ct on ct.caseTypeId = icr.caseTypeId"
-                                    + " inner join caseResult cr on cr.caseResultId = icr.caseResultId"
-                                    + " where pip.tagId = " + tagId, myConnection);
+            myCommand = new SqlCommand(" select * from v_caseObjectDeail where tagId = " + tagId, myConnection);
             myReader = myCommand.ExecuteReader();
 
             tb.Text += "\r\n" + "Характеристики: " + "\r\n";
             while (myReader.Read())
             {
                 tb.Text += myReader[0].ToString() + " " + myReader[1].ToString() + " " + myReader[2].ToString() + "\r\n";
-
             }
             myReader.Close();
 
@@ -1209,10 +1096,7 @@ namespace UHFReader09demomain
             Form frm = new Form();
             RichTextBox tb = new RichTextBox();
 
-            SqlCommand myCommand = new SqlCommand(" select betw.brief, betw.discript"
-                                                + " from pipe pip"
-                                                + " inner join betwHipple betw on betw.betwHippleId = pip.betwHippleId"
-                                                + " where pip.tagId = " + tagId, myConnection);
+            SqlCommand myCommand = new SqlCommand(" select * from v_BetwHippleDeail where tagId = " + tagId, myConnection);
             SqlDataReader myReader = myCommand.ExecuteReader();
             while (myReader.Read())
             {
@@ -1288,5 +1172,116 @@ namespace UHFReader09demomain
             frm.Show();
 
         }
+
+        private void autorization()
+        {
+            Form frm = new Form();
+            Container components = new System.ComponentModel.Container();
+            Panel panel1 = new System.Windows.Forms.Panel();
+            Label label1 = new System.Windows.Forms.Label();
+            Label label2 = new System.Windows.Forms.Label();
+            TextBox textBox1 = new System.Windows.Forms.TextBox();
+            ContextMenuStrip contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(components);
+            TextBox textBox2 = new System.Windows.Forms.TextBox();
+            Button button1 = new System.Windows.Forms.Button();
+            Label label3 = new System.Windows.Forms.Label();
+            //panel1.SuspendLayout();
+          //  SuspendLayout();
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(textBox2);
+            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(label1);
+            panel1.Location = new System.Drawing.Point(12, 10);
+            panel1.Name = "panel1";
+            panel1.Size = new System.Drawing.Size(338, 159);
+            panel1.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            label1.Location = new System.Drawing.Point(3, 48);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(128, 20);
+            label1.TabIndex = 0;
+            label1.Text = "Введите логин:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            label2.Location = new System.Drawing.Point(3, 79);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(139, 20);
+            label2.TabIndex = 1;
+            label2.Text = "Введите пароль:";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new System.Drawing.Point(148, 81);
+            textBox1.Name = "textBox1";
+            textBox1.PasswordChar = '*';
+            textBox1.Size = new System.Drawing.Size(180, 20);
+            textBox1.TabIndex = 2;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new System.Drawing.Point(148, 48);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new System.Drawing.Size(180, 20);
+            textBox2.TabIndex = 3;
+            // 
+            // button1
+            // 
+            button1.Location = new System.Drawing.Point(253, 123);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(75, 23);
+            button1.TabIndex = 4;
+            button1.Text = "Войти";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += new System.EventHandler(button1_Click);
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            label3.Location = new System.Drawing.Point(83, 12);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(158, 20);
+            label3.TabIndex = 5;
+            label3.Text = "Добро пожаловать!";
+            // 
+            // Form1
+            // 
+          //  AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+         //   AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+         //   ClientSize = new System.Drawing.Size(364, 181);
+            Controls.Add(panel1);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            frm.MaximumSize = new System.Drawing.Size(380, 220);
+            frm.MinimumSize = new System.Drawing.Size(380, 220);
+            Name = "Form1";
+            Text = "Form1";
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ResumeLayout(false);
+            frm.Controls.Add(panel1);
+            frm.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+              InitializeComponent();
+        }
     }
-}
+ }

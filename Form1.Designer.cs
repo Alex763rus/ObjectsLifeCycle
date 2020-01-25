@@ -87,7 +87,6 @@
             this.label21 = new System.Windows.Forms.Label();
             this.textBoxFactoryNum = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
-            this.buttCertificateOpen = new System.Windows.Forms.Button();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.textBoxPipeId = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
@@ -121,7 +120,6 @@
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.lfNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lifeCicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lfAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lfOperation = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -333,9 +331,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 115);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(97, 13);
+            this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Opened COM Port:";
+            this.label3.Text = "Открытый COM порт:";
             // 
             // ClosePort
             // 
@@ -343,7 +341,7 @@
             this.ClosePort.Name = "ClosePort";
             this.ClosePort.Size = new System.Drawing.Size(125, 25);
             this.ClosePort.TabIndex = 5;
-            this.ClosePort.Text = "ClosePort";
+            this.ClosePort.Text = "Закрыть порт";
             this.ClosePort.UseVisualStyleBackColor = true;
             this.ClosePort.Click += new System.EventHandler(this.ClosePort_Click);
             // 
@@ -353,7 +351,7 @@
             this.OpenPort.Name = "OpenPort";
             this.OpenPort.Size = new System.Drawing.Size(125, 25);
             this.OpenPort.TabIndex = 4;
-            this.OpenPort.Text = "Open COM Port";
+            this.OpenPort.Text = "Открыть COM порт";
             this.OpenPort.UseVisualStyleBackColor = true;
             this.OpenPort.Click += new System.EventHandler(this.OpenPort_Click);
             // 
@@ -617,7 +615,6 @@
             this.groupBox4.Controls.Add(this.label21);
             this.groupBox4.Controls.Add(this.textBoxFactoryNum);
             this.groupBox4.Controls.Add(this.label20);
-            this.groupBox4.Controls.Add(this.buttCertificateOpen);
             this.groupBox4.Location = new System.Drawing.Point(3, 65);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(655, 161);
@@ -730,16 +727,6 @@
             this.label20.Size = new System.Drawing.Size(109, 13);
             this.label20.TabIndex = 6;
             this.label20.Text = "Заводской № трубы";
-            // 
-            // buttCertificateOpen
-            // 
-            this.buttCertificateOpen.Location = new System.Drawing.Point(328, 132);
-            this.buttCertificateOpen.Name = "buttCertificateOpen";
-            this.buttCertificateOpen.Size = new System.Drawing.Size(75, 23);
-            this.buttCertificateOpen.TabIndex = 16;
-            this.buttCertificateOpen.Text = "тест";
-            this.buttCertificateOpen.UseVisualStyleBackColor = true;
-            this.buttCertificateOpen.Click += new System.EventHandler(this.buttCertificateOpen_Click);
             // 
             // groupBox12
             // 
@@ -927,7 +914,6 @@
             this.dataGridLifeCicle.AllowUserToOrderColumns = true;
             this.dataGridLifeCicle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridLifeCicle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.lfNum,
             this.lifeCicleId,
             this.lfAddedDate,
             this.lfOperation,
@@ -989,12 +975,6 @@
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
-            // lfNum
-            // 
-            this.lfNum.HeaderText = "№";
-            this.lfNum.Name = "lfNum";
-            this.lfNum.Width = 40;
-            // 
             // lifeCicleId
             // 
             this.lifeCicleId.HeaderText = "ID действия";
@@ -1037,7 +1017,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "UHFReader09CSHarp V1.5";
+            this.Text = "Радиочастотная идентификация трубной продукции";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
@@ -1107,7 +1087,6 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label25;
-        private System.Windows.Forms.Button buttCertificateOpen;
         private System.Windows.Forms.TextBox textBoxPackageNum;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.TextBox textBoxGostThCon;
@@ -1159,7 +1138,6 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dataGridLifeCicle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn lfNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn lifeCicleId;
         private System.Windows.Forms.DataGridViewTextBoxColumn lfAddedDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn lfOperation;
