@@ -181,35 +181,17 @@ namespace UHFReader09demomain
             }
         }
         
-
         private void InitComList()
         {
             int i = 0;
             ComboBox_COM.Items.Clear();
-              ComboBox_COM.Items.Add(" AUTO");
+              ComboBox_COM.Items.Add(" АВТО");
               for (i = 1; i < 13;i++ )
                   ComboBox_COM.Items.Add(" COM" + Convert.ToString(i));
               ComboBox_COM.SelectedIndex = 0;
               RefreshStatus();
         }
-        private void InitReaderList()
-        {
-            int i=0;
-           // ComboBox_PowerDbm.SelectedIndex = 0;
-            ComboBox_baud.SelectedIndex =3;
-             for (i=0 ;i< 63;i++)
-             {
-                ComboBox_dminfre.Items.Add(Convert.ToString(902.6+i*0.4)+" MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(902.6 + i * 0.4) + " MHz");
-             }
-             ComboBox_dmaxfre.SelectedIndex = 62;
-              ComboBox_dminfre.SelectedIndex = 0;
-              for (i=0x03;i<=0xff;i++)
-                  ComboBox_scantime.Items.Add(Convert.ToString(i) + "*100ms");
-              ComboBox_scantime.SelectedIndex = 7;
-              i=40;
-           
-        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             progressBar1.Visible = false;
@@ -218,8 +200,7 @@ namespace UHFReader09demomain
               ferrorcode= -1;
               fBaud =5;
              InitComList();
-              InitReaderList();
-             
+               
               fAppClosed = false;
               fIsInventoryScan = false;
               Timer_Test_.Enabled = false;
@@ -233,7 +214,6 @@ namespace UHFReader09demomain
               tagId = 0;
               this.Size = new System.Drawing.Size(685, 316);
              // tabControl1.Size = new System.Drawing.Size(669, 267);
-               ComboBox_baud2.SelectedIndex = 3;
 
             linkLabelCoupling.Visible = false;
             linkLabelIntercoating.Visible = false;
@@ -283,24 +263,12 @@ namespace UHFReader09demomain
               {
                   if (ComboBox_COM.SelectedIndex == 0)//Auto
                   {
-                      fBaud = Convert.ToByte(ComboBox_baud2.SelectedIndex);
-                      if (fBaud>2)
-                      {
-                          fBaud = Convert.ToByte(fBaud + 2);
-                      }
-                    openresult =StaticClassReaderB.AutoOpenComPort(ref port,ref fComAdr,fBaud,ref frmcomportindex);
+                    openresult =StaticClassReaderB.AutoOpenComPort(ref port,ref fComAdr,5,ref frmcomportindex);
                     fOpenComIndex = frmcomportindex;
                     if (openresult == 0 )
                     {
                         ComOpen = true;
-                        if (fBaud > 3)
-                        {
-                            ComboBox_baud.SelectedIndex = Convert.ToInt32(fBaud - 2);
-                        }
-                        else
-                        {
-                            ComboBox_baud.SelectedIndex = Convert.ToInt32(fBaud);
-                        }
+
                         Button3_Click(sender, e); //自动执行读取写卡器信息
                       if ((fCmdRet==0x35) |(fCmdRet==0x30))
                         {
@@ -331,14 +299,6 @@ namespace UHFReader09demomain
                         {
                             ComOpen = true;
                             Button3_Click(sender, e); //自动执行读取写卡器信息
-                            if (fBaud > 3)
-                            {
-                                ComboBox_baud.SelectedIndex = Convert.ToInt32(fBaud - 2);
-                            }
-                            else
-                            {
-                                ComboBox_baud.SelectedIndex = Convert.ToInt32(fBaud);
-                            }
                             if ((fCmdRet == 0x35) || (fCmdRet == 0x30))
                             {
                                 ComOpen = false;
@@ -445,8 +405,6 @@ namespace UHFReader09demomain
               fCmdRet = StaticClassReaderB.GetReaderInformation(ref fComAdr, VersionInfo, ref ReaderType, TrType, ref dmaxfre, ref dminfre, ref powerdBm, ref ScanTime, frmcomportindex);
               if (fCmdRet == 0)
               {
-                 ComboBox_scantime.SelectedIndex = ScanTime - 3;
-
                   FreBand= Convert.ToByte(((dmaxfre & 0xc0)>> 4)|(dminfre >> 6)) ;
                   switch (FreBand)
                   {
@@ -481,215 +439,12 @@ namespace UHFReader09demomain
                           }
                           break;
                   }
-                  ComboBox_dminfre.SelectedIndex = dminfre & 0x3F;
-                  ComboBox_dmaxfre.SelectedIndex = dmaxfre & 0x3F;
+
 
               }
               AddCmdLog("GetReaderInformation","GetReaderInformation", fCmdRet);
         }
 
-        private void Button5_Click(object sender, EventArgs e)
-        {
-              byte aNewComAdr, powerDbm, dminfre, dmaxfre, scantime, band=0;
-              string returninfo="";
-              string returninfoDlg="";
-              string setinfo;
-              band = 0;
-              progressBar1.Visible = true;
-              progressBar1.Minimum = 0;
-              dminfre = Convert.ToByte(((band & 3) << 6) | (ComboBox_dminfre.SelectedIndex & 0x3F));
-              dmaxfre = Convert.ToByte(((band & 0x0c) << 4) | (ComboBox_dmaxfre.SelectedIndex & 0x3F));
-                  aNewComAdr = Convert.ToByte("00");
-                  powerDbm = Convert.ToByte(13);
-                  fBaud = Convert.ToByte(ComboBox_baud.SelectedIndex);
-                  if (fBaud > 2)
-                      fBaud = Convert.ToByte(fBaud + 2);
-                  scantime = Convert.ToByte(ComboBox_scantime.SelectedIndex + 3);
-                  setinfo = "Write";
-              progressBar1.Value =10;     
-              fCmdRet = StaticClassReaderB.WriteComAdr(ref fComAdr,ref aNewComAdr,frmcomportindex);
-              if (fCmdRet==0x13)
-              fComAdr = aNewComAdr;
-              if (fCmdRet == 0)
-              {
-                fComAdr = aNewComAdr;
-                returninfo=returninfo+setinfo+"Address Successfully";
-              }
-              else if (fCmdRet==0xEE )
-              returninfo=returninfo+setinfo+"Address Response Command Error";
-              else
-              {
-              returninfo=returninfo+setinfo+"Address Fail";
-              returninfoDlg=returninfoDlg+setinfo+"Address Fail Command Response=0x"
-                   + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-              }
-
-              progressBar1.Value =25; 
-              fCmdRet = StaticClassReaderB.SetPowerDbm(ref fComAdr,powerDbm,frmcomportindex);
-              if (fCmdRet == 0)
-               returninfo=returninfo+",Power Success";
-              else if (fCmdRet==0xEE )
-              returninfo=returninfo+",Power Response Command Error";
-              else
-              {
-                  returninfo=returninfo+",Power Fail";
-                  returninfoDlg=returninfoDlg+" "+setinfo+"Power Fail Command Response=0x"
-                       +Convert.ToString(fCmdRet)+"("+GetReturnCodeDesc(fCmdRet)+")";
-              }
-              
-              progressBar1.Value =40; 
-              fCmdRet = StaticClassReaderB.Writedfre(ref fComAdr,ref dmaxfre,ref dminfre,frmcomportindex);
-              if (fCmdRet == 0 )
-               returninfo=returninfo+",Frequency Success";
-              else if (fCmdRet==0xEE)
-              returninfo=returninfo+",Frequency Response Command Error";
-              else
-              {
-              returninfo =returninfo+",Frequency Fail";
-              returninfoDlg=returninfoDlg+" "+setinfo+"Frequency Fail Command Response=0x"
-                   + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-              }
-
-                    progressBar1.Value =55; 
-                  fCmdRet = StaticClassReaderB.Writebaud(ref fComAdr,ref fBaud,frmcomportindex);
-                  if (fCmdRet == 0)
-                   returninfo=returninfo+",Baud Rate Success";
-                  else if (fCmdRet==0xEE)
-                  returninfo=returninfo+",Baud Rate Response Command Error";
-                  else
-                  {
-                  returninfo=returninfo+",Baud Rate Fail";
-                  returninfoDlg=returninfoDlg+" "+setinfo+"Baud Rate Fail Command Response=0x"
-                       + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-                  }
-
-             progressBar1.Value =70; 
-              fCmdRet = StaticClassReaderB.WriteScanTime(ref fComAdr,ref scantime,frmcomportindex);
-              if (fCmdRet == 0 )
-               returninfo=returninfo+",InventoryScanTime Success";
-             else if (fCmdRet==0xEE)
-              returninfo=returninfo+",InventoryScanTime Response Command Error";
-              else
-              {
-              returninfo=returninfo+",InventoryScanTime Fail";
-              returninfoDlg=returninfoDlg+" "+setinfo+"InventoryScanTime Fail Command Response=0x"
-                   + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-             }
-
-              progressBar1.Value =100; 
-              Button3_Click(sender,e);
-              progressBar1.Visible=false;
-              StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + returninfo;
-              if  (returninfoDlg!="")
-                 MessageBox.Show(returninfoDlg, "Information");
-            
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            byte aNewComAdr, powerDbm, dminfre, dmaxfre, scantime;
-            string returninfo = "";
-            string returninfoDlg = "";
-            string setinfo;
-            progressBar1.Visible = true;
-            progressBar1.Minimum = 0;
-             dminfre = 0;
-            dmaxfre = 62;
-            aNewComAdr =0x00;
-            powerDbm = 13;
-            fBaud=5;
-            scantime=10;
-            setinfo=" Recovery ";
-            ComboBox_baud.SelectedIndex = 3;
-            progressBar1.Value = 10;
-            fCmdRet = StaticClassReaderB.WriteComAdr(ref fComAdr, ref aNewComAdr, frmcomportindex);
-            if (fCmdRet == 0x13)
-                fComAdr = aNewComAdr;
-            if (fCmdRet == 0)
-            {
-                fComAdr = aNewComAdr;
-                returninfo = returninfo + setinfo + "Address Successfully";
-            }
-            else if (fCmdRet == 0xEE)
-                returninfo = returninfo + setinfo + "Address Response Command Error";
-            else
-            {
-                returninfo = returninfo + setinfo + "Address Fail";
-                returninfoDlg = returninfoDlg + setinfo + "Address Fail Command Response=0x"
-                     + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-            }
-
-            progressBar1.Value = 25;
-            fCmdRet = StaticClassReaderB.SetPowerDbm(ref fComAdr, powerDbm, frmcomportindex);
-            if (fCmdRet == 0)
-                returninfo = returninfo + ",Power Success";
-            else if (fCmdRet == 0xEE)
-                returninfo = returninfo + ",Power Response Command Error";
-            else
-            {
-                returninfo = returninfo + ",Power Fail";
-                returninfoDlg = returninfoDlg + " " + setinfo + "Power Fail Command Response=0x"
-                     + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-            }
-
-            progressBar1.Value = 40;
-            fCmdRet = StaticClassReaderB.Writedfre(ref fComAdr, ref dmaxfre, ref dminfre, frmcomportindex);
-            if (fCmdRet == 0)
-                returninfo = returninfo + ",Frequency Success";
-            else if (fCmdRet == 0xEE)
-                returninfo = returninfo + ",Frequency Response Command Error";
-            else
-            {
-                returninfo = returninfo + ",Frequency Fail";
-                returninfoDlg = returninfoDlg + " " + setinfo + "Frequency Fail Command Response=0x"
-                     + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-            }
-
-            progressBar1.Value = 55;
-            fCmdRet = StaticClassReaderB.Writebaud(ref fComAdr, ref fBaud, frmcomportindex);
-            if (fCmdRet == 0)
-                returninfo = returninfo + ",Baud Rate Success";
-            else if (fCmdRet == 0xEE)
-                returninfo = returninfo + ",Baud Rate Response Command Error";
-            else
-            {
-                returninfo = returninfo + ",Baud Rate Fail";
-                returninfoDlg = returninfoDlg + " " + setinfo + "Baud Rate Fail Command Response=0x"
-                     + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-            }
-
-            progressBar1.Value = 70;
-            fCmdRet = StaticClassReaderB.WriteScanTime(ref fComAdr, ref scantime, frmcomportindex);
-            if (fCmdRet == 0)
-                returninfo = returninfo + ",InventoryScanTime Success";
-            else if (fCmdRet == 0xEE)
-                returninfo = returninfo + ",InventoryScanTime Response Command Error";
-            else
-            {
-                returninfo = returninfo + ",InventoryScanTime Fail";
-                returninfoDlg = returninfoDlg + " " + setinfo + "InventoryScanTime Fail Command Response=0x"
-                     + Convert.ToString(fCmdRet) + "(" + GetReturnCodeDesc(fCmdRet) + ")";
-            }
-
-            progressBar1.Value = 100;
-            Button3_Click(sender, e);
-            progressBar1.Visible = false;
-            StatusBar1.Panels[0].Text = DateTime.Now.ToLongTimeString() + returninfo;
-            if (returninfoDlg != "")
-                MessageBox.Show(returninfoDlg, "Information");
-            
-        }
-
-
-        private void ComboBox_dfreSelect(object sender, EventArgs e)
-        {
-        if  (ComboBox_dminfre.SelectedIndex> ComboBox_dmaxfre.SelectedIndex )
-             {
-                 ComboBox_dminfre.SelectedIndex = ComboBox_dmaxfre.SelectedIndex;
-                MessageBox.Show("Min.Frequency is equal or lesser than Max.Frequency", "Error Information");
-              }
-        }
-      
         private void button2_Click(object sender, EventArgs e)
         {
             Timer_Test_.Enabled = !Timer_Test_.Enabled;
@@ -833,100 +588,6 @@ namespace UHFReader09demomain
                 Timer_6B_Write.Enabled = false;
         }
 
-        private void Edit_CmdComAddr_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = ("0123456789ABCDEF".IndexOf(Char.ToUpper(e.KeyChar)) < 0);
-        }
-     
-        private void radioButton_band1_CheckedChanged(object sender, EventArgs e)
-        {
-            int i;
-            ComboBox_dmaxfre.Items.Clear();
-            ComboBox_dminfre.Items.Clear();
-            for (i = 0; i < 63; i++)
-            {
-                ComboBox_dminfre.Items.Add(Convert.ToString(902.6 + i * 0.4) + " MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(902.6 + i * 0.4) + " MHz");
-            }
-            ComboBox_dmaxfre.SelectedIndex = 62;
-            ComboBox_dminfre.SelectedIndex = 0;
-        }
-
-        private void radioButton_band2_CheckedChanged(object sender, EventArgs e)
-        {
-            int i;
-            ComboBox_dmaxfre.Items.Clear();
-            ComboBox_dminfre.Items.Clear();
-            for (i = 0; i < 20; i++)
-            {
-                ComboBox_dminfre.Items.Add(Convert.ToString(920.125 + i * 0.25) + " MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(920.125 + i * 0.25) + " MHz");
-            }
-            ComboBox_dmaxfre.SelectedIndex = 19;
-            ComboBox_dminfre.SelectedIndex = 0;
-        }
-
-        private void radioButton_band3_CheckedChanged(object sender, EventArgs e)
-        {
-            int i;
-            ComboBox_dmaxfre.Items.Clear();
-            ComboBox_dminfre.Items.Clear();
-            for (i = 0; i < 50; i++)
-            {
-                ComboBox_dminfre.Items.Add(Convert.ToString(902.75 + i * 0.5) + " MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(902.75 + i * 0.5) + " MHz");
-            }
-            ComboBox_dmaxfre.SelectedIndex = 49;
-            ComboBox_dminfre.SelectedIndex = 0;
-        }
-
-        private void radioButton_band4_CheckedChanged(object sender, EventArgs e)
-        {
-            int i;
-            ComboBox_dmaxfre.Items.Clear();
-            ComboBox_dminfre.Items.Clear();
-            for (i = 0; i < 32; i++)
-            {
-                ComboBox_dminfre.Items.Add(Convert.ToString(917.1 + i * 0.2) + " MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(917.1 + i * 0.2) + " MHz");
-            }
-            ComboBox_dmaxfre.SelectedIndex = 31;
-            ComboBox_dminfre.SelectedIndex = 0;
-        }
- 
-        private void ComboBox_COM_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ComboBox_baud2.Items.Clear();
-            if(ComboBox_COM.SelectedIndex==0)
-           { 
-              ComboBox_baud2.Items.Add("9600bps");
-              ComboBox_baud2.Items.Add("19200bps");
-              ComboBox_baud2.Items.Add("38400bps");
-              ComboBox_baud2.Items.Add("57600bps");
-              ComboBox_baud2.Items.Add("115200bps");
-              ComboBox_baud2.SelectedIndex = 3;
-            }
-            else
-            {
-              ComboBox_baud2.Items.Add("Auto");
-              ComboBox_baud2.SelectedIndex = 0;
-            }
-        }
-
-        private void radioButton_band5_CheckedChanged(object sender, EventArgs e)
-        {
-            int i;
-            ComboBox_dmaxfre.Items.Clear();
-            ComboBox_dminfre.Items.Clear();
-            for (i = 0; i < 15; i++)
-            {
-                ComboBox_dminfre.Items.Add(Convert.ToString(865.1 + i * 0.2) + " MHz");
-                ComboBox_dmaxfre.Items.Add(Convert.ToString(865.1 + i * 0.2) + " MHz");
-            }
-            ComboBox_dmaxfre.SelectedIndex = 14;
-            ComboBox_dminfre.SelectedIndex = 0;
-        }
-
         private void sqlFieldFill(string tagNum)
         {
 
@@ -1002,12 +663,7 @@ namespace UHFReader09demomain
             }
             myReader.Close();
         }
-       
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
+ 
         private void button4_Click_1(object sender, EventArgs e) // Дополнительная информация
         {
             if (gpSecondInf.Visible)

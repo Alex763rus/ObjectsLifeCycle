@@ -32,19 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.TabSheet_CMD = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.ComboBox_scantime = new System.Windows.Forms.ComboBox();
-            this.ComboBox_baud = new System.Windows.Forms.ComboBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.ComboBox_dmaxfre = new System.Windows.Forms.ComboBox();
-            this.ComboBox_dminfre = new System.Windows.Forms.ComboBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
-            this.ComboBox_baud2 = new System.Windows.Forms.ComboBox();
-            this.label47 = new System.Windows.Forms.Label();
             this.ComboBox_AlreadyOpenCOM = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.ClosePort = new System.Windows.Forms.Button();
@@ -108,6 +97,12 @@
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridLifeCicle = new System.Windows.Forms.DataGridView();
+            this.lifeCicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfOperation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfFirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lfMainHuman = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ldGeoposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.StatusBar1 = new System.Windows.Forms.StatusBar();
             this.TStatusPanel = new System.Windows.Forms.StatusBarPanel();
             this.Port = new System.Windows.Forms.StatusBarPanel();
@@ -120,15 +115,8 @@
             this.Timer_6B_Write = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.lifeCicleId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lfAddedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lfOperation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lfFirm = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lfMainHuman = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ldGeoposit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.TabSheet_CMD.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.GroupBox1.SuspendLayout();
             this.TabSheet_EPCC1G2.SuspendLayout();
             this.gpSecondInf.SuspendLayout();
@@ -161,7 +149,6 @@
             // TabSheet_CMD
             // 
             this.TabSheet_CMD.BackColor = System.Drawing.Color.Transparent;
-            this.TabSheet_CMD.Controls.Add(this.groupBox3);
             this.TabSheet_CMD.Controls.Add(this.progressBar1);
             this.TabSheet_CMD.Controls.Add(this.GroupBox1);
             this.TabSheet_CMD.Location = new System.Drawing.Point(4, 22);
@@ -172,103 +159,6 @@
             this.TabSheet_CMD.Text = "Считыватель";
             this.TabSheet_CMD.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.ComboBox_scantime);
-            this.groupBox3.Controls.Add(this.ComboBox_baud);
-            this.groupBox3.Controls.Add(this.label17);
-            this.groupBox3.Controls.Add(this.label16);
-            this.groupBox3.Controls.Add(this.ComboBox_dmaxfre);
-            this.groupBox3.Controls.Add(this.ComboBox_dminfre);
-            this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Controls.Add(this.label14);
-            this.groupBox3.Location = new System.Drawing.Point(147, 10);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(506, 79);
-            this.groupBox3.TabIndex = 42;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Параметры считывателя";
-            // 
-            // ComboBox_scantime
-            // 
-            this.ComboBox_scantime.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_scantime.FormattingEnabled = true;
-            this.ComboBox_scantime.Location = new System.Drawing.Point(379, 45);
-            this.ComboBox_scantime.Name = "ComboBox_scantime";
-            this.ComboBox_scantime.Size = new System.Drawing.Size(121, 21);
-            this.ComboBox_scantime.TabIndex = 12;
-            // 
-            // ComboBox_baud
-            // 
-            this.ComboBox_baud.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_baud.FormattingEnabled = true;
-            this.ComboBox_baud.Items.AddRange(new object[] {
-            "9600bps",
-            "19200bps",
-            "38400bps",
-            "57600bps",
-            "115200bps"});
-            this.ComboBox_baud.Location = new System.Drawing.Point(379, 18);
-            this.ComboBox_baud.Name = "ComboBox_baud";
-            this.ComboBox_baud.Size = new System.Drawing.Size(121, 21);
-            this.ComboBox_baud.TabIndex = 11;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(244, 48);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(125, 13);
-            this.label17.TabIndex = 9;
-            this.label17.Text = "Max InventoryScanTime:";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(244, 21);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(61, 13);
-            this.label16.TabIndex = 8;
-            this.label16.Text = "Baud Rate:";
-            // 
-            // ComboBox_dmaxfre
-            // 
-            this.ComboBox_dmaxfre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_dmaxfre.FormattingEnabled = true;
-            this.ComboBox_dmaxfre.Location = new System.Drawing.Point(95, 45);
-            this.ComboBox_dmaxfre.Name = "ComboBox_dmaxfre";
-            this.ComboBox_dmaxfre.Size = new System.Drawing.Size(100, 21);
-            this.ComboBox_dmaxfre.TabIndex = 7;
-            this.ComboBox_dmaxfre.SelectedIndexChanged += new System.EventHandler(this.ComboBox_dfreSelect);
-            // 
-            // ComboBox_dminfre
-            // 
-            this.ComboBox_dminfre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_dminfre.FormattingEnabled = true;
-            this.ComboBox_dminfre.Location = new System.Drawing.Point(95, 18);
-            this.ComboBox_dminfre.Name = "ComboBox_dminfre";
-            this.ComboBox_dminfre.Size = new System.Drawing.Size(100, 21);
-            this.ComboBox_dminfre.TabIndex = 6;
-            this.ComboBox_dminfre.SelectedIndexChanged += new System.EventHandler(this.ComboBox_dfreSelect);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 48);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(83, 13);
-            this.label15.TabIndex = 3;
-            this.label15.Text = "Max.Frequency:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 21);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(80, 13);
-            this.label14.TabIndex = 2;
-            this.label14.Text = "Min.Frequency:";
-            // 
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(242, 339);
@@ -278,8 +168,6 @@
             // 
             // GroupBox1
             // 
-            this.GroupBox1.Controls.Add(this.ComboBox_baud2);
-            this.GroupBox1.Controls.Add(this.label47);
             this.GroupBox1.Controls.Add(this.ComboBox_AlreadyOpenCOM);
             this.GroupBox1.Controls.Add(this.label3);
             this.GroupBox1.Controls.Add(this.ClosePort);
@@ -293,35 +181,11 @@
             this.GroupBox1.TabStop = false;
             this.GroupBox1.Text = "Считыватель";
             // 
-            // ComboBox_baud2
-            // 
-            this.ComboBox_baud2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboBox_baud2.FormattingEnabled = true;
-            this.ComboBox_baud2.Items.AddRange(new object[] {
-            "9600bps",
-            "19200bps",
-            "38400bps",
-            "57600bps",
-            "115200bps"});
-            this.ComboBox_baud2.Location = new System.Drawing.Point(10, 85);
-            this.ComboBox_baud2.Name = "ComboBox_baud2";
-            this.ComboBox_baud2.Size = new System.Drawing.Size(121, 21);
-            this.ComboBox_baud2.TabIndex = 12;
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(7, 69);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(61, 13);
-            this.label47.TabIndex = 9;
-            this.label47.Text = "Baud Rate:";
-            // 
             // ComboBox_AlreadyOpenCOM
             // 
             this.ComboBox_AlreadyOpenCOM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboBox_AlreadyOpenCOM.FormattingEnabled = true;
-            this.ComboBox_AlreadyOpenCOM.Location = new System.Drawing.Point(6, 131);
+            this.ComboBox_AlreadyOpenCOM.Location = new System.Drawing.Point(5, 85);
             this.ComboBox_AlreadyOpenCOM.Name = "ComboBox_AlreadyOpenCOM";
             this.ComboBox_AlreadyOpenCOM.Size = new System.Drawing.Size(125, 21);
             this.ComboBox_AlreadyOpenCOM.TabIndex = 7;
@@ -329,7 +193,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 115);
+            this.label3.Location = new System.Drawing.Point(6, 69);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 6;
@@ -337,7 +201,7 @@
             // 
             // ClosePort
             // 
-            this.ClosePort.Location = new System.Drawing.Point(6, 158);
+            this.ClosePort.Location = new System.Drawing.Point(5, 112);
             this.ClosePort.Name = "ClosePort";
             this.ClosePort.Size = new System.Drawing.Size(125, 25);
             this.ClosePort.TabIndex = 5;
@@ -347,7 +211,7 @@
             // 
             // OpenPort
             // 
-            this.OpenPort.Location = new System.Drawing.Point(6, 41);
+            this.OpenPort.Location = new System.Drawing.Point(5, 41);
             this.OpenPort.Name = "OpenPort";
             this.OpenPort.Size = new System.Drawing.Size(125, 25);
             this.OpenPort.TabIndex = 4;
@@ -363,7 +227,6 @@
             this.ComboBox_COM.Name = "ComboBox_COM";
             this.ComboBox_COM.Size = new System.Drawing.Size(65, 21);
             this.ComboBox_COM.TabIndex = 1;
-            this.ComboBox_COM.SelectedIndexChanged += new System.EventHandler(this.ComboBox_COM_SelectedIndexChanged);
             // 
             // Label1
             // 
@@ -925,6 +788,37 @@
             this.dataGridLifeCicle.Size = new System.Drawing.Size(638, 169);
             this.dataGridLifeCicle.TabIndex = 0;
             // 
+            // lifeCicleId
+            // 
+            this.lifeCicleId.HeaderText = "ID действия";
+            this.lifeCicleId.Name = "lifeCicleId";
+            // 
+            // lfAddedDate
+            // 
+            this.lfAddedDate.HeaderText = "Дата внесения данных";
+            this.lfAddedDate.Name = "lfAddedDate";
+            // 
+            // lfOperation
+            // 
+            this.lfOperation.HeaderText = "Операция";
+            this.lfOperation.Name = "lfOperation";
+            this.lfOperation.Width = 120;
+            // 
+            // lfFirm
+            // 
+            this.lfFirm.HeaderText = "Компания";
+            this.lfFirm.Name = "lfFirm";
+            // 
+            // lfMainHuman
+            // 
+            this.lfMainHuman.HeaderText = "Ответственный";
+            this.lfMainHuman.Name = "lfMainHuman";
+            // 
+            // ldGeoposit
+            // 
+            this.ldGeoposit.HeaderText = "Геопозиция считывателя";
+            this.ldGeoposit.Name = "ldGeoposit";
+            // 
             // StatusBar1
             // 
             this.StatusBar1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -973,38 +867,6 @@
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            // 
-            // lifeCicleId
-            // 
-            this.lifeCicleId.HeaderText = "ID действия";
-            this.lifeCicleId.Name = "lifeCicleId";
-            // 
-            // lfAddedDate
-            // 
-            this.lfAddedDate.HeaderText = "Дата внесения данных";
-            this.lfAddedDate.Name = "lfAddedDate";
-            // 
-            // lfOperation
-            // 
-            this.lfOperation.HeaderText = "Операция";
-            this.lfOperation.Name = "lfOperation";
-            this.lfOperation.Width = 120;
-            // 
-            // lfFirm
-            // 
-            this.lfFirm.HeaderText = "Компания";
-            this.lfFirm.Name = "lfFirm";
-            // 
-            // lfMainHuman
-            // 
-            this.lfMainHuman.HeaderText = "Ответственный";
-            this.lfMainHuman.Name = "lfMainHuman";
-            // 
-            // ldGeoposit
-            // 
-            this.ldGeoposit.HeaderText = "Геопозиция считывателя";
-            this.ldGeoposit.Name = "ldGeoposit";
             // 
             // Form1
             // 
@@ -1022,8 +884,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.TabSheet_CMD.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.GroupBox1.ResumeLayout(false);
             this.GroupBox1.PerformLayout();
             this.TabSheet_EPCC1G2.ResumeLayout(false);
@@ -1062,13 +922,6 @@
         private System.Windows.Forms.TabPage TabSheet_EPCC1G2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox ComboBox_AlreadyOpenCOM;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox ComboBox_dmaxfre;
-        private System.Windows.Forms.ComboBox ComboBox_scantime;
-        private System.Windows.Forms.ComboBox ComboBox_baud;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label label16;
         private System.Windows.Forms.GroupBox groupBox12;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Timer Timer_Test_;
@@ -1079,8 +932,6 @@
         private System.Windows.Forms.Timer Timer_6B_Read;
         private System.Windows.Forms.Timer Timer_6B_Write;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ComboBox ComboBox_baud2;
-        private System.Windows.Forms.Label label47;
         private System.Windows.Forms.TextBox textBoxTagId;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox textBoxPipeId;
@@ -1121,8 +972,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBoxOTK;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox ComboBox_dminfre;
-        private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox2;
